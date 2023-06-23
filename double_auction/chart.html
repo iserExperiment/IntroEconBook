@@ -1,0 +1,49 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+
+<div id="highchart">
+
+</div>
+
+<script>
+    function redrawChart(series) {  
+        if (series.length!=0){
+            Highcharts.chart('highchart', {
+                title: {
+                    text: '取引履歴'
+                },
+                yAxis: {
+                    title: {
+                        text: '価格'
+                    }
+                },
+
+                xAxis: {
+                    title: {
+                        text: '時間 (秒)'
+                    },
+                    min: series[0][0]-1
+                },
+
+                plotOptions: {
+                    series: {
+                        label: {
+                            enabled: false
+                        },
+                    }
+                },
+
+                series: [{
+                    data: series,
+                    type: 'line'
+
+                }],
+
+                credits: {
+                    enabled: false
+                }
+
+            });
+        }        
+    }
+</script>

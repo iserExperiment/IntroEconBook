@@ -1,0 +1,10 @@
+{{ block title }}あなたはプレイヤー2（後手）になりました。{{ endblock }}
+{{ block content }}
+
+    <p>プレイヤー1（先手）は、 あなたに、{{ group.p2_amount}}ポイント、相手（プレイヤー1）に{{ group.p1_amount }} ポイントという提案をしました。</p>
+    <p>あなたがこの提案を[受入]れれば、 このポイントがそれぞれもらえます。[拒否]すれば、0ポイントずつになります</p>
+    {{ formfields }}
+
+    {{ next_button }}
+
+{{ endblock }}

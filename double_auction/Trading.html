@@ -1,0 +1,246 @@
+{{ block title }}
+あなたの役割は　{{ if player.is_buyer }}<font color="#1e90ff">買手</font>{{ else }}<font color="#ff4500">売手</font>{{ endif }}　です。<br>
+この市場には買手が{{ num_buyers }}人、売手が{{ num_sellers }}人います。
+{{ endblock }}
+{{ block content }}
+
+<p id="news" style="color: green"></p>
+
+<table class="table">
+    <tr>
+        <td>
+            あなたの評価額
+            {{ if player.is_buyer }}
+                (これ以下の額で購入して下さい。)
+            {{ else }}
+                (これ以上の額で販売して下さい。)
+            {{ endif }}
+        </td>
+        <th>
+            {{ player.break_even_point }}
+        </th>
+    </tr>
+    <tr>
+        <td>あなたが所持している財の量</td>
+        <th id="num_items"></th>
+    </tr>    
+</table>
+
+
+<input type="number" id="my_offer">
+<button type="button" onclick="sendOffer()" id="btn-offer">新たに価格を入札する</button>
+<div id="current_value"></div>
+<div id="alert"></div>
+<br><br>
+
+<div class="container box">
+    <div class="row">        
+        <div class="col-sm">
+                <h4>買注文</h4>            
+            <table id="bids_list"></table>
+        </div>
+        <div class="col-sm">
+            <h4>価格</h4>
+            <table id="prices_list"></table>
+        </div>
+        <div class="col-sm">
+            <h4>売注文</h4>
+            <table id="asks_list"></table>
+        </div>          
+        <div class="col-sm">
+            <h4>取引履歴</h4>
+            <table id="result_time"></table>
+        </div>            
+        <div class="col-sm">
+            <h4>契約価格</h4>
+            <table id="result"></table>
+        </div>
+    </div>
+</div>
+
+<br><br>
+<!-- {{ include 'double_auction/chart.html' }} -->
+
+<script>
+    // 定数
+    let my_id = js_vars.id_in_group;
+    let max_value = js_vars.max_value;    
+
+    let news_div = document.getElementById('news'); // 取引成立時メッセージ
+    let is_buyer = js_vars.is_buyer; 
+    let btnOffer = document.getElementById('btn-offer');// 送信ボタン
+    let my_offer = document.getElementById('my_offer'); // 入力ボックス 
+    lock_frag = false; // 画面ロック鍵（グルーバル変数で定義）
+
+    function showNews(msg) {
+        news_div.innerText = msg;
+        // メッセージの削除
+        // setTimeout(function () {　　
+        //     news_div.innerText = ''
+        // }, 10000)
+    }
+
+    function cu(amount) {
+        return `${amount} `;
+    }
+    
+    function count_duble(arr){
+        var count = {};
+        for (var i = 0; i < arr.length; i++) {
+            var elm = arr[i];
+            count[elm] = (count[elm] || 0) + 1;
+        }
+        return(count)
+    }
+
+    function player_count(p,q,current_offer) {
+        if(q[p]=== undefined ){
+            return `　`; 
+        }else{
+            return `${q[p]} `; 
+        }
+    }
+
+    function price_count(amount,current_offer,asks_price,bids_price) {   
+        if(asks_price == amount){
+            if(current_offer == amount){
+                return `<font color="red"> ${amount} </font> (入札中）`
+            }else{
+                return `<font color="red"> ${amount} </font>`
+            }            
+        }else if( bids_price == amount){
+            if(current_offer == amount){
+                return `<font color="blue"> ${amount} </font> (入札中）`
+            }else{
+                return `<font color="blue"> ${amount} </font> `
+            }
+        }else{
+            if(current_offer == amount){
+                return `<font> ${amount} </font> (入札中）`
+            }else{
+            return `${amount} `;
+            }
+        }
+    }
+
+    function make_history(x,player_id) {
+        let array_seconds = []; //　取引時間
+        let array_player = []; //　プレーヤー
+        let array_price = []; // 価格
+        for (let i of x){                                        
+            array_player.push(i[1])                                 
+            if (i[2] == player_id||i[3] == player_id){
+                array_seconds.push(`<font color="red">${i[0]} 秒(あなた)</font>`)
+                array_price.push(`<font color="red">${i[1]} </font>`)
+            }else{
+                array_seconds.push(`${i[0]} 秒`)
+                array_price.push(i[1])
+            }
+        }        
+        return [array_seconds,array_player,array_price];
+    }
+    
+    function liveRecv(data) {        
+        console.log(data)       
+        // javascript destructuring assignment
+        let {player, bids_dict, asks_dict,bids, asks, bids_player, asks_player, highcharts_series, num_items, current_offer, payoff, news, finish_frag,results_series } = data;                                
+        if (finish_frag === true) {// 画面ロック
+            btnOffer.style.display = 'none'
+            lock_frag = true;
+        }
+        if (news) {
+            let {buyer, seller, price} = news;
+            if (buyer === my_id) {
+                showNews(`あなたは player ${seller} から価格 ${cu(price)}で財を購入しました。`);
+            } else if (seller === my_id) {
+                showNews(`あなたは player ${buyer} に価格  ${cu(price)}で財を販売しました。`);
+            }
+        }
+        let bids_price = Math.max.apply(null, Object.values(bids_dict))                
+        let asks_price = Math.min.apply(null, Object.values(asks_dict))
+        if(is_buyer){
+            var price_canditate = asks_price
+        }else{
+            var price_canditate = bids_price
+        }
+        
+        var ask = Object.values(asks_dict) // 指値        
+        let seller = count_duble(ask) // 人数                
+        var ask = Array.from(new Set(ask)) // 重複削除
+        var ask = ask.sort(function(a,b){ //ソート　(降順)
+            if(a > b) {
+                return -1;
+            }
+            if(a < b) {
+                return 1;
+            }
+            return 0;
+            });
+
+
+        var bid = Object.values(bids_dict)                
+        let buyer = count_duble(bid)                   
+        var bid = Array.from(new Set(bid))        
+        var bid = bid.sort(function(a,b){
+            if(a > b) {
+                return -1;
+            }
+            if(a < b) {
+                return 1;
+            }
+            return 0;
+            });                
+
+        var price = ask.concat(bid)   //価格の列        
+        var long = 5
+        var ask = ask.reverse().slice(0, [long]) // 下位　5つ
+        var bid = bid.slice(0, [long]) //　上位　5つ
+        
+        asks_list.innerHTML = price.map(e => `<tr><td>${player_count(e,seller,current_offer)}</td></tr>`).join(''); // => アロー関数
+        prices_list.innerHTML = price.map(e => `<tr><td>${price_count(e,current_offer,asks_price,bids_price)}</td></tr>`).join(''); // => アロー関数        
+        bids_list.innerHTML = price.map(e => `<tr><td>${player_count(e,buyer,current_offer)}</td></tr>`).join(''); // => アロー関数                 
+        
+        document.getElementById('num_items').innerText = num_items;
+        
+        times = make_history(results_series,my_id)[0]
+        prices = make_history(results_series,my_id)[1] 
+        players = make_history(results_series,my_id)[2] //なくてもよし
+
+        result_time.innerHTML = times.map(e => `<tr><td>${cu(e)}</td></tr>`).join(''); // => アロー関数
+        result.innerHTML = players.map(e => `<tr><td>${cu(e)}</td></tr>`).join(''); // => アロー関数
+        
+        if(player == my_id){            
+            document.getElementById('alert').innerHTML = ``; 
+            document.getElementById('current_value').innerHTML = `現在の入札額:　${current_offer}`; 
+            if(current_offer <=0 || max_value <= current_offer){
+                document.getElementById('current_value').innerHTML = ` `; 
+            }                        
+        }
+        
+    }
+
+    function sendOffer() { // 送信処理
+        let offer = my_offer.value
+        if (offer.match(/[0-9]+/g) != offer ) {
+            document.getElementById('alert').innerHTML = '決められた範囲の数値を入力してください。';            
+        } else if(offer <=0 || max_value <= offer ){
+            document.getElementById('alert').innerHTML = '決められた範囲の数値を入力してください。';                        
+        } else{
+            liveSend({'offer': offer,'offer_frag':true})            
+            document.getElementById('current_value').innerHTML = '入札中です。しばらくお待ちください';                        
+        }
+    }
+
+    
+    my_offer.addEventListener("keydown", function (event) {  // Enterボタン時の処理
+        if (event.key === "Enter" && lock_frag == false) {                         
+            sendOffer();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => { //画面リロード
+        liveSend({'offer_frag':false});
+    });
+</script>
+
+{{ endblock }}

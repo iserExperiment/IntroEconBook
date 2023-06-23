@@ -1,0 +1,10 @@
+{{ block title }}
+結果：グラフ
+{{ endblock }}
+{{ block content }}
+    <div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; background-color: #FFFFE0;">
+    {{ subsession.round_number}}回目までのあなたの利得合計</th><th>{{ participant.payoff }}
+    </div>
+{{ include 'ch9_auction_secondprice/chart.html' }}
+
+{{ endblock }}

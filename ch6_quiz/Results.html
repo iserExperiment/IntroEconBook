@@ -1,0 +1,64 @@
+{{ block title }}
+    回答
+{{ endblock }}
+
+{{ block content }}
+<table height="100">
+  <tr>
+  <td width="3%" align="right"></td>
+  <td align="center" bgcolor="#ffd700">回答</td>
+  <td align="center" bgcolor="#adff2f">あなたの答え</td>
+  <td align="center" bgcolor="#ffd700">解説</td>
+</tr>
+<tr>
+  <td width="30%" align="left">（1）あなたはどちらの役割になりますか？</td>
+  <td width="15%" align="center">{{C.A1}}</td>
+  <td width="15%" align="center">{{ if player.q1 != C.A1 }}<font color="red">{{player.q1}} {{else}} {{player.q1}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K1}}</td>
+</tr>
+<tr bgcolor="#f0fff0">
+  <td width="30%" align="left">（2）あなたは、１回あたり何個の商品を販売することができますか？</td>
+  <td width="15%" align="center">{{C.A2}}</td>
+  <td width="15%" align="center">{{ if player.q2 != C.A2 }}<font color="red">{{player.q2}} {{else}} {{player.q2}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K2}}</td>
+</tr>
+<tr>
+  <td width="30%" align="left">（3）買い手がひとりいて、彼にとっての商品の価値が10 だったとします。売り手があなたしかおらず、販売価格を10 と設定した場合、買い手は購入しますか？</td>
+  <td width="15%" align="center">{{C.A3}}</td>
+  <td width="15%" align="center">{{ if player.q3 != C.A3 }}<font color="red">{{player.q3}} {{else}} {{player.q3}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K3}}</td>
+</tr>
+<tr bgcolor="#f0fff0">
+  <td width="30%" align="left">（4）商品の価値が20 の買い手は、次のどの場合で、商品を購入しますか？売り手は1 人しかいないとします。</td>
+  <td width="10%" align="center">{{C.A4}}</td>
+  <td width="10%" align="center">{{ if player.q4 != C.A4 }}<font color="red">{{player.q4}} {{else}} {{player.q4}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K4}}</td>
+</tr>
+<tr>
+  <td width="30%" align="left">（5）あなたの商品の1 個当たりの費用が10 だとします。販売価格15で、10 個の商品を売却した場合の利得はいくらですか？</td>
+  <td width="10%" align="center">{{C.A5}}</td>
+  <td width="10%" align="center">{{ if player.q5 != C.A5 }}<font color="red">{{player.q5}} {{else}} {{player.q5}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K5}}</td>
+</tr>
+<tr bgcolor="#f0fff0">
+  <td width="30%" align="left">（6）あなたの商品の1 個当たりの費用が10 だとします。販売価格9で、10 個の商品を売却した場合の利得はいくらですか？</td>
+  <td width="10%" align="center">{{C.A6}}</td>
+  <td width="10%" align="center">{{ if player.q6 != C.A6 }}<font color="red">{{player.q6}} {{else}} {{player.q6}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K6}}</td>
+</tr>
+<tr>
+  <td width="30%" align="left">（7）売り手が二人いる場合を考えます。買い手が5 人いるとします。あなたも相手も同じ販売価格としたときに、買い手は何人あなたから購入する可能性がありますか？当てはまる組み合わせを選んでください。</td>
+  <td width="10%" align="center">{{C.A7}}</td>
+  <td width="10%" align="center">{{ if player.q7 != C.A7 }}<font color="red">{{player.q7}} {{else}} {{player.q7}} {{ endif }}</font></td>
+  <td width="30%" align="left">{{C.K7}}</td>
+</tr>
+</table>
+
+{{ next_button }}
+
+    {{ include C.INSTRUCTIONS1_TEMPLATE }}
+    {{ include C.INSTRUCTIONS2_TEMPLATE }}
+
+{{ endblock }}
+
+

@@ -1,0 +1,68 @@
+
+{% block title %}
+    結果
+{% endblock %}
+
+{% block content %}
+{% if player.type == 'buy' %}  
+あなたは買い手{{ player.player_number }}です。あなたは、
+<ul>
+<li>状態の良い中古品１台あたり、{{ C.VALUE_GOOD_BUYER }} </li>
+<li>状態の悪い中古品１台あたり、{{ C.VALUE_BAD_BUYER }} </li>
+</ul>
+の利得を得ることができます。<br>
+この市場には、状態の良い中古品の売り手が{{ group.good_players }}人。状態の悪い中古品の売り手が{{ group.bad_players }}人いました。<br>
+
+あなたが、今回獲得した利得：{{ player.payoff }}<br>
+
+あなたが今回購入した中古品の履歴です。
+<div class="white-background">
+    <div class="row">
+        <div class="col-8" style="margin: 0 auto; margin-bottom: 40px; min-height:30vh;">
+            <table class="table fixed">
+                <thead>
+                    <tr>
+                        <th>取引番号</th>
+                        <th>購入価格</th>
+                        <th>中古品の状態</th>
+                    </tr>
+                </thead>
+                <script type="text/javascript">
+                    let history_str=js_vars.history;
+                    const chars = history_str.split(',');
+                    for (var i = 0; i < chars.length-1; i++) {
+                        const hist=chars[i].split('-');
+                        document.write("<tr><td>"+ hist[0]+ "</td>");
+                        document.write("<td>"+ hist[1]+ "</td>");
+                        document.write("<td>"+ hist[2]+ "</td></tr>");
+                    }
+                </script>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+    あなたは売り手です。<br>あなたは、
+    {% if player.used_status == True %}  
+        状態の良い中古品を
+        {% if player.sell_flg == True %}  
+            １つ売却しました。
+        {% else %}
+            売却しませんでした。
+        {% endif %}
+    {% else %}
+        状態の悪い中古品を
+        {% if player.sell_flg == True %}  
+            １つ売却しました。
+        {% else %}
+            売却しませんでした。
+        {% endif %}
+    {% endif %}
+    <br>あなたが、今回得た利得：{{ player.payoff }}。<br>
+    この市場には、状態の良い中古品の売り手が{{ group.good_players }}人。状態の悪い中古品の売り手が{{ group.bad_players }}人いました。
+{% endif %}
+    {% next_button %}
+{% endblock %}
+
+

@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    実験1-3
+{% endblock %}
+
+{% block content %}
+<div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; width:65%">
+<p>元手が250あります。<br>
+A:投資する：ある未知の確率で400になり、ある未知の確率で100になる<br>
+B:投資しない：250をそのままもつ<br></p>
+</div>
+<br>
+<p> この時、あなたは、A,Bのどちらをえらびますか？{% formfield player.u_individual_choice %}</p>
+<p> その選択をした理由はなぜですか{% formfield player.individual_choice_u_comment %}</p>
+
+{% next_button %}
+
+{% endblock %}

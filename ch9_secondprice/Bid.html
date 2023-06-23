@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+
+{% block title %}入札（回目）{% endblock %}
+{% block content %}
+
+    <p>
+        今回出品された商品に対するあなたの評価値は {{ player.item_value }}です。
+    </p>
+
+    <p>
+        入札額を決定してください。
+    </p>
+
+    {% formfields %}
+
+    {% next_button %}
+
+    {% include C.INSTRUCTIONS_TEMPLATE %}
+
+{% endblock %}

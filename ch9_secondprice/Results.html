@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+
+{% block title %}結果（回目）{% endblock %}
+{% block content %}
+
+    <p>
+        {% if player.is_winner %}
+            落札できました。あなたの利得は{{player.payoff}}です。
+            {% if is_greedy %}
+                しかし、あなたの入札額は評価値よりも高かったので、利得はマイナスです。
+            {% endif %}
+        {% else %}
+            落札できませんでした。あなたの利得は0です。
+        {% endif %}
+    </p>
+
+    <table class="table" style="width:400px">
+
+        <tr>
+            <th>あなたの入札額</th>
+            <th>落札額</th>
+            <th>二番目に高い入札額</th>
+            <th>評価値</th>
+            <th>あなたの利得</th>
+            <th>あなたの利得の合計</th>
+        </tr>
+
+    <tr>
+        <td>{{ player.bid_amount }}</td>
+        <td>{{ group.highest_bid }}</td>
+        <td>{{ group.second_highest_bid }}</td>
+        <td>{{ player.item_value }}</td>
+        <td>{{ player.payoff }}</td>
+        <td>{{ player.sum_payoff }}</td>
+    </tr>
+
+    </table>
+
+    {% next_button %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "global/Page.html" %}
+
+{% block title %}結果（{{C.NUM_ROUNDS}}回中{{player.round_number}}回目）{% endblock %}
+{% block content %}
+
+    <div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; background-color: #FFFFE0;">
+        あなたは{{ player.bid }}を入札し、
+        {% if player.is_winner %}
+            落札できました。あなたの利得は{{player.payoff}}です。
+            二番目に高い価格は{{ group.second_highest_bid }}でしたので、それが支払額になります。
+        {% else %}
+            落札できませんでした。あなたの利得は0です。
+        {% endif %}
+    </div>
+
+    <table class="table">
+        <tr bgcolor="#E6FFE9">
+            <th>あなたの評価値</th><th>{{ player.item_value }}</th>
+        </tr>
+        <tr>
+            <th>あなたの入札額</th><th>{{ player.bid }}</th>
+        </tr>
+        <tr bgcolor="#E6FFE9">
+            <th>落札額（{{C.PLAYERS_PER_GROUP}}人のグループでの一番高い価格）</th><th>{{ group.highest_bid }}</th>
+        </tr>
+        <tr>
+            <th>支払額（{{C.PLAYERS_PER_GROUP}}人のグループでの二番目に高い価格）</th><th>{{ group.second_highest_bid }}</th>
+        </tr>
+        <tr bgcolor="#E6FFE9">
+            <th>あなたの利得（落札できていれば：あなたの評価値‐支払い額 / 落札できなければ：0）</th><th>{{ player.payoff }}</th>
+        </tr>
+    </table>
+
+    {% next_button %}
+
+    {% include C.INSTRUCTIONS_TEMPLATE %}
+
+{% endblock %}

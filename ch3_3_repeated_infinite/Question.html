@@ -1,0 +1,44 @@
+{{ block title }}
+質問
+{{ endblock }}
+{{ block content }}
+
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>プレイヤー2</th>
+        </tr>
+        <tr>
+            <th>映画1</th>
+            <th>映画2</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>プレイヤー1</u></span></th>
+            <th>映画1</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_D }}</u>, {{ C.PAYOFF_C }}</td>
+        </tr>
+        <tr>
+            <th>映画2</th>
+            <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_D }}</td>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+        </tr>
+    </table>
+<br>
+
+ {% if player.id_in_group == 1 %}あなたはプレイヤー1でした。{% endif %}
+ {% if player.id_in_group == 2 %}あなたはプレイヤー2でした。{% endif %}
+{% if player.individual_choice == "A" %}あなたは映画1をえらびました。{% endif %}
+{% if player.individual_choice == "B" %}あなたは映画2をえらびました。{% endif %}
+{% if player.individual_choice == "" %}あなたが映画1を選んでいたとしてください。{% endif %}
+<br>
+【質問】相手が映画１を選んでいたら、あなたは何ポイント獲得しますか？{% formfield player.q1 %}<br>
+【質問】相手が映画２を選んでいたら、あなたは何ポイント獲得しますか？{% formfield player.q2 %}<br>
+【質問】あなたの相手はどちらを選ぶと思いますか？{% formfield player.think_other_player_choice %}<br>
+【質問】相手がその選択をすると思った理由はなぜですか？{% formfield player.think_other_player_choice_comment %}<br>
+
+<br>
+{{ next_button }}
+{{ endblock }}

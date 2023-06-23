@@ -1,0 +1,113 @@
+{{ block title }}
+    各ラウンドの結果
+{{ endblock }}
+
+{{ block content }}
+    <h3>今回の実験結果</h3>
+    <table class="table">
+        <tr>
+            <th>ラウンド</th>
+            <th>あなたの役割</th>
+            <th>評価額</th>
+            <th>取引価格</th>
+            <th>報酬</th>
+            <th>市場全体の<br>取引数</th>
+            <th>実験参加者</th>
+            <th>社会的損害額<br>(={{C.multiple_social_damage}} × 取引数 ÷人数)</th>
+            <th>利益</th>
+        </tr>
+
+        {{ for p in p_list }}
+        <tr>
+            <td>{{ p.round }}</td>
+            <td>{{ p.role }}</td>
+            <td>{{ p.break_even_point }}</td>
+            <td>{{ p.prices }}</td>
+            <td>{{ p.payoff }}</td>
+            <td>{{ p.sum_transactions }}</td>
+            <td>{{ C.PLAYERS_PER_GROUP }}</td>
+            <td>{{ p.social_damage }}（={{ C.multiple_social_damage }} × {{ p.sum_transactions }} ÷{{ C.PLAYERS_PER_GROUP }}）</td>
+            <td>{{ p.social_damage_payoff }}</td>
+
+        </tr>
+        {{ endfor }}
+    </table>
+
+    <div id="highchart"></div>
+    <br>
+    <h4>今回の市場結果</h4>
+    <br><br>
+    <table class="table">
+        <tr>
+            <th>ラウンド</th>
+            <th>均衡価格</th>
+            <th>生産者余剰</th>
+            <th>消費者余剰</th>
+            <th>総余剰</th>
+        </tr>
+
+        {{ for q in p_list2 }}
+        <tr>
+            <td>{{ q.round }}</td>
+            <td>{{ q.eq_price }}</td>
+            <td>{{ q.prod_surplus }}</td>
+            <td>{{ q.cons_surplus }}</td>
+            <td>{{ q.total_surplus }}</td>
+        </tr>
+        {{ endfor }}
+    </table>
+
+    <div id="highchart2"></div>
+
+<br><br>
+    {{ if player.round_number == C.NUM_ROUNDS }}
+        <h3>理論値の市場結果</h3>
+    <table class="table">
+        <tr>
+            <th>均衡価格</th>
+            <th>生産者余剰</th>
+            <th>消費者余剰</th>
+            <th>社会的損害額</th>
+            <th>総余剰</th>
+        </tr>
+        <tr>
+            <td>{{ C.ideal_eqPrice }}</td>
+            <td>{{ ideal_dict.ideal_prodSurplus }}</td>
+            <td>{{ ideal_dict.ideal_consSurplus }}</td>
+            <td>{{ ideal_dict.ideal_socialDamage }}</td>
+            <td>{{ ideal_dict.ideal_totalSurplus }}</td>
+        </tr>
+    </table>
+    <div id="highchart3"></div>
+    {{ endif }}
+{{ include 'ch5_externality/chart.html' }}
+    
+<script>
+let my_id = js_vars.id_in_group;
+function cu(amount) {
+    return `${amount} `;
+}
+
+function liveRecv(data) {
+    console.log(data)     
+    
+    let {highcharts_series,highcharts_buyer,highcharts_seller,last_flag,noBuyer,chart_idealBuyer,chart_idealSeller} = data;
+    redrawChart(highcharts_series); // 取引履歴のグラフ
+    if (last_flag === true){ 
+        if (noBuyer === false){
+            redrawChart2(highcharts_buyer,highcharts_seller); //需要と供給グラフ
+        }
+        redrawChart3(chart_idealBuyer,chart_idealSeller);
+    }    
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    liveSend({'offer_frag':false});
+});
+
+</script>
+
+
+
+
+{{ endblock }}

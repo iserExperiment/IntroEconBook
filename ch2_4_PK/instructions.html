@@ -1,0 +1,40 @@
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+    <h3>
+        実験説明
+    </h3>
+    <p>あなたとあなたの相手は、{{C.PLAYER_NAME_1}}または{{C.PLAYER_NAME_2}}になります。</p>
+    <p>ポイントは下記の表の通りです。{{C.PLAYER_NAME_1}}のポイントは<u>下線</u>が引いてあります。</p>
+    <p>{{C.PLAYER_NAME_1}}が「{{C.CHOICE_LABEL_1}}」を選び{{C.PLAYER_NAME_2}}は「{{C.CHOICE_LABEL_1}}」を選ぶと、{{C.PLAYER_NAME_1}}は{{ C.PAYOFF_B }}、{{C.PLAYER_NAME_2}}は{{ C.PAYOFF_A }}です。</p>
+    <p>{{C.PLAYER_NAME_1}}が「{{C.CHOICE_LABEL_1}}」を選び{{C.PLAYER_NAME_2}}は「{{C.CHOICE_LABEL_2}}」を選ぶと、{{C.PLAYER_NAME_1}}は{{ C.PAYOFF_A }}、{{C.PLAYER_NAME_2}}は{{ C.PAYOFF_B }}です。</p>
+    <p>{{C.PLAYER_NAME_1}}が「{{C.CHOICE_LABEL_2}}」を選び{{C.PLAYER_NAME_2}}は「{{C.CHOICE_LABEL_1}}」を選ぶと、{{C.PLAYER_NAME_1}}は{{ C.PAYOFF_A }}、{{C.PLAYER_NAME_2}}は{{ C.PAYOFF_B }}です。</p>
+    <p>{{C.PLAYER_NAME_1}}が「{{C.CHOICE_LABEL_2}}」を選び{{C.PLAYER_NAME_2}}は「左」を選ぶと、{{C.PLAYER_NAME_1}}は{{ C.PAYOFF_B }}、{{C.PLAYER_NAME_2}}は{{ C.PAYOFF_A }}です。</p>
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>{{C.PLAYER_NAME_2}}</th>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>{{C.PLAYER_NAME_1}}</u></span></th>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+        </tr>
+    </table>
+    <br>
+    <p>※入力がなければ、コンピュータによりランダムに決定されます。</p>
+
+</div>
+</div>

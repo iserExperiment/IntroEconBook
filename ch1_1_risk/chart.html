@@ -1,0 +1,303 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+
+<table class="table">
+        <td>実験１：あなたの意思決定</td>
+        <tr>
+            <th>質問1～5</th>
+            <th>
+                {{ player.risk_List }}
+            </th>
+        </tr>
+</table>
+<div id="highchart"></div>
+
+<table class="table">
+    <td>実験２：あなたの意思決定：{{ player.individual_choice }}<div id="innerid1"></div><div id="innerid2"></div></td>
+</table>
+<br><br>
+<table class="table">
+        <td>実験３：あなたの意思決定：{{ player.u_individual_choice }}</td>
+</table>
+<div id="highchart3"></div>
+
+<table class="table">
+        <td>実験４：あなたの意思決定：{{ player.u_individual_choice }}</td>
+</table>
+<div id="highchart4"></div>
+
+
+<table class="table">
+        <td>実験５：あなたの意思決定：{{ player.u_individual_choice }}</td>
+</table>
+<div id="highchart5"></div>
+
+<script>
+    function inputValue(){
+            innerid1.innerHTML= "平均" +  js_vars.average_decision
+            innerid2.innerHTML= js_vars.num_participants_c + "名が実験に参加しました。"
+    }
+    function drawChart() {
+        disp_title = "※（デバッグ中）" + js_vars.num_participants + "名が実験に参加しました。"
+        //alert(disp_title)
+        //if (series.length!=0){
+            Highcharts.chart('highchart', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    //categories: ['Aが1つ', 'Aが2つ', 'Aが3つ', 'Aが4つ', 'Aが5つ'],
+                    categories: ['Aが0つ','Aが1つ', 'Aが2つ', 'Aが3つ', 'Aが4つ', 'Aが5つ'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    data: [js_vars.num_A0, js_vars.num_A1, js_vars.num_A2, js_vars.num_A3, js_vars.num_A4, js_vars.num_A5]
+                }]
+            });
+     }
+
+    function drawChart_3() {
+        disp_title_3 = "（デバッグ中）" + js_vars.num_participants_u + "名が実験に参加しました。"
+        //alert(js_vars.u_numA)
+        //if (series.length!=0){
+            Highcharts.chart('highchart3', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title_3
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['Aを選んだ人','Bを選んだ人'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    data: [
+                      {y: js_vars.u_numA, color: 'orange'},
+                      {y: js_vars.u_numB, color: 'green'},
+                    ]
+                }]
+            });
+        }
+
+
+    function drawChart_4() {
+        disp_title_4 = "（デバッグ中）" + js_vars.num_participants_s + "名が実験に参加しました。"
+        //alert(disp_title)
+        //if (series.length!=0){
+            Highcharts.chart('highchart4', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title_4
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['Aを選んだ人','Bを選んだ人'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    data: [
+                      {y: js_vars.s_numA, color: 'orange'},
+                      {y: js_vars.s_numB, color: 'green'},
+                    ]
+                }]
+            });
+        }
+
+
+
+    function drawChart_5() {
+        disp_title_5 = "（デバッグ中）" + js_vars.num_participants_e + "名が実験に参加しました。"
+        //alert(disp_title)
+        //if (series.length!=0){
+            Highcharts.chart('highchart5', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title_5
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['Aを選んだ人','Bを選んだ人'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    data: [
+                      {y: js_vars.e_numA, color: 'orange'},
+                      {y: js_vars.e_numB, color: 'green'},
+                    ]
+                }]
+            });
+        }
+</script>

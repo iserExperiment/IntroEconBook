@@ -1,0 +1,28 @@
+{{ block title }}
+結果：あなたと相手の意思決定の結果です。
+{{ endblock }}
+{{ block content }}
+ {% if player.id_in_group == 1 %}あなたは{{C.PLAYER_NAME_1}}でした。{% endif %}
+ {% if player.id_in_group == 2 %}あなたは{{C.PLAYER_NAME_2}}でした。{% endif %}
+    <p>
+             あなた{{ if player.flg_non_input == 1 }}(コンピュータが選びました){{ endif }}は {{ if my_decision == "A"}} 右{{ endif }}{{ if my_decision == "B"}} 左 {{ endif }}、
+        あなたの相手{{ if player.flg_pair_non_input == 1 }}(コンピュータが選びました){{ endif }}は {{ if opponent_decision == "A"}} 右{{ endif }}{{ if opponent_decision == "B"}} 左 {{ endif }}を選びました。
+    </p>
+
+    <p>
+        その結果、あなたのポイントは {{ player.payoff }}です。
+    </p>
+
+
+    {{ include C.INSTRUCTIONS_TEMPLATE }}
+
+<p>他の参加者の方の結果</p>
+{{ include 'ch2_4_PK/chart.html' }}
+<script>
+drawChart();// グラフ描画
+drawChart_pair();// グラフ描画
+</script>
+
+
+
+{{ endblock }}

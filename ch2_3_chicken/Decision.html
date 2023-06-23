@@ -1,0 +1,36 @@
+{{ block title }}
+実験
+{{ endblock }}
+{{ block content }}
+
+  「{{C.CHOICE_LABEL_1}}」か「{{C.CHOICE_LABEL_2}}」か決めてください。<br>
+   質問に回答したあと、下記のテーブル(<u>左があなたのポイント</u>、右が相手のポイントを表しています)より、ボタンを押して回答してください。</p>
+
+
+【質問】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment %}</p>
+
+    <div class="form-group required">
+        <table class="table table-bordered text-center" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="2">あなたの相手</th>
+            </tr>
+            <tr>
+                <th>{{C.CHOICE_LABEL_1}}</th>
+                <th>{{C.CHOICE_LABEL_2}}</th>
+            </tr>
+            <tr>
+                <th rowspan="2"><span>あなた</span></th>
+                <td><button name="individual_choice" value="A" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_1}}</button></td>
+                <td><u>{{C.PAYOFF_B}}</u>, {{C.PAYOFF_B}}</td>
+                <td><u>{{C.PAYOFF_D}}</u>, {{C.PAYOFF_A}}</td>
+            </tr>
+            <tr>
+                <td><button name="individual_choice" value="B" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_2}}</button></td>
+                <td><u>{{C.PAYOFF_A}}</u>, {{ C.PAYOFF_D }}</td>
+                <td><u>{{C.PAYOFF_C}}</u>, {{C.PAYOFF_C}}</td>
+            </tr>
+        </table>
+    </div>
+
+{{ endblock }}

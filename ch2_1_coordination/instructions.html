@@ -1,0 +1,41 @@
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+    <h3>
+        実験説明
+    </h3>
+    <p>あなたとあなたの相手の意思決定により、あなたのポイントが決まります。</p>
+    <p>あなたは、プレイヤー１または２になります。</p>
+    <p>ポイントは下記の表の通りです。ここでは、プレイヤー1のポイントに<u>下線</u>が引いてあります。</p>
+    <p>プレイヤー１が「映画1」を選び、プレイヤー2は「映画1」を選ぶと、プレイヤー1は{{ C.PAYOFF_A }}、プレイヤー2は{{ C.PAYOFF_B }}です。</p>
+    <p>プレイヤー１が「映画1」を選び、プレイヤー2は「映画2」を選ぶと、プレイヤー1は{{ C.PAYOFF_D }}、プレイヤー2は{{ C.PAYOFF_D }}です。</p>
+    <p>プレイヤー１が「映画2」を選び、プレイヤー2は「映画1」を選ぶと、プレイヤー1は{{ C.PAYOFF_C }}、プレイヤー2は{{ C.PAYOFF_C }}です。</p>
+    <p>プレイヤー１が「映画2」を選び、プレイヤー2は「映画2」を選ぶと、プレイヤー1は{{ C.PAYOFF_B }}、プレイヤー2は{{ C.PAYOFF_A }}です。</p>
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>プレイヤー2</th>
+        </tr>
+        <tr>
+            <th>映画1</th>
+            <th>映画2</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>プレイヤー1</u></span></th>
+            <th>映画1</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_D }}</u>, {{ C.PAYOFF_D }}</td>
+        </tr>
+        <tr>
+            <th>映画2</th>
+            <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_C }}</td>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+        </tr>
+    </table>
+    <br>
+    <p>※入力がなければ、コンピュータによりランダムに決定されます。</p>
+
+</div>
+</div>

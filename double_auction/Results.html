@@ -1,0 +1,58 @@
+{{ block title }}
+    Result
+{{ endblock }}
+
+{{ block content }}
+
+    <table class="table">
+        <td>あなたの役割</td>
+        <th>
+            {{ if player.is_buyer }}買手{{ else }}売手{{ endif }}
+        </th>
+        <tr>
+            <th>評価額</th>
+            <th>
+                {{ player.break_even_point }}
+            </th>            
+        </tr>        
+        <tr>
+            <th>取引価格</th>
+            <td>{{ player.prices }}</td>
+        </tr>
+        <tr>
+            <th>報酬</th>
+            <td>{{ player.payoff }}</td>
+        </tr>
+    </table>
+
+    <br><br>
+
+<br><br>
+
+{{ include 'double_auction/chart.html' }}
+    
+<script>
+let my_id = js_vars.id_in_group;
+
+function cu(amount) {
+    return `${amount} `;
+}
+
+function liveRecv(data) {
+    console.log(data)     
+    // javascript destructuring assignment
+    let { highcharts_series,bids_dict,asks_dict,current_offer} = data;    
+    redrawChart(highcharts_series);// グラフの更新 
+    
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    liveSend({'offer_frag':false});
+});
+
+</script>
+
+
+
+
+{{ endblock }}

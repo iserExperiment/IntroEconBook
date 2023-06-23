@@ -1,0 +1,46 @@
+{{ block title }}
+    実験：あなたはプレイヤー2（後手）になりました。
+{{ endblock }}
+{{ block content }}
+    {% if group.p1_decision == "A" %}
+        <p>　<font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_1}}]を選びました。</font></p>
+        <p>　あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_B }}、あなたは{{ C.PAYOFF_B }}もらうことができます。</p>
+        <p>　あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_D }}、あなたは{{ C.PAYOFF_A }}もらうことができます。</p>
+    {% endif %}
+    {% if group.p1_decision == "B" %}
+        <p>　<font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_2}}]を選びました。</font></p>
+        <p>　あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_A }}、あなたは{{ C.PAYOFF_D }}もらうことができます。</p>
+        <p>　あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_C }}、あなたは{{ C.PAYOFF_C }}もらうことができます。</p>
+    {% endif %}
+   <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2><u>プレイヤー2（あなた）</u></th>
+        </tr>
+        <tr>
+            <th>{{ C.CHOICE_LABEL_1 }}</th>
+            <th>{{ C.CHOICE_LABEL_2 }}</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);">プレイヤー1</span></th>
+            <th>{{ C.CHOICE_LABEL_1 }}</th>
+            <td>{{ C.PAYOFF_B }}, <u>{{ C.PAYOFF_B }}</u></td>
+            <td>{{ C.PAYOFF_D }}, <u>{{ C.PAYOFF_A }}</u></td>
+        </tr>
+        <tr>
+            <th>{{ C.CHOICE_LABEL_2 }}</th>
+            <td>{{ C.PAYOFF_A }}, <u>{{ C.PAYOFF_D }}</u></td>
+            <td>{{ C.PAYOFF_C }}, <u>{{ C.PAYOFF_C }}</u></td>
+        </tr>
+    </table>
+    <br>
+    <p>※入力がなければ、コンピュータによりランダムに決定されます。</p>
+
+【質問1】 あなたは [{{ C.CHOICE_LABEL_1 }}]または[{{ C.CHOICE_LABEL_2 }}]のどちらに出店しますか。
+<br>{% formfield group.p2_decision %}</p>
+【質問2】その選択をした理由を教えてください。
+<br>{% formfield group.p2_individual_choice_comment %}</p>
+    {{ next_button }}
+
+{{ endblock }}

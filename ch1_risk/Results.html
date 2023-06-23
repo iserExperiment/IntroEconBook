@@ -1,0 +1,18 @@
+{{ block title }}
+    ご参加ありがとうございました。
+{{ endblock }}
+
+{{ block content }}
+<br><br>
+
+{{ include 'ch1_risk/chart.html' }}
+<script>
+drawChart();// グラフ描画
+inputValue();// 値代入
+drawChart_3();// グラフ3描画
+drawChart_4();// グラフ4描画
+drawChart_5();// グラフ4描画
+</script>
+{{ endblock }}
+
+

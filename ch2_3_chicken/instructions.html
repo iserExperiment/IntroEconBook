@@ -1,0 +1,41 @@
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+    <h3>
+        実験説明
+    </h3>
+
+    <p>あなたとあなたの相手の意思決定により、あなたのポイントが決まります。</p>
+    <p>ポイントは下記の表の通りです。あなたのポイントは<u>下線</u>が引いてあります。</p>
+    <p>あなたが「{{C.CHOICE_LABEL_1}}」を選び、相手も「{{C.CHOICE_LABEL_1}}」を選ぶと、あなたも相手も{{ C.PAYOFF_B }}です。</p>
+    <p>あなたが「{{C.CHOICE_LABEL_1}}」を選び、相手は「{{C.CHOICE_LABEL_2}}」を選ぶと、あなたは{{ C.PAYOFF_D }}、あなたの相手は{{ C.PAYOFF_A }}です。</p>
+    <p>あなたが「{{C.CHOICE_LABEL_2}}」を選び、相手は「{{C.CHOICE_LABEL_1}}」を選ぶと、あなたは{{ C.PAYOFF_A }}、あなたの相手は{{ C.PAYOFF_D }}です。</p>
+    <p>あなたが「{{C.CHOICE_LABEL_2}}」を選び、相手も「{{C.CHOICE_LABEL_2}}」を選ぶと、あなたも相手も{{ C.PAYOFF_C }}です。</p>
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>あなたの相手</th>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>あなた</u></span></th>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_D }}</u>, {{ C.PAYOFF_A }}</td>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_D }}</td>
+            <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_C }}</td>
+        </tr>
+    </table>
+    <br>
+    <p>※入力がなければ、コンピュータによりランダムに決定されます。</p>
+
+</div>
+</div>

@@ -1,0 +1,5 @@
+*.pyc
+*.sqlite3
+*__init__.cpython-39.pyc
+
+venv
