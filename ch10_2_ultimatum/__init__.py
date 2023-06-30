@@ -484,5 +484,5 @@ page_sequence = [
                  WaitForP2,
                  ResultsWaitPage,
                  ResultWaitPair,
-                #  Results
+                 Results
 ]

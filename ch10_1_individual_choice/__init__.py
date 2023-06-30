@@ -134,5 +134,5 @@ page_sequence = [Question1,
                  Question2,
                  Question3,
                  ResultsWaitPage,
-                #  Results
+                 Results
                  ]

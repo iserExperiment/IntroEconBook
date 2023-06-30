@@ -242,5 +242,5 @@ page_sequence = [
     Send,
     WaitForP1,
     ResultsWaitPage,
-    # Results
+    Results
 ]
