@@ -8,17 +8,17 @@ doc = "Double auction market"
 class C(BaseConstants):
     NAME_IN_URL = 'ch5_externality_tax'
     PLAYERS_PER_GROUP = 200
-    NUM_ROUNDS = 2
+    NUM_ROUNDS = 1
     ITEMS_PER_SELLER = 1
     VALUATION_MIN = 20
     VALUATION_MAX = 100
     PRODUCTION_COSTS_MIN = 10
     PRODUCTION_COSTS_MAX = 90
-    #buyer_value = [50,47,44,41,38,35]
-    #seller_value = [23,26,29,32,35,38]
     buyer_value = [45,40,35,30,25,20]
     seller_value = [3,8,13,18,23,28]
-    ideal_eqPrice = 34          #理想値の均衡価格
+    #ideal_eqPrice = 34          #理想値の均衡価格
+    ideal_eqPrice = 24  # 理想値の均衡価格
+    ideal_eqPrice_tax = 34  # 理想値の均衡価格
     multiple_social_damage = 20 # 社会的損害額のための倍数
     tax = 20                    # 税金
 
@@ -381,10 +381,24 @@ class Results(Page):
             else:
                 eq_price = (buyer_offer[eq_cnt]+seller_offer[eq_cnt])//2
 
-            #余剰の計算
-            prod_surplus = len(seller_offer)*eq_price -sum(seller_offer)
-            cons_surplus = sum(buyer_offer) - len(buyer_offer)*eq_price
+            # 余剰の計算
+            cons_surplus = 0
+            prod_surplus = 0
+            prod_surplus_tax = 0
+            for p in players:
+                if p.prices != "":
+                    if p.is_buyer == True:
+                        tmp = p.break_even_point - int(p.prices)
+                        cons_surplus = cons_surplus + tmp
+                    else:
+                        tmp = int(p.prices) - p.break_even_point
+                        prod_surplus = prod_surplus + tmp
+                        tmp_tax = int(p.prices) - p.break_even_point - C.tax
+                        prod_surplus_tax = prod_surplus_tax + tmp_tax
+            #prod_surplus = len(seller_offer)*eq_price -sum(seller_offer)
+            #cons_surplus = sum(buyer_offer) - len(buyer_offer)*eq_price
             total_surplus = prod_surplus + cons_surplus
+            total_surplus_tax = prod_surplus_tax + cons_surplus
 
             #利益の計算
             if p.is_buyer:
@@ -405,25 +419,54 @@ class Results(Page):
                 round = p.round_number,
                 eq_price = eq_price,
                 prod_surplus = prod_surplus,
+                prod_surplus_tax = prod_surplus_tax,
                 cons_surplus = cons_surplus,
-                total_surplus = total_surplus                
+                total_surplus = total_surplus,
+                total_surplus_tax = total_surplus_tax
             )
             p_list.append(p_dict)
             p_list2.append(p_dict2)
-        #理想値の計算(均衡価格、余剰)
+        # 理想値の計算(均衡価格、余剰)
         ideal_prodSurplus = 0
         ideal_consSurplus = 0
-        for j in range(C.PLAYERS_PER_GROUP):
-            tmp = j % len(C.buyer_value)
-            ideal_prodSurplus += max(C.ideal_eqPrice - C.seller_value[tmp] - C.tax,0)
-            ideal_consSurplus += max(C.buyer_value[tmp] - C.ideal_eqPrice,0)
+        ideal_prodSurplus_tax = 0
+        ideal_consSurplus_tax = 0
+        #for j in range(C.PLAYERS_PER_GROUP):
+        #    tmp = j % len(C.buyer_value)
+        #    ideal_prodSurplus += max(C.ideal_eqPrice - C.seller_value[tmp] - C.tax,0)
+        #    ideal_consSurplus += max(C.buyer_value[tmp] - C.ideal_eqPrice,0)
+        #ideal_totalSurplus = ideal_prodSurplus + ideal_consSurplus
+        buyer_count = 0
+        seller_count = 0
+        for p in players:
+            if p.is_buyer:
+                tmp = buyer_count % len(C.buyer_value)
+                if C.buyer_value[tmp] > C.ideal_eqPrice:
+                    print(tmp, C.buyer_value[tmp])
+                    ideal_prodSurplus += C.buyer_value[tmp] - C.ideal_eqPrice
+                    if C.buyer_value[tmp] > C.ideal_eqPrice_tax:
+                        ideal_prodSurplus_tax += C.buyer_value[tmp] - C.ideal_eqPrice_tax
+                buyer_count = buyer_count + 1
+            else:
+                tmp = seller_count % len(C.seller_value)
+                if C.seller_value[tmp] < C.ideal_eqPrice:
+                    ideal_consSurplus += C.ideal_eqPrice - C.seller_value[tmp]
+                    if C.seller_value[tmp]+20 < C.ideal_eqPrice_tax:
+                        ideal_consSurplus_tax += C.ideal_eqPrice_tax - (C.seller_value[tmp] + 20)
+                seller_count = seller_count + 1
         ideal_totalSurplus = ideal_prodSurplus + ideal_consSurplus
+        ideal_totalSurplus_tax = ideal_prodSurplus_tax + ideal_prodSurplus_tax
+
+
 
         #理想値の余剰
         ideal_dict = dict(
-            ideal_prodSurplus = ideal_prodSurplus, #理想値の生産者余剰
-            ideal_consSurplus = ideal_consSurplus, #理想値の消費者余剰
-            ideal_totalSurplus = ideal_totalSurplus #理想値の総余剰
+            ideal_prodSurplus       = ideal_prodSurplus,          # 理想値の生産者余剰
+            ideal_prodSurplus_tax   = ideal_prodSurplus_tax,    # 理想値の生産者余剰(税引き後)
+            ideal_consSurplus       = ideal_consSurplus,          # 理想値の消費者余剰
+            ideal_consSurplus_tax   = ideal_consSurplus_tax,  # 理想値の生産者余剰(税引き後)
+            ideal_totalSurplus      = ideal_totalSurplus,        # 理想値の総余剰
+            ideal_totalSurplus_tax  = ideal_totalSurplus_tax # 理想値の総余剰（税引き後）
         )
 
         return dict(p_list=p_list,p_list2=p_list2,ideal_dict=ideal_dict)
@@ -444,19 +487,55 @@ class Results(Page):
         #需要と供給グラフ用の変数
         buyer_offer = [] #buyerのofferリスト
         seller_offer = [] #sellerのofferリスト
+        highcharts_buyer = []
+        highcharts_seller = []
+        chart_time = []
+        chart_buyer_seller = []
         for p in players:
             if p.prices != '':
                 if p.is_buyer:
-                    buyer_offer.append(int(p.offers_win))
-                else:
-                    seller_offer.append(int(p.offers_win))
-        buyer_offer.sort(reverse=True)
-        seller_offer.sort()
-        highcharts_buyer = [[0,0] for _ in range(len(buyer_offer))]
-        highcharts_seller = [[0,0] for _ in range(len(seller_offer))]       
-        for i in range(len(buyer_offer)):
-            highcharts_buyer[i] = [i+1,buyer_offer[i]]
-            highcharts_seller[i] = [i+1,seller_offer[i]]
+                    #buyer_offer.append(int(p.offers_win))
+                    #highcharts_buyer.append([int(p.seconds), int(p.offers_win)])
+                    buyer_offer.append(p.break_even_point)
+                    highcharts_buyer.append([int(p.seconds), int(p.break_even_point)])
+                    # 取引相手
+                    pair_id = p.partners
+                    #tmp = player.group.get_player_by_id(pair_id).offers_win
+                    tmp = player.group.get_player_by_id(pair_id).break_even_point
+                    print(tmp)
+                    seller_offer.append(tmp)
+                    highcharts_seller.append([int(p.seconds), int(tmp)])
+                    tmp_pair = []
+                    tmp_pair.append(int(p.mili_seconds))
+                    tmp_pair.append(p.break_even_point)
+                    tmp_pair.append(tmp)
+                    chart_buyer_seller.append(tmp_pair)
+        #時間順に並び替える
+        #print("時間前", chart_buyer_seller)
+        #chart_buyer_seller = sorted(chart_buyer_seller, reverse=True, key=lambda x: x[2])
+        #chart_buyer_seller = ([sorted(l) for l in chart_buyer_seller])
+        chart_buyer_seller.sort()
+
+        #print(chart_buyer_seller)
+        for row in chart_buyer_seller:
+            tmp = round(row.pop(0), 1)
+            chart_time.append(tmp)
+        print(chart_buyer_seller, chart_time)
+
+
+        #for p in players:
+        #    if p.prices != '':
+        #        if p.is_buyer:
+        #            buyer_offer.append(int(p.offers_win))
+        #        else:
+        #            seller_offer.append(int(p.offers_win))
+        #buyer_offer.sort(reverse=True)
+        #seller_offer.sort()
+        #highcharts_buyer = [[0,0] for _ in range(len(buyer_offer))]
+        #highcharts_seller = [[0,0] for _ in range(len(seller_offer))]
+        #for i in range(len(buyer_offer)):
+        #    highcharts_buyer[i] = [i+1,buyer_offer[i]]
+        #    highcharts_seller[i] = [i+1,seller_offer[i]]
         
         #取引が無かったことを表すFlag．(取引なければTrue)
         if len(buyer_offer) == 0: noBuyer = True
@@ -468,18 +547,30 @@ class Results(Page):
         else:
             last_flag = False
 
-        #理想値の需要供給グラフ
+        # 理想値の需要供給グラフ
         tmp_buyer = []
         tmp_seller = []
-        for j in range(C.PLAYERS_PER_GROUP//2):
-            if C.buyer_value[j%len(C.buyer_value)] >= C.seller_value[j%len(C.seller_value)]:
-                tmp_buyer.append(C.buyer_value[j%len(C.buyer_value)])
-                tmp_seller.append(C.seller_value[j%len(C.seller_value)])
+        tmp_seller_tax = []
+        for j in range(C.PLAYERS_PER_GROUP // 2):
+            tmp_buyer.append(C.buyer_value[j % len(C.buyer_value)])
+            tmp_seller.append(C.seller_value[j % len(C.seller_value)])
+            tmp_seller_tax.append(C.seller_value[j % len(C.seller_value)])
+        #for j in range(C.PLAYERS_PER_GROUP//2):
+        #    if C.buyer_value[j%len(C.buyer_value)] >= C.seller_value[j%len(C.seller_value)]:
+        #        tmp_buyer.append(C.buyer_value[j%len(C.buyer_value)])
+        #        tmp_seller.append(C.seller_value[j%len(C.seller_value)])
         tmp_buyer.sort(reverse=True)
         tmp_seller.sort()
-        chart_idealBuyer = [[j+1,tmp_buyer[j]] for j in range(len(tmp_buyer))]
-        chart_idealSeller = [[j+1,tmp_seller[j]] for j in range(len(tmp_seller))]
-
+        #chart_idealBuyer = [[j+1,tmp_buyer[j]] for j in range(len(tmp_buyer))]
+        chart_idealBuyer = [[j, tmp_buyer[j]] for j in range(len(tmp_buyer))]
+        chart_idealBuyer.append([len(tmp_buyer), tmp_buyer[-1]])
+        #chart_idealSeller = [[j+1,tmp_seller[j]] for j in range(len(tmp_seller))]
+        chart_idealSeller = [[j, tmp_seller[j]] for j in range(len(tmp_seller))]
+        chart_idealSeller.append([len(tmp_seller), tmp_seller[-1]])
+        # 供給（税あり）
+        chart_idealSeller_tax = [[j, tmp_seller[j] + C.tax] for j in range(len(tmp_seller))]
+        chart_idealSeller_tax.append([len(tmp_seller), tmp_seller[-1] + C.tax])
+        print(chart_buyer_seller)
         return {
             p.id_in_group: dict(
                 highcharts_series=highcharts_series,
@@ -488,14 +579,17 @@ class Results(Page):
                 last_flag = last_flag,
                 noBuyer = noBuyer,
                 chart_idealBuyer = chart_idealBuyer,
-                chart_idealSeller = chart_idealSeller
+                chart_idealSeller = chart_idealSeller,
+                chart_idealSeller_tax= chart_idealSeller_tax,
+                chart_time =chart_time,
+                chart_buyer_seller = chart_buyer_seller
             )
             for p in players
         }
 
-    @staticmethod
-    def get_timeout_seconds(player: Player):
-        return player.group.start_timestamp + 30 -time.time()
+    #@staticmethod
+    #def get_timeout_seconds(player: Player):
+    #    return player.group.start_timestamp + 30 -time.time()
 
 
 class Room_waiting(Page):
