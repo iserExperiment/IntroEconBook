@@ -1,0 +1,392 @@
+{% extends "ch8_comparative_advantage2/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+取引
+{% endblock %}
+
+{% block content %}
+
+
+<h3>あなたの情報</h3>
+<div class="player_info">保有するチーズ: <span id="myCash">{{ player.cheese }}</span></div>
+<div class="player_info">保有するパン: <span id="myAsset">{{ player.bread }}</span></div>
+
+
+
+
+<h3 style="margin-top: 30px;">注文画面</h3>
+
+<div class="centered">
+    <div class="input">
+        買い注文の入力フォーム
+        <div class="input-group">
+            <input id="buyer_form" class="form-control" type="number">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-primary" onclick="form_buyer()">注文</button>
+            </span>
+        </div>
+    </div>
+    <div class="input">
+        売り注文の入力フォーム
+        <div class="input-group">
+            <input id="seller_form" class="form-control" type="number">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-primary" onclick="form_seller()">注文</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="white-background">
+    <div class="row">
+        <div class="col-8 centered">
+            <table class="table fixed">
+                <thead>
+                    <tr>
+                        <th>買い注文</th>
+                        <th>成功した取引価格</th>
+                        <th>売り注文</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span id="buy"></span>
+                        </td>
+                        <td>
+                            <span id="closed"></span>
+                        </td>
+                        <td>
+                            <span id="sell"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let id = js_vars.id_in_group;
+    let player_type = js_vars.player_type;
+    let cheese = js_vars.cheese;
+    let bread = js_vars.bread;
+    let autoClearFlg = js_vars.autoClearFlg;
+    let sellOffer_flg = false; //意図しない挙動を制限するflg．一連の処理を終えるまでlock．
+    let buyOffer_flg = false;
+    let clearSeller_flg = false;
+    let clearBuyer_flg = false;
+
+    // 2次元配列: [price, time]
+    let my_sell_value = [];
+    let my_buy_value = [];
+
+    // 3次元配列: [playerID, price, time]
+    let all_sell_value = [];
+    let all_buy_value = [];
+    // 1次元配列: [price]
+    let closed_value_str = "";
+
+    window.onload = function(){
+        closed_value_str = sessionStorage.getItem('closed_value');
+        document.getElementById("closed").innerHTML = closed_value_str;
+    }
+
+    document.getElementById("seller_form").onkeypress = (e) => {
+        const key = e.keyCode || e.charCode || 0;
+        if (key == 13) {
+            form_seller();
+        }
+    }
+    document.getElementById("buyer_form").onkeypress = (e) => {
+        const key = e.keyCode || e.charCode || 0;
+        if (key == 13) {
+            form_buyer();
+        }
+    }
+
+    function form_seller() {
+        var e = document.getElementById('seller_form');
+        var form_value = Number(e.value);
+        if (!e.value.match(/^[0-9\.]+$/)) {
+            alert('数字のみを入力してください'); // 警告ダイアログを表示
+            return false;
+        }
+        if (form_value == NaN) {
+            alert("数値を入力してください");
+            return false;
+        }
+        if (!Number.isInteger(form_value*10)) {
+            alert("小数点以下1桁までで入力してください");
+            return false;
+        }
+        if (form_value < 0.1 || form_value > 10) {
+            alert("0.1以上、10以下の範囲で入力してください");
+            return false;
+        }
+        if (my_sell_value.length > 0 && form_value > my_sell_value[0]) {
+            alert('以前の注文よりも安い価格で注文を出してください');
+            return false;
+        }
+        if (bread - my_sell_value.length < 1) {
+            alert("これ以上売り注文を出すことはできません");
+            return false;
+        }
+        if (sellOffer_flg === false) {
+            sellOffer_flg = true;
+            liveSend({ 'player_type': player_type, 'type': 'sell', 'value': form_value, 'sellOffer_flg': sellOffer_flg });
+        e.value = '';
+        }
+    }
+
+    function form_buyer() {
+        var e = document.getElementById('buyer_form');
+        var form_value = Number(e.value);
+        if (!e.value.match(/^[0-9\.]+$/)) {
+            alert('数字のみを入力してください'); // 警告ダイアログを表示
+            return false;
+        }
+        if (form_value == NaN) {
+            alert("数値を入力してください");
+            return false;
+        }
+        if (!Number.isInteger(form_value*10)) {
+            alert("小数点以下1桁までで入力してください");
+            return false;
+        }
+        if (form_value < 0.1 || form_value > 10) {
+            alert("0.1以上、10以下の範囲で入力してください");
+            return false;
+        }
+        if (my_buy_value.length > 0 && form_value < my_buy_value[0]) {
+            alert('以前の注文よりも高い価格で注文を出してください');
+            return false;
+        }
+        // 買い注文の合計を算出
+        let sum = 0;
+        for (let i = 0; i < my_buy_value.length; i++) {
+            sum += my_buy_value[i][0];
+        }
+        if (cheese - sum < form_value) {
+            alert("これ以上買い注文を出すことはできません");
+            return false;
+        }
+        if (buyOffer_flg === false) {
+            liveSend({ 'player_type': player_type, 'type': 'buy', 'value': form_value, 'buyOffer_flg': buyOffer_flg });
+        e.value = '';
+    }
+    }
+
+    function clear_seller(i) {
+        if (clearSeller_flg === false) {
+            clearSeller_flg = true;
+            liveSend({ 'player_type': player_type, 'type': 'sell_clear', 'id': Number(all_sell_value[i][0]), 'value': Number(all_sell_value[i][1]), 'time' : Number(all_sell_value[i][2]), 'clearSeller_flg' : clearSeller_flg });
+        }
+    }
+    function clear_buyer(i) {
+        if (clearBuyer_flg === false) {
+            clearBuyer_flg = true;
+            liveSend({ 'player_type': player_type, 'type': 'buy_clear', 'id': Number(all_buy_value[i][0]), 'value': Number(all_buy_value[i][1]), 'time' : Number(all_buy_value[i][2]), 'clearBuyer_flg' : clearBuyer_flg });
+        }
+    }
+
+    function round_for_otree(num) {
+        return Math.round(num * 100) / 100;
+    }
+
+    function liveRecv(data) {
+        if (data['player_type'] != player_type) {
+            return;
+        }
+        if (data['formSyubetu'] === 'sell') {
+            all_sell_value.push([data['formInputPlayerID'], data['formData'], data['time']]);
+            // 昇順にソート
+            all_sell_value.sort(
+                function (a, b) {
+                    return (a[1] - b[1]);
+                }
+            );
+            sellOffer_flg = false;
+        } else if (data['formSyubetu'] === 'buy') {
+            all_buy_value.push([data['formInputPlayerID'], data['formData'], data['time']]);
+            // 降順にソート
+            all_buy_value.sort(
+                function (a, b) {
+                    return (b[1] - a[1]);
+                }
+            );
+            buyOffer_flg = false;
+        }
+
+        if (data['seiritu'] === 0) {
+            if (id === data['formInputPlayerID']) {
+                if (data['formSyubetu'] === 'sell') {
+                    my_sell_value.push([data['formData'], data['time']]);
+                    // 昇順にソート
+                    my_sell_value.sort(
+                        function (a, b) {
+                            return (a[0] - b[0]);
+                        }
+                    );
+                } else {
+                    my_buy_value.push([data['formData'], data['time']]);
+                    // 降順にソート
+                    my_buy_value.sort(
+                        function (a, b) {
+                            return (b[0] - a[0]);
+                        }
+                    );
+                }
+            }
+        } else if (data['seiritu'] === 1) {
+            closed_value_str = closed_value_str + data['torihikigaku'] + '<br>';
+
+            if (data['seirituAitePlayerID'] === id) {
+                if (data['formSyubetu'] === 'sell') {
+                    for (let i = 0; i < my_buy_value.length; i++) {
+                        if (my_buy_value[i][0] == data['buyValue']) {
+                            my_buy_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                    cheese -= data['torihikigaku'];
+                    bread++;
+                } else {
+                    for (let i = 0; i < my_sell_value.length; i++) {
+                        if (my_sell_value[i][0] == data['sellValue']) {
+                            my_sell_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                    cheese += data['torihikigaku'];
+                    bread--;
+                }
+            } else if (data['formInputPlayerID'] === id) {
+                if (data['formSyubetu'] === 'sell') {
+                    cheese += data['torihikigaku'];
+                    bread--;
+                } else {
+                    cheese -= data['torihikigaku'];
+                    bread++;
+                }
+            }
+            document.getElementById('myCash').innerHTML = round_for_otree(cheese);
+            document.getElementById('myAsset').innerHTML = round_for_otree(bread);
+
+
+            if (data['formSyubetu'] == 'sell') {
+                for (let i = 0; i < all_buy_value.length; i++) {
+                    if (all_buy_value[i][1] == data['buyValue']) {
+                        if (all_buy_value[i][0] == data['seirituAitePlayerID']) {
+                            all_buy_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                for (let i = 0; i < all_sell_value.length; i++) {
+                    if (all_sell_value[i][1] == data['sellValue']) {
+                        if (all_sell_value[i][0] == data['formInputPlayerID']) {
+                            all_sell_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < all_buy_value.length; i++) {
+                    if (all_buy_value[i][1] == data['buyValue']) {
+                        if (all_buy_value[i][0] == data['formInputPlayerID']) {
+                            all_buy_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                for (let i = 0; i < all_sell_value.length; i++) {
+                    if (all_sell_value[i][1] == data['sellValue']) {
+                        if (all_sell_value[i][0] == data['seirituAitePlayerID']) {
+                            all_sell_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (autoClearFlg === 1) { // 自分の注文を全部消す
+                if (data['formInputPlayerID'] === id || data['seirituAitePlayerID'] === id) {
+                    my_sell_value.splice(0);
+                    my_buy_value.splice(0);
+                }
+                all_buy_value = all_buy_value.filter(value => {
+                    return value[0] != data['formInputPlayerID'] && value[0] != data['seirituAitePlayerID'];
+                });
+                all_sell_value = all_sell_value.filter(value => {
+                    return value[0] != data['formInputPlayerID'] && value[0] != data['seirituAitePlayerID'];
+                });
+            }
+        } else if (data['seiritu'] === -1) { // 価格の消去メッセージ
+            if (data['formSyubetu'] == 'sell_clear') {
+                for (let i=0; i < all_sell_value.length; i++) {
+                    if (data['formData'] == all_sell_value[i][1] && data['time'] == all_sell_value[i][2]) {
+                        all_sell_value.splice(i, 1);
+                        break;
+                    }
+                }
+                if (data['formInputPlayerID'] == id) {
+                    for (let i=0; i < my_sell_value.length; i++) {
+                        if (data['formData'] == my_sell_value[i][0] && data['time'] == my_sell_value[i][1]) {
+                            my_sell_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                clearSeller_flg = false;
+            } else if (data['formSyubetu'] == 'buy_clear') {
+                for (let i=0; i < all_buy_value.length; i++) {
+                    if (data['formData'] == all_buy_value[i][1] && data['time'] == all_buy_value[i][2]) {
+                        all_buy_value.splice(i, 1);
+                        break;
+                    }
+                }
+                if (data['formInputPlayerID'] == id) {
+                    for (let i=0; i < my_buy_value.length; i++) {
+                        if (data['formData'] == my_buy_value[i][0] && data['time'] == my_buy_value[i][1]) {
+                            my_buy_value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                clearBuyer_flg = false;
+            }
+        } else {
+            console.log('error');
+        }
+        // 注文価格表の更新
+        // 売り注文の更新
+        let str = '';
+        for (let i = 0; i < all_sell_value.length; i++) {
+            if (all_sell_value[i][0] == id) {
+                // TODO: i の取得
+                str += '<font color="red">' + all_sell_value[i][1] + '</font> - <button type="button" class="badge badge-primary" onclick="clear_seller(' + i + ');">消去</button><br>';
+            } else {
+                str += '<font>' + all_sell_value[i][1] + '</font><br>';
+            }
+        }
+        document.getElementById("sell").innerHTML = str;
+        // 買い注文の更新
+        str = '';
+        for (let i = 0; i < all_buy_value.length; i++) {
+            if (all_buy_value[i][0] == id) {
+                str += '<font color="red">' + all_buy_value[i][1] + '</font> - <button type="button" class="badge badge-primary" onclick="clear_buyer(' + i + ');">消去</button><br>';
+            } else {
+                str += '<font>' + all_buy_value[i][1] + '</font><br>';
+            }
+        }
+        document.getElementById("buy").innerHTML = str;
+        // 成立済み注文の更新
+        document.getElementById("closed").innerHTML = closed_value_str;
+        sessionStorage.setItem('closed_value', closed_value_str);
+    }
+</script>
+
+{% endblock %}

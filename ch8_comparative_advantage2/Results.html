@@ -1,0 +1,26 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    結果
+{% endblock %}
+
+{% block content %}
+
+<p>
+    あなたはチーズを{{player.cheese}}個、パンを{{player.bread}}個保有しているので、
+    チーズサンドを{{player.payoff}}個消費することができました。
+</p>
+<p>
+    獲得した利得は{{player.payoff}}です。
+</p>
+
+<script>
+    if (sessionStorage.getItem('closed_value') !== null) {
+        sessionStorage.removeItem('closed_value');
+    }
+</script>
+    {% next_button %}
+{% endblock %}
+
+

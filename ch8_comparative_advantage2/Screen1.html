@@ -1,0 +1,61 @@
+{% extends "ch8_comparative_advantage2/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    生産
+{% endblock %}
+
+{% block content %}
+
+    <script>
+    function check(){
+        var cheese = document.getElementsByName("cheese")[0].value;
+        var bread = document.getElementsByName("bread")[0].value;
+        if (!cheese.match(/^[0-9\.]+$/) || !bread.match(/^[0-9\.]+$/)) {
+            window.alert('数字のみを入力してください'); // 警告ダイアログを表示
+            return false; // 「OK」時は送信を実行
+        } else {
+            // document.forms.submit;
+            return true;
+        }
+    }
+    </script>
+    <table class="table">
+        <caption>チーズやパンの生産に必要な時間</caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Aタイプ</th>
+                <th>Bタイプ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>チーズ1個</td>
+                <td>{{ Constants.cheese_cost_A }}時間</td>
+                <td>{{ Constants.cheese_cost_B }}時間</td>
+            </tr>
+            <tr>
+                <td>パン1個</td>
+                <td>{{ Constants.bread_cost_A }}時間</td>
+                <td>{{ Constants.bread_cost_B }}時間</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        あなたは{{ player.player_type }}タイプのスキルを持っています。<br>
+        与えられた{{ Constants.working_hours }}時間を使って、チーズとパンを何個ずつ作りますか?
+    </p>
+
+    {% formfields %}
+
+    <button class="otree-btn-next btn btn-primary" onclick="return check()">次へ</button>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    caption { caption-side: top; }
+</style>
+{% endblock %}

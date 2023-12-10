@@ -25,10 +25,6 @@ class Group(BaseGroup):
     second_highest_bid = models.CurrencyField()
     # 落札価格
     contract_payoff = models.CurrencyField()
-    # 留保価格が落札額になった場合
-    flg_reserve_price = models.IntegerField(initial=0)
-    # 全員が留保価格を超える入札ではなかった場合
-    flg_not_higher_price_than_reserve_price = models.IntegerField(initial=0)
     # グループでの正直申告率
     rate_of_true_telling_group = models.IntegerField(initial=0)
 
@@ -77,9 +73,9 @@ def set_winner(group: Group):
 
     group.highest_bid = max([p.bid for p in players])
     players_with_highest_bid = [p for p in players if p.bid == group.highest_bid]
-    losers = [p for p in players if p.bid < group.highest_bid]
-    if len(losers)>0:
-        group.second_highest_bid = max([p.bid for p in losers])
+    not_winners = [p for p in players if p.bid < group.highest_bid]
+    if len(not_winners)>0:
+        group.second_highest_bid = max([p.bid for p in not_winners])
     else:
         group.second_highest_bid = group.highest_bid
     winner = random.choice(
@@ -161,7 +157,6 @@ class Summarize_Result(Page):
                 # 正直申告率
                 print("sub:this_round.flg_true_bid_this_round", this_round.flg_true_bid_this_round)
                 sub.rate_of_true_telling_sub = sub.rate_of_true_telling_sub + this_round.flg_true_bid_this_round
-        sincere_bid_rate_sub = round(sub.rate_of_true_telling_sub / (C.NUM_ROUNDS * len(players)),3)
         # グループ
         group = player.group
         players = group.get_players()
@@ -185,8 +180,6 @@ class Summarize_Result(Page):
                 #list_data.append(this_round.bid)
         print("評価値",list_value)
         print("入札額",list_data)
-        sincere_bid_rate_group = round(group.rate_of_true_telling_group / (C.NUM_ROUNDS * C.PLAYERS_PER_GROUP),3)
-        print("test",group.rate_of_true_telling_group,sincere_bid_rate_group * 100)
         #group.rate_of_true_telling_group = sum(p.flg_true_bid_this_round for p in players.in_all_rounds())
         #print(group.rate_of_true_telling_group)
 
@@ -199,8 +192,6 @@ class Summarize_Result(Page):
             #list_data = list_data,
             graph_data_group = graph_data_group,
             graph_data_sub=graph_data_sub,
-            sincere_bid_rate_sub=sincere_bid_rate_sub * 100,
-            sincere_bid_rate_group = sincere_bid_rate_group  * 100,
         )
 
 class Summarize_WaitPage(WaitPage):
