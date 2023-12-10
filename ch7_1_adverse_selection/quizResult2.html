@@ -1,0 +1,60 @@
+{{ block title }}
+確認問題２：回答
+{{ endblock }}
+
+
+{{ block content }}
+
+<p>練習問題1と同様に、あなたは<b>買い手</b>で、中古品を買いたい価格（購入希望価格）を提示します。そして、提示した購入希望価格以下であれば、何個でも中古品を購入するとします。<br></p>
+<ul>
+    <li>いま、中古品市場には12名の売り手がいるとします。</li>
+    <li>買い手はあなたひとりだけです。</li>
+    <li>12名の内手のうち、4名は状態の良い中古品を所有し、残りの8名は状態の悪い中古品を所有しています。</li>
+</ul>
+買い手であるあなたの利得を最大化にするためには、提示する購入希望価格をいくらにすればよいか次のカッコを埋めて考えてみましょう。
+<ul>
+    <li>ケース１：提示する購入希望価格を1601にしたときのあなたの利得
+    <br>
+    (3500 - [か] × [き]) + (500 - 1601) × 8 = 11394 - 6606 = 4788
+    </li>
+    <li>ケース２：提示する購入希望価格を1にしたときのあなたの利得
+    <br>
+    (3500 - 1 × [く]) + (500 - 1) × [け] = 0 - 2994 = 2994
+    </li>
+</ul>
+
+<table height="100">
+  <tr>
+  <td width="3%" align="right"></td>
+  <td align="center" bgcolor="#ffd700">回答</td>
+  <td align="center" bgcolor="#adff2f">あなたの答え</td>
+</tr>
+<tr>
+  <td width="30%" align="right">[か]</td>
+  <td width="30%" align="center">{{C.A4}}</td>
+  <td width="30%" align="center">{{ if player.q4 != C.A4 }}<font color="red">{{player.q4}} {{else}} {{player.q4}} {{ endif }}</font></td>
+</tr>
+<tr bgcolor="#f0fff0">
+  <td width="30%" align="right">[き]</td>
+  <td width="30%" align="center">{{C.A5}}</td>
+  <td width="30%" align="center">{{ if player.q5 != C.A5 }}<font color="red">{{player.q5}} {{else}} {{player.q5}} {{ endif }}</font></td>
+</tr>
+<tr>
+  <td width="30%" align="right">[く]</td>
+  <td width="30%" align="center">{{C.A6}}</td>
+  <td width="30%" align="center">{{ if player.q6 != C.A6 }}<font color="red">{{player.q6}} {{else}} {{player.q6}} {{ endif }}</font></td>
+</tr>
+<tr>
+  <td width="30%" align="right">[け]</td>
+  <td width="30%" align="center">{{C.A7}}</td>
+  <td width="30%" align="center">{{ if player.q7 != C.A7 }}<font color="red">{{player.q7}} {{else}} {{player.q7}} {{ endif }}</font></td>
+</tr>
+</table>
+<br>
+{{ next_button }}
+
+    {{ include C.INSTRUCTIONS1_TEMPLATE }}
+
+{{ endblock }}
+
+

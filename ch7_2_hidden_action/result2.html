@@ -1,0 +1,32 @@
+{{ block title }}実験{{ player.round_number }}回目{{ endblock }}
+{{ block content }}
+    <p>
+    <ul>    
+    <!-- A -->
+    {{ if player.id_in_group == 1 }}
+    
+        <li>プレイヤー{{ player.role }}（あなた）は、Uを選びました。</li>
+        <li>その結果、</li>
+        <ul>
+            <li>{{ player.role }}(あなた)は、{{ player.payoff }}</li>
+        </ul>
+    <!-- B -->
+    {{ else }}
+        <li>プレイヤー{{ other_player.role }}は、Uを選びました。</li>
+        <li>あなたは{{ B_choice }}を選びました。
+        </li>
+        <li>その結果、</li>
+        <ul>
+            <li>{{ other_player.role }}は、{{ other_player.payoff }}</li>
+            <li>{{ player.role }}(あなた)は、{{ player.payoff }}</li>
+        </ul>
+    
+    {{ endif }}
+    獲得しました。確認したらOKボタンを押してください。
+    </ul>
+    </p>
+    <p>
+        <button class="otree-btn-next btn btn-primary">OK</button>
+    </p>
+{{ include C.INSTRUCTIONS_TEMPLATE }}
+{{ endblock }}

@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    結果
+{% endblock %}
+
+{% block content %}
+
+<p>
+    あなたはチーズを {{player.cheese}} 個、パンを {{player.bread}} 個保有しているので、
+    チーズサンドを {% if player.cheese < player.bread %} {{player.cheese}} {% else %} {{player.bread}} {% endif %} 個消費することができました。
+</p>
+<p>
+    獲得した利得は {% if player.cheese < player.bread %} {{player.cheese}} {% else %} {{player.bread}} {% endif %} です。
+</p>
+
+    {% next_button %}
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+{% extends "ch8_comparative_advantage1_instruction/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    実験1
+{% endblock %}
+
+{% block content %}
+
+<p>あなたのスキルタイプが画面に表示されます。</p>
+<p>自給自足の世界を考えましょう。</p>
+<p>あなた方は、それぞれ{{ Constants.working_hours }}時間の労働時間をもっています。</p>
+<p>この労働時間を使って、チーズやパンを生産することができます。</p>
+<p>チーズサンドを一個作るのに、チーズ1個とパン1個が必要です。</p>
+<p>自分の利得 (消費できるチーズサンドの数) を最大にするために、チーズ何個、パン何個を生産しますか? (それぞれ小数点以下1桁までの回答を可能とします。)</p>
+<p>制限時間{{ Constants.timeout_question1_min }}分で回答してください。</p>
+
+    {% next_button %}
+{% endblock %}
