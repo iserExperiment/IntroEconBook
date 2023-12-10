@@ -295,6 +295,8 @@ def graph(subsession: Subsession):
     graph_list_accept = []
     graph_list_reject = []
 
+    ch10_2_result = []
+
     # 割合に計算(accept)
     if sub.num_0_reject > 0:
         tmp = round((sub.num_0_reject / sub.num_participants) * 100, 2)
@@ -411,6 +413,24 @@ def graph(subsession: Subsession):
 
     print(graph_list_accept, graph_list_reject)
 
+    for player in subsession.get_players():
+        group = player.group
+        participant = player.participant
+
+        p2_decision = ""
+        if group.p2_decision == '0':
+            p2_decision = "承諾"
+        else:
+            p2_decision = "拒否"
+
+        participant.vars['ch10_2_result'] = "++++++++++++++++++++++++++++++++++++++++++++++++++<br>" \
+                                            "最後通牒ゲーム：あなたの結果：" \
+                                            "プレイヤー1（先手）は、プレイヤー1に" + str(group.p1_amount) + "ポイント、プレイヤー2に" + str(group.p2_amount) + "という提案をしました。<br>" \
+                                            "プレイヤー2（後手）は、プレイヤー1の提案を" + (p2_decision) +"しました。<br>" \
+                                            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+    ch10_2_result.append(participant.vars['ch10_2_result'])
+
     # 最終結果用
     if 'graph_data' not in session.vars:
         session.graph_data = {}
@@ -418,6 +438,7 @@ def graph(subsession: Subsession):
             'num_participants': sub.num_participants,
             'graph_list_accept': graph_list_accept,
             'graph_list_reject': graph_list_reject,
+            'ch10_2_result': ch10_2_result
         }
 
 

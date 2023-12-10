@@ -175,6 +175,8 @@ class Results(Page):
         graph_list = []
         graph_name_list = []
 
+        ch10_4_result = []
+
         # 割合に計算(accept)
         if sub.num_0 > 0:
             tmp = round((sub.num_0 / sub.num_participants) * 100, 2)
@@ -248,6 +250,40 @@ class Results(Page):
 
         print("グラフリスト",graph_list, graph_name_list,type(graph_name_list))
 
+        group = player.group
+        participant = player.participant
+
+        p1_decision = ""
+        if group.p1_decision == "u100":
+            p1_decision = "100ポイント奪う"
+        elif group.p1_decision == "u200":
+            p1_decision = "200ポイント奪う"
+        elif group.p1_decision == "u300":
+            p1_decision = "300ポイント奪う"
+        elif group.p1_decision == "u400":
+            p1_decision = "400ポイント奪う"
+        elif group.p1_decision == "u500":
+            p1_decision = "500ポイント奪う"
+        elif group.p1_decision == "a100":
+            p1_decision = "100ポイント与える"
+        elif group.p1_decision == "a200":
+            p1_decision = "200ポイント与える"
+        elif group.p1_decision == "a300":
+            p1_decision = "300ポイント与える"
+        elif group.p1_decision == "a400":
+            p1_decision = "400ポイント与える"
+        elif group.p1_decision == "a500":
+            p1_decision = "500ポイント与える"
+        else:
+            p1_decision = "なにもしない"
+
+        participant.vars['ch10_4_result'] = "++++++++++++++++++++++++++++++++++++++++++++++++++<br>" \
+                                            "[直接法]最後通牒ゲーム：あなたの結果：" \
+                                            "プレイヤー1（先手）は、" + p1_decision + "という提案をしました。<br>" \
+                                            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>" \
+                                            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+        ch10_4_result.append(participant.vars['ch10_4_result'])
 
         if 'graph_data' not in player.session.vars:
             player.session.graph_data = {}
@@ -255,6 +291,7 @@ class Results(Page):
                 'num_participants': sub.num_participants,
                 'graph_list': graph_list,
                 'graph_name_list': graph_name_list,
+                'ch10_4_result': ch10_4_result
             }
         print('graph_data')
         print(sub.session.graph_data)

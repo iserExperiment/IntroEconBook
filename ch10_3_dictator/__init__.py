@@ -139,6 +139,8 @@ def graph(subsession: Subsession):
     session = sub.session
     graph_list = []
 
+    ch10_3_result = []
+
     # 割合に計算(accept)
     if sub.num_0 > 0:
         tmp = round((sub.num_0 / sub.num_participants) * 100, 2)
@@ -196,12 +198,24 @@ def graph(subsession: Subsession):
     else:
         graph_list.append(0)
 
+    for player in subsession.get_players():
+        group = player.group
+        participant = player.participant
+        participant.vars['ch10_3_result'] = "++++++++++++++++++++++++++++++++++++++++++++++++++<br>" \
+                                            "独裁者ゲーム：あなたの結果：" \
+                                            "プレイヤー1（先手）は、プレイヤー1に" + str(group.p1_amount) + "ポイント、プレイヤー2に" + str(group.p2_amount) + "という提案をしました。<br>" \
+                                            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>" \
+                                            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+    ch10_3_result.append(participant.vars['ch10_3_result'])
+
     #　最終結果用
     if 'graph_data' not in session.vars:
         session.graph_data = {}
     session.graph_data['ch10_3'] = {
             'num_participants': sub.num_participants,
             'graph_list': graph_list,
+            'ch10_3_result': ch10_3_result
     }
     
 

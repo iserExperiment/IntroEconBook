@@ -327,7 +327,7 @@ def input_check(player: Player):
 
 # Page --------------------------------------------------
 class Introduction(Page):
-    timeout_seconds = 10
+    timeout_seconds = 30
 
 class Students(Page):
     timeout_seconds = 330
