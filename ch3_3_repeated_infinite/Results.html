@@ -15,7 +15,7 @@
 {% if C.NUM_ROUNDS != subsession.round_number %}サイコロは{{subsession.this_rounds_dice}}でしたので、次に続きます。{{ next_button }}{% endif %}
 {% if C.NUM_ROUNDS == subsession.round_number %}サイコロは{{subsession.this_rounds_dice}}でしたので、この回で終了です。{% endif %}
 
-<p>他の参加者の方の結果</p>
+<p>全ての参加者の結果</p>
 {{ include 'ch3_3_repeated_infinite/chart.html' }}
 <script>
 drawChart_p1();// グラフ描画

@@ -6,7 +6,7 @@ import time
 class C(BaseConstants):
     NAME_IN_URL = 'ch3_4_public_goods_game'
     PLAYERS_PER_GROUP = 10
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 10
     ENDOWMENT = cu(40)
     MULTIPLIER = 2
     INSTRUCTIONS_TEMPLATE = 'ch3_4_public_goods_game/instructions.html'

@@ -135,7 +135,7 @@ class Results0(Page):
     pass
 
 
-page_sequence = [Decision0,
+page_sequence = [#Decision0,
                  #Results0,
                  Decision1,
                  Decision2

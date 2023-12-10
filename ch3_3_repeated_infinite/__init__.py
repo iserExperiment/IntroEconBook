@@ -18,12 +18,12 @@ class C(BaseConstants):
     for i in range(100):
         #tmp = random.randrange(0, 100, 1)
         tmp = random.randint(1, 100)
-        print(tmp)
+        #print(tmp)
         if tmp <= 80:
-            print("以下")
+            #print("以下")
             LIST_PROB.append(tmp)
         else:
-            print("80より多い")
+            #print("80より多い")
             LIST_PROB.append(tmp)
             NUM_ROUNDS = i + 1
             break
@@ -37,7 +37,7 @@ class C(BaseConstants):
         #else:
         #    LIST_PROB.append(tmp)
 
-    print("LIST_PROB",LIST_PROB, NUM_ROUNDS, "回実施")
+    #print("LIST_PROB",LIST_PROB, NUM_ROUNDS, "回実施")
 
     #if random.random() > 1:
     #    NUM_ROUNDS = 2
