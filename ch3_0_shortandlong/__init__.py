@@ -1,13 +1,11 @@
 from otree.api import *
 import random
 
-doc = """
-Your app description
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch3_0_shortandlong'
+    NAME_IN_URL = "ch3_0_shortandlong"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 2
     choice_list = ["A", "B"]
@@ -15,14 +13,15 @@ class C(BaseConstants):
     CHOICE_LABEL_1 = "仕事する"
     CHOICE_LABEL_2 = "仕事しない"
 
+    INSTRUCTIONS_TEMPLATE = "ch3_0_shortandlong/instructions.html"
 
-    INSTRUCTIONS_TEMPLATE = 'ch3_0_shortandlong/instructions.html'
 
 class Subsession(BaseSubsession):
     num_participants_1 = models.IntegerField(initial=0)
     num_A_1 = models.IntegerField(initial=0)
     num_B_1 = models.IntegerField(initial=0)
     err_message_1 = models.StringField()
+
 
 class Group(BaseGroup):
     pass
@@ -31,16 +30,14 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     flg_non_input_1 = models.IntegerField(initial=0)
     individual_choice_1 = models.StringField(
-        choices=[['A', '仕事する'], ['B', '仕事しない']],
-        verbose_name='',
+        choices=[["A", "仕事する"], ["B", "仕事しない"]],
+        verbose_name="",
         widget=widgets.RadioSelect,
     )
 
     # 意思決定の理由
-    individual_choice_comment_1  = models.LongStringField(
-        verbose_name='',
-        initial=""
-    )
+    individual_choice_comment_1 = models.LongStringField(verbose_name="", initial="")
+
 
 # FUNCTIONS------------------------------------------
 def keisan_1(player: Player):
@@ -59,18 +56,21 @@ def keisan_1(player: Player):
         player.flg_non_input_1 = 1
         player.individual_choice_1 = random.choice(C.choice_list)
 
+
 def keisans_1(subsession: Subsession):
     for p in subsession.get_players():
         keisan_1(p)
+
 
 # PAGES ------------------------------------------
 class Introduction(Page):
     timeout_seconds = 100
 
+
 class Decision_1(Page):
     timeout_seconds = 180
-    form_model = 'player'
-    form_fields = ['individual_choice_1','individual_choice_comment_1']
+    form_model = "player"
+    form_fields = ["individual_choice_1", "individual_choice_comment_1"]
 
 
 class keisanWaitPage_1(WaitPage):
@@ -90,7 +90,7 @@ class Results1(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
-            my_decision=player.field_display('individual_choice_1'),
+            my_decision=player.field_display("individual_choice_1"),
         )
 
     # グラフ描画用
@@ -116,8 +116,8 @@ class Results1(Page):
 
 
 page_sequence = [
-                 Introduction,
-                 Decision_1,
-                 keisanWaitPage_1,
-                 Results1,
-                 ]
+    Introduction,
+    Decision_1,
+    keisanWaitPage_1,
+    Results1,
+]

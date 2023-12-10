@@ -1,14 +1,14 @@
 from otree.api import *
 import random
-import time
+
 c = Currency
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch9_auction_firstprice'
+    NAME_IN_URL = "ch9_auction_firstprice"
     PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 3
-    INSTRUCTIONS_TEMPLATE = 'ch9_auction_firstprice/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch9_auction_firstprice/instructions.html"
     EVALUATE_MIN = 0
     EVALUATE_MAX = 100
 
@@ -26,6 +26,7 @@ class Group(BaseGroup):
     contract_payoff = models.CurrencyField()
     # グループでの正直申告率
     rate_of_true_telling_group = models.IntegerField(initial=0)
+
 
 class Player(BasePlayer):
     # 評価値
@@ -51,15 +52,15 @@ class Player(BasePlayer):
     flg_true_bid_this_round = models.IntegerField(initial=0)
 
 
-
 # FUNCTIONS-----------------------
 def set_winner(group: Group):
     import random
+
     players = group.get_players()
     # 追加------------------------
     for p in group.get_players():
         # print(p.input_contribution, p.contribution)
-        if p.individual_choice == '':
+        if p.individual_choice == "":
             # rangeの範囲は画面で入力できる範囲に合わせる
             p.bid = random.randint(C.EVALUATE_MIN, C.EVALUATE_MAX)
             # 入力なし
@@ -70,7 +71,7 @@ def set_winner(group: Group):
     group.highest_bid = max([p.bid for p in players])
     players_with_highest_bid = [p for p in players if p.bid == group.highest_bid]
     not_winners = [p for p in players if p.bid < group.highest_bid]
-    if len(not_winners)>0:
+    if len(not_winners) > 0:
         group.second_highest_bid = max([p.bid for p in not_winners])
     else:
         group.second_highest_bid = group.highest_bid
@@ -82,60 +83,63 @@ def set_winner(group: Group):
     for p in players:
         set_payoff(p)
 
+
 def set_payoff(player: Player):
     group = player.group
 
     if player.is_winner:
         player.payoff = player.item_value - player.bid
-        #if player.payoff < 0:
+        # if player.payoff < 0:
         #    player.payoff = 0
     else:
         player.payoff = 0
     player.sum_payoff = player.sum_payoff + player.payoff
 
 
-
 # PAGES-------------------------
 class Introduction(Page):
     timeout_seconds = 30
+
     @staticmethod
     def is_displayed(player):
         return player.round_number == 1
 
+
 class Bid(Page):
     timeout_seconds = 60
-    form_model = 'player'
-    form_fields = ['individual_choice']
+    form_model = "player"
+    form_fields = ["individual_choice"]
 
     @staticmethod
     def vars_for_template(player: Player):
-        player.item_value = random.randint(C.EVALUATE_MIN,C.EVALUATE_MAX)
+        player.item_value = random.randint(C.EVALUATE_MIN, C.EVALUATE_MAX)
 
 
 class ResultsWaitPage(WaitPage):
-    after_all_players_arrive = 'set_winner'
+    after_all_players_arrive = "set_winner"
 
 
 class Results(Page):
     timeout_seconds = 30
+
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
         return dict(is_greedy=player.item_value - player.bid < 0)
-        
+
 
 class Summarize_WaitPage(WaitPage):
-        wait_for_all_groups = True
-        @staticmethod
-        def is_displayed(player):
-            return player.round_number == C.NUM_ROUNDS
-            
-            
-class Summarize_Result(Page):
+    wait_for_all_groups = True
+
     @staticmethod
     def is_displayed(player):
         return player.round_number == C.NUM_ROUNDS
 
+
+class Summarize_Result(Page):
+    @staticmethod
+    def is_displayed(player):
+        return player.round_number == C.NUM_ROUNDS
 
     # グラフ描画用
     @staticmethod
@@ -145,59 +149,73 @@ class Summarize_Result(Page):
         sub = player.subsession
         players = sub.get_players()
         graph_data_sub = []
-        sub.rate_of_true_telling_sub = 0 # リロード対応
-        print("サブ",len(players))
+        sub.rate_of_true_telling_sub = 0  # リロード対応
+        print("サブ", len(players))
         for p in players:
             for i in range(C.NUM_ROUNDS):
                 i = i + 1
-                #all_sub_round = sub.in_round(i)
+                # all_sub_round = sub.in_round(i)
                 this_round = p.in_round(i)
-                tmp = [this_round.item_value,this_round.bid]
+                tmp = [this_round.item_value, this_round.bid]
                 graph_data_sub.append(tmp)
                 # 正直申告
-                print("sub:this_round.flg_true_bid_this_round", this_round.flg_true_bid_this_round)
-                sub.rate_of_true_telling_sub = sub.rate_of_true_telling_sub + this_round.flg_true_bid_this_round
+                print(
+                    "sub:this_round.flg_true_bid_this_round",
+                    this_round.flg_true_bid_this_round,
+                )
+                sub.rate_of_true_telling_sub = (
+                    sub.rate_of_true_telling_sub + this_round.flg_true_bid_this_round
+                )
         # グループ
         group = player.group
         players = group.get_players()
-        list_value= []
+        list_value = []
         list_data = []
         graph_data_group = []
-        print("グループ",len(players))
-        group.rate_of_true_telling_group = 0 # リロード対応
+        print("グループ", len(players))
+        group.rate_of_true_telling_group = 0  # リロード対応
         for p in players:
             for i in range(C.NUM_ROUNDS):
                 i = i + 1
-                #all_sub_round = sub.in_round(i)
+                # all_sub_round = sub.in_round(i)
                 this_round = p.in_round(i)
-                tmp = [this_round.item_value,this_round.bid]
+                tmp = [this_round.item_value, this_round.bid]
                 graph_data_group.append(tmp)
                 print(graph_data_group)
                 # 正直申告率
-                print("this_round.flg_true_bid_this_round",this_round.flg_true_bid_this_round)
-                group.rate_of_true_telling_group = group.rate_of_true_telling_group + this_round.flg_true_bid_this_round
-                #list_value.append(this_round.item_value)
-                #list_data.append(this_round.bid)
-        print("評価値",list_value)
-        print("入札額",list_data)
-        
-        #group.rate_of_true_telling_group = sum(p.flg_true_bid_this_round for p in players.in_all_rounds())
-        #print(group.rate_of_true_telling_group)
+                print(
+                    "this_round.flg_true_bid_this_round",
+                    this_round.flg_true_bid_this_round,
+                )
+                group.rate_of_true_telling_group = (
+                    group.rate_of_true_telling_group
+                    + this_round.flg_true_bid_this_round
+                )
+                # list_value.append(this_round.item_value)
+                # list_data.append(this_round.bid)
+        print("評価値", list_value)
+        print("入札額", list_data)
 
-        #tmp_group = group.rate_of_true_telling_group * C.NUM_ROUNDS
+        # group.rate_of_true_telling_group = sum(p.flg_true_bid_this_round for p in players.in_all_rounds())
+        # print(group.rate_of_true_telling_group)
 
-        #print(list_average.replace('[', ''))
-        #print(list_average.replace(']', ''))
+        # tmp_group = group.rate_of_true_telling_group * C.NUM_ROUNDS
+
+        # print(list_average.replace('[', ''))
+        # print(list_average.replace(']', ''))
         return dict(
-            #list_value=list_value,
-            #list_data = list_data,
-            graph_data_group = graph_data_group,
+            # list_value=list_value,
+            # list_data = list_data,
+            graph_data_group=graph_data_group,
             graph_data_sub=graph_data_sub,
         )
 
-page_sequence = [Introduction,
-                 Bid,
-                 ResultsWaitPage,
-                 Results,
-                 Summarize_WaitPage,
-                 Summarize_Result]
+
+page_sequence = [
+    Introduction,
+    Bid,
+    ResultsWaitPage,
+    Results,
+    Summarize_WaitPage,
+    Summarize_Result,
+]

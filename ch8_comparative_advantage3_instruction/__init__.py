@@ -1,14 +1,11 @@
 from otree.api import *
 
 
-author = 'Your name here'
-doc = """
-Your app description
-"""
+doc = """ """
 
 
 class Constants(BaseConstants):
-    name_in_url = 'ch8_comparative_advantage3_instruction'
+    name_in_url = "ch8_comparative_advantage3_instruction"
     players_per_group = None
     num_rounds = 1
     timeout_question2 = 180

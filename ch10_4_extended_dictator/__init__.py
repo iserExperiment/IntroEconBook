@@ -2,31 +2,29 @@ from otree.api import *
 import random
 import re
 
-doc = """
-Simple trust game
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch10_4_extended_dictator'
+    NAME_IN_URL = "ch10_4_extended_dictator"
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
     ENDOWMENT = 500
-    INSTRUCTIONS_TEMPLATE = 'ch10_4_extended_dictator/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch10_4_extended_dictator/instructions.html"
     ADD_TIME = 180
 
     CHOICE_LIST_SENTE = [
-        ["0", '何もしない'],
-        ["u100", '100ポイント奪う'],
-        ["u200", '200ポイント奪う'],
-        ["u300", '300ポイント奪う'],
-        ["u400", '400ポイント奪う'],
-        ["u500", '500ポイント奪う'],
-        ["a100", '100ポイント与える'],
-        ["a200", '200ポイント与える'],
-        ["a300", '300ポイント与える'],
-        ["a400", '400ポイント与える'],
-        ["a500", '500ポイント与える'],
+        ["0", "何もしない"],
+        ["u100", "100ポイント奪う"],
+        ["u200", "200ポイント奪う"],
+        ["u300", "300ポイント奪う"],
+        ["u400", "400ポイント奪う"],
+        ["u500", "500ポイント奪う"],
+        ["a100", "100ポイント与える"],
+        ["a200", "200ポイント与える"],
+        ["a300", "300ポイント与える"],
+        ["a400", "400ポイント与える"],
+        ["a500", "500ポイント与える"],
     ]
 
 
@@ -57,13 +55,9 @@ class Group(BaseGroup):
     p2_amount = models.IntegerField()
 
     p1_decision = models.StringField(
-        choices=C.CHOICE_LIST_SENTE,
-        widget=widgets.RadioSelect,
-        label=""
+        choices=C.CHOICE_LIST_SENTE, widget=widgets.RadioSelect, label=""
     )
-    p1_decision_why = models.LongStringField(
-        label="なぜその選択をしましたか？"
-    )
+    p1_decision_why = models.LongStringField(label="なぜその選択をしましたか？")
 
     flg_non_input_p1 = models.IntegerField(initial=0)
 
@@ -113,7 +107,7 @@ def set_P1(player: Player):
         s = group.p1_decision
     # 配分計算
     suuji = re.sub(r"\D", "", s)
-    print(";;;;;;;;;;;;;",suuji,s)
+    print(";;;;;;;;;;;;;", suuji, s)
     if "u" in s:
         group.p1_amount = C.ENDOWMENT + int(suuji)
         group.p2_amount = C.ENDOWMENT - int(suuji)
@@ -136,21 +130,22 @@ def set_payoffs(group: Group):
     p1 = group.get_player_by_id(1)
     p2 = group.get_player_by_id(2)
 
-    #p1.payoff = C.ENDOWMENT - int(group.p1_decision)
-    #p2.payoff = int(group.p1_decision)
+    # p1.payoff = C.ENDOWMENT - int(group.p1_decision)
+    # p2.payoff = int(group.p1_decision)
     p1.payoff = group.p1_amount
     p2.payoff = group.p2_amount
 
-# PAGESー－－－－－－－
+
+# PAGES-----
 class Introduction(Page):
     timeout_seconds = 60
 
 
 class Send(Page):
-    #timeout_seconds = 60+C.ADD_TIME
+    # timeout_seconds = 60+C.ADD_TIME
     timeout_seconds = C.ADD_TIME
-    form_model = 'group'
-    form_fields = ['p1_decision', 'p1_decision_why']
+    form_model = "group"
+    form_fields = ["p1_decision", "p1_decision_why"]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -248,7 +243,7 @@ class Results(Page):
             graph_list.append(0)
         graph_name_list.append("500ポイント与える")
 
-        print("グラフリスト",graph_list, graph_name_list,type(graph_name_list))
+        print("グラフリスト", graph_list, graph_name_list, type(graph_name_list))
 
         group = player.group
         participant = player.participant
@@ -277,30 +272,27 @@ class Results(Page):
         else:
             p1_decision = "なにもしない"
 
-        participant.vars['ch10_4_result'] = "++++++++++++++++++++++++++++++++++++++++++++++++++<br>" \
-                                            "[直接法]最後通牒ゲーム：あなたの結果：" \
-                                            "プレイヤー1（先手）は、" + p1_decision + "という提案をしました。<br>" \
-                                            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>" \
-                                            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+        participant.vars["ch10_4_result"] = (
+            "++++++++++++++++++++++++++++++++++++++++++++++++++<br>"
+            "[直接法]最後通牒ゲーム：あなたの結果："
+            "プレイヤー1（先手）は、" + p1_decision + "という提案をしました。<br>"
+            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>"
+            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+        )
 
-        ch10_4_result.append(participant.vars['ch10_4_result'])
+        ch10_4_result.append(participant.vars["ch10_4_result"])
 
-        if 'graph_data' not in player.session.vars:
+        if "graph_data" not in player.session.vars:
             player.session.graph_data = {}
-        player.session.graph_data['ch10_4'] = {
-                'num_participants': sub.num_participants,
-                'graph_list': graph_list,
-                'graph_name_list': graph_name_list,
-                'ch10_4_result': ch10_4_result
-            }
-        print('graph_data')
+        player.session.graph_data["ch10_4"] = {
+            "num_participants": sub.num_participants,
+            "graph_list": graph_list,
+            "graph_name_list": graph_name_list,
+            "ch10_4_result": ch10_4_result,
+        }
+        print("graph_data")
         print(sub.session.graph_data)
         return player.session.graph_data
 
 
-page_sequence = [
-    Introduction,
-    Send,
-    WaitForP1,
-    ResultsWaitPage,
-    Results]
+page_sequence = [Introduction, Send, WaitForP1, ResultsWaitPage, Results]

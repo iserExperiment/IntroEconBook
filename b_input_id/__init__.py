@@ -1,13 +1,11 @@
 from otree.api import *
 
 
-doc = """
-Your app description
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'b_input_id'
+    NAME_IN_URL = "b_input_id"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
@@ -22,16 +20,13 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     # 入力されるID
-    input_id = models.StringField(
-        verbose_name='',
-        initial=""
-    )
+    input_id = models.StringField(verbose_name="", initial="")
 
 
 # PAGES
 class MyPage(Page):
-    form_model = 'player'
-    form_fields = ['input_id']
+    form_model = "player"
+    form_fields = ["input_id"]
 
 
 class ResultsWaitPage(WaitPage):
@@ -42,7 +37,8 @@ class Results(Page):
     pass
 
 
-page_sequence = [MyPage,
-                 #ResultsWaitPage,
-                 #Results
-                 ]
+page_sequence = [
+    MyPage,
+    # ResultsWaitPage,
+    # Results
+]

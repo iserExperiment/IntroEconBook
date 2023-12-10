@@ -4,12 +4,12 @@ import time
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch3_4_public_goods_game'
+    NAME_IN_URL = "ch3_4_public_goods_game"
     PLAYERS_PER_GROUP = 10
     NUM_ROUNDS = 10
     ENDOWMENT = cu(40)
     MULTIPLIER = 2
-    INSTRUCTIONS_TEMPLATE = 'ch3_4_public_goods_game/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch3_4_public_goods_game/instructions.html"
 
 
 class Subsession(BaseSubsession):
@@ -38,16 +38,17 @@ def keisan(player: Player):
     if player.individual_choice != "":
         # グラフ用集計
         sub.num_participants += 1
-        #tmp = random.randint(0, 40)
-        #player.individual_choice = str(tmp)
+        # tmp = random.randint(0, 40)
+        # player.individual_choice = str(tmp)
         s = player.individual_choice
         sub.sum_decisinon = sub.sum_decisinon + int(s)
     else:
         player.flg_non_input = 1
-        tmp = random.randint(0,40)
+        tmp = random.randint(0, 40)
         player.individual_choice = str(tmp)
         s = player.individual_choice
         sub.sum_decisinon = sub.sum_decisinon + int(s)
+
 
 def set_payoffs(group: Group):
     players = group.get_players()
@@ -61,25 +62,32 @@ def set_payoffs(group: Group):
     for p in players:
         p.payoff = C.ENDOWMENT - p.individual_choice + group.individual_share
 
+
 def keisans(subsession: Subsession):
     for p in subsession.get_players():
         keisan(p)
+
+
 # PAGES-------------------------
 class WaitToStart(WaitPage):
     @staticmethod
     def after_all_players_arrive(group: Group):
         group.start_timestamp = int(time.time())
 
+
 class Introduction(Page):
     timeout_seconds = 30
+
     @staticmethod
     def is_displayed(player):
-        return player.round_number  == 1
+        return player.round_number == 1
+
 
 class Contribute(Page):
     timeout_seconds = 40
-    form_model = 'player'
-    form_fields = ['individual_choice']
+    form_model = "player"
+    form_fields = ["individual_choice"]
+
 
 class keisanWaitPage(WaitPage):
     wait_for_all_groups = True
@@ -93,6 +101,7 @@ class ResultsWaitPage(WaitPage):
 class Results(Page):
     timeout_seconds = 30
 
+
 class Summarize_Result(Page):
     @staticmethod
     def is_displayed(player):
@@ -103,11 +112,11 @@ class Summarize_Result(Page):
     def js_vars(player: Player):
         print("js_vars")
         sub = player.subsession
-        list_counts= []
+        list_counts = []
         list_data = []
 
-        #prev_player = player.in_round(1)
-        #print("test",prev_player.payoff)
+        # prev_player = player.in_round(1)
+        # print("test",prev_player.payoff)
 
         for i in range(C.NUM_ROUNDS):
             i = i + 1
@@ -115,20 +124,20 @@ class Summarize_Result(Page):
             list_counts.append(str(i) + "回目")
             list_data.append(all_sub_round.sum_decisinon)
 
-
-        #print(list_average.replace('[', ''))
-        #print(list_average.replace(']', ''))
+        # print(list_average.replace('[', ''))
+        # print(list_average.replace(']', ''))
         return dict(
             list_counts=list_counts,
-            list_data = list_data,
+            list_data=list_data,
         )
 
+
 page_sequence = [
-                 WaitToStart,
-                 Introduction,
-                 Contribute,
-                 keisanWaitPage,
-                 ResultsWaitPage,
-                 Results,
-                 Summarize_Result,
-                 ]
+    WaitToStart,
+    Introduction,
+    Contribute,
+    keisanWaitPage,
+    ResultsWaitPage,
+    Results,
+    Summarize_Result,
+]

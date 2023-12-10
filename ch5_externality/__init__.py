@@ -6,7 +6,7 @@ doc = "Double auction market"
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch5_externality'
+    NAME_IN_URL = "ch5_externality"
     PLAYERS_PER_GROUP = 200
     NUM_ROUNDS = 1
     ITEMS_PER_SELLER = 1
@@ -14,60 +14,61 @@ class C(BaseConstants):
     VALUATION_MAX = 100
     PRODUCTION_COSTS_MIN = 10
     PRODUCTION_COSTS_MAX = 90
-    buyer_value = [45,40,35,30,25,20]
-    seller_value = [3,8,13,18,23,28]
-    ideal_eqPrice = 24 #理想値の均衡価格
+    buyer_value = [45, 40, 35, 30, 25, 20]
+    seller_value = [3, 8, 13, 18, 23, 28]
+    ideal_eqPrice = 24  # 理想値の均衡価格
     # 社会的損害額のための倍数
     multiple_social_damage = 20
 
 
-class Subsession(BaseSubsession):    
+class Subsession(BaseSubsession):
     pass
 
-def creating_session(subsession: Subsession):    
-    players = subsession.get_players()    
+
+def creating_session(subsession: Subsession):
+    players = subsession.get_players()
     i = 0
     for p in players:
         # this means if the player's ID is not a multiple of 2, they are a buyer.
         # for more buyers, change the 2 to 3
-        # 買い手かどうかを決定する        
+        # 買い手かどうかを決定する
         p.is_buyer = p.id_in_group % 2 > 0
-        if p.is_buyer: # 
+        if p.is_buyer:  #
             p.num_items = 0
-            tmp = i%len(C.buyer_value)  
+            tmp = i % len(C.buyer_value)
             p.break_even_point = C.buyer_value[tmp]
             C.PLAYERS_PER_GROUP
             p.current_offer = 0
         else:
             p.num_items = C.ITEMS_PER_SELLER
-            tmp = i%len(C.buyer_value)  
+            tmp = i % len(C.buyer_value)
             p.break_even_point = C.seller_value[tmp]
             p.current_offer = C.VALUATION_MAX + 1
-            i += 1 
+            i += 1
+
 
 class Group(BaseGroup):
     start_timestamp = models.IntegerField()
-    sum_transactions = models.IntegerField()    # 市場全体の取引数
-    social_damage = models.FloatField()         # 社会的損害額
+    sum_transactions = models.IntegerField()  # 市場全体の取引数
+    social_damage = models.FloatField()  # 社会的損害額
 
 
 class Player(BasePlayer):
-    finish_frag = models.BooleanField(initial = False)
+    finish_frag = models.BooleanField(initial=False)
     is_buyer = models.BooleanField()
     break_even_point = models.IntegerField()
     num_items = models.IntegerField()
     total_payoff = models.IntegerField()
-    offers = models.StringField(initial="")         # 注文    
-    offer_seconds = models.StringField(initial="")  # 注文時間  
-    offers_win = models.StringField(initial="")     # 取引成立時の注文
-    partners = models.StringField(initial="")       # 取引相手 
-    prices = models.StringField(initial="")         # 取引価格
-    seconds = models.StringField(initial="")        # 取引時間
-    mili_seconds = models.FloatField(initial=0.0)   # 取引時間(グラフ用)
+    offers = models.StringField(initial="")  # 注文
+    offer_seconds = models.StringField(initial="")  # 注文時間
+    offers_win = models.StringField(initial="")  # 取引成立時の注文
+    partners = models.StringField(initial="")  # 取引相手
+    prices = models.StringField(initial="")  # 取引価格
+    seconds = models.StringField(initial="")  # 取引時間
+    mili_seconds = models.FloatField(initial=0.0)  # 取引時間(グラフ用)
     current_offer = models.IntegerField()
     current_seconds = models.IntegerField()
-    social_damage_payoff = models.CurrencyField()   # 社会的損害後の利益
-    
+    social_damage_payoff = models.CurrencyField()  # 社会的損害後の利益
 
 
 class Transaction(ExtraModel):
@@ -77,6 +78,7 @@ class Transaction(ExtraModel):
     price = models.CurrencyField()
     seconds = models.IntegerField(doc="Timestamp (seconds since beginning of trading)")
 
+
 class offerRecord(ExtraModel):
     group = models.Link(Group)
     player = models.Link(Player)
@@ -85,10 +87,20 @@ class offerRecord(ExtraModel):
     tradePartner = models.IntegerField()
     time = models.FloatField(doc="Timestamp (seconds since beginning of trading)")
 
+
 def custom_export(players):
     # header row
-    yield ['sessionID', 'groupID', 'round_number', 'playerID', 'is_buyer'
-           , 'offer_price', 'trade_price', 'tradePartner', 'time']
+    yield [
+        "sessionID",
+        "groupID",
+        "round_number",
+        "playerID",
+        "is_buyer",
+        "offer_price",
+        "trade_price",
+        "tradePartner",
+        "time",
+    ]
 
     scores = offerRecord.filter()
     for score in scores:
@@ -108,154 +120,171 @@ def custom_export(players):
 
 
 def live_method(player: Player, data):
-#    print("受信")    
-#    print(data)            
+    #    print("受信")
+    #    print(data)
     my_id = player.id_in_group
-    group = player.group    
+    group = player.group
     players = group.get_players()
     buyers = [p for p in players if p.is_buyer]
-    sellers = [p for p in players if not p.is_buyer]      
+    sellers = [p for p in players if not p.is_buyer]
     news = None
     match = None
 
-    # オファー時の処理 
-    if data['offer_frag'] and player.finish_frag == False :               
+    # オファー時の処理
+    if data["offer_frag"] and player.finish_frag == False:
         seconds = int(time.time() - group.start_timestamp)
-        mili_seconds = round(time.time() - group.start_timestamp,3)
-        offer = int(data['offer'])
+        mili_seconds = round(time.time() - group.start_timestamp, 3)
+        offer = int(data["offer"])
         player.current_offer = offer
         player.current_seconds = seconds
-        if len(player.offer_seconds) ==0:
-            player.offer_seconds =   str(seconds)
-            player.offers =  str(offer) 
+        if len(player.offer_seconds) == 0:
+            player.offer_seconds = str(seconds)
+            player.offers = str(offer)
         else:
-            player.offer_seconds =  player.offer_seconds + "," + str(seconds)
-            player.offers = player.offers+ "," + str(offer)
+            player.offer_seconds = player.offer_seconds + "," + str(seconds)
+            player.offers = player.offers + "," + str(offer)
 
-        #買手の処理 
-        if player.is_buyer :                                                
-            prices = {p.id_in_group:p.current_offer for p in sellers }                        
-            price =  min(prices.values())            
+        # 買手の処理
+        if player.is_buyer:
+            prices = {p.id_in_group: p.current_offer for p in sellers}
+            price = min(prices.values())
             if price <= offer:
-                second = {p.offer_seconds:p.id_in_group for p in sellers if p.current_offer == price}
+                second = {
+                    p.offer_seconds: p.id_in_group
+                    for p in sellers
+                    if p.current_offer == price
+                }
                 partner = second[sorted(second)[0]]
-                match = [player,group.get_player_by_id(partner)]
+                match = [player, group.get_player_by_id(partner)]
 
-                #record
+                # record
                 offerRecord.create(
-                    group = group,
-                    player = player,
-                    offer_price = offer,
-                    tradePrice = price,
-                    tradePartner = partner,
-                    time = mili_seconds,
+                    group=group,
+                    player=player,
+                    offer_price=offer,
+                    tradePrice=price,
+                    tradePartner=partner,
+                    time=mili_seconds,
                 )
-            else:                
-                #record
+            else:
+                # record
                 offerRecord.create(
-                    group = group,
-                    player = player,
-                    offer_price = offer,
-                    time = mili_seconds,
+                    group=group,
+                    player=player,
+                    offer_price=offer,
+                    time=mili_seconds,
                 )
 
         # 売手の処理
         else:
-            prices = {p.id_in_group:p.current_offer for p in buyers }            
-            price =  max(prices.values())                                    
-            if  offer <= price and player.num_items >0:      
-                second = {p.offer_seconds:p.id_in_group for p in buyers if p.current_offer == price}
+            prices = {p.id_in_group: p.current_offer for p in buyers}
+            price = max(prices.values())
+            if offer <= price and player.num_items > 0:
+                second = {
+                    p.offer_seconds: p.id_in_group
+                    for p in buyers
+                    if p.current_offer == price
+                }
                 partner = second[sorted(second)[0]]
-                match = [group.get_player_by_id(partner),player]            
+                match = [group.get_player_by_id(partner), player]
 
-                #record
+                # record
                 offerRecord.create(
-                    group = group,
-                    player = player,
-                    offer_price = offer,
-                    tradePrice = price,
-                    tradePartner = partner,
-                    time = mili_seconds,
+                    group=group,
+                    player=player,
+                    offer_price=offer,
+                    tradePrice=price,
+                    tradePartner=partner,
+                    time=mili_seconds,
                 )
             else:
-                #record
+                # record
                 offerRecord.create(
-                    group = group,
-                    player = player,
-                    offer_price = offer,
-                    time = mili_seconds,
+                    group=group,
+                    player=player,
+                    offer_price=offer,
+                    time=mili_seconds,
                 )
 
-        if match is not None: # find_match　が　空でなければ作動 #
-            [buyer, seller] = match                        
+        if match is not None:  # find_match　が　空でなければ作動 #
+            [buyer, seller] = match
             Transaction.create(
                 group=group,
                 buyer=buyer,
                 seller=seller,
                 price=price,
                 seconds=seconds,
-                #mili_seconds = mili_seconds,
+                # mili_seconds = mili_seconds,
             )
-            # 売手    
+            # 売手
             buyer.num_items += 1
-            buyer.finish_frag =  seller.num_items == 1 # 終了条件
-            if len(buyer.offers_win)==0:
-                buyer.offers_win =  str(buyer.current_offer)
-                buyer.partners =  str(seller.id_in_group)  
-                buyer.prices =  str(price)
+            buyer.finish_frag = seller.num_items == 1  # 終了条件
+            if len(buyer.offers_win) == 0:
+                buyer.offers_win = str(buyer.current_offer)
+                buyer.partners = str(seller.id_in_group)
+                buyer.prices = str(price)
                 buyer.seconds = str(seconds)
                 buyer.mili_seconds = mili_seconds
             else:
-                buyer.offers_win =  "," + str(buyer.current_offer)
-                buyer.partners =  "," + str(seller.id_in_group)  
-                buyer.prices =  "," + str(price)
-                buyer.seconds =  buyer.seconds + "," + str(seconds)
+                buyer.offers_win = "," + str(buyer.current_offer)
+                buyer.partners = "," + str(seller.id_in_group)
+                buyer.prices = "," + str(price)
+                buyer.seconds = buyer.seconds + "," + str(seconds)
                 buyer.mili_seconds = buyer.mili_seconds
             buyer.current_offer = 0
-            # 買手    
+            # 買手
             seller.num_items -= 1
-            seller.finish_frag = seller.num_items == 0 # 終了条件            
-            if len(seller.offers_win)==0:            
-                seller.offers_win =  str(seller.current_offer)
-                seller.partners =  str(buyer.id_in_group) 
-                seller.prices =   str(price)
-                seller.seconds =   str(seconds)
+            seller.finish_frag = seller.num_items == 0  # 終了条件
+            if len(seller.offers_win) == 0:
+                seller.offers_win = str(seller.current_offer)
+                seller.partners = str(buyer.id_in_group)
+                seller.prices = str(price)
+                seller.seconds = str(seconds)
                 seller.mili_seconds = mili_seconds
             else:
                 seller.offers_win = seller.offers_win + "," + str(seller.current_offer)
-                seller.partners = seller.partners + ','  + str(buyer.id_in_group) 
+                seller.partners = seller.partners + "," + str(buyer.id_in_group)
                 seller.prices = seller.prices + "," + str(price)
-                seller.seconds = seller.seconds +  "," + str(seconds)
+                seller.seconds = seller.seconds + "," + str(seconds)
                 seller.mili_seconds = seller.mili_seconds
-            seller.current_offer = C.VALUATION_MAX + 1 
+            seller.current_offer = C.VALUATION_MAX + 1
 
             buyer.payoff += buyer.break_even_point - price
             seller.payoff += price - seller.break_even_point
-            news = dict(buyer=buyer.id_in_group, seller=seller.id_in_group, price=price)            
-    bids_dict = {p.id_in_group:p.current_offer for p in buyers if p.current_offer > 0}
-    tmp = sorted(bids_dict.items(), key=lambda x:x[1], reverse=True)
-    bids_dict = {i[0]:i[1] for i in tmp}    
+            news = dict(buyer=buyer.id_in_group, seller=seller.id_in_group, price=price)
+    bids_dict = {p.id_in_group: p.current_offer for p in buyers if p.current_offer > 0}
+    tmp = sorted(bids_dict.items(), key=lambda x: x[1], reverse=True)
+    bids_dict = {i[0]: i[1] for i in tmp}
 
-    asks_dict = {p.id_in_group:p.current_offer for p in sellers if p.current_offer <= C.VALUATION_MAX}    
-    tmp = sorted(asks_dict.items(), key=lambda x:x[1])
-    asks_dict = {i[0]:i[1] for i in tmp}
+    asks_dict = {
+        p.id_in_group: p.current_offer
+        for p in sellers
+        if p.current_offer <= C.VALUATION_MAX
+    }
+    tmp = sorted(asks_dict.items(), key=lambda x: x[1])
+    asks_dict = {i[0]: i[1] for i in tmp}
     bids_player = [p for p in bids_dict]
     asks_player = [p for p in asks_dict]
     bids = [bids_dict[p] for p in bids_dict]
     asks = [asks_dict[p] for p in asks_dict]
 
-    highcharts_series = [[tx.seconds, tx.price] for tx in Transaction.filter(group=group)]    
-    results_series = [[tx.seconds, tx.price,tx.buyer.id_in_group,tx.seller.id_in_group] for tx in Transaction.filter(group=group)]    
+    highcharts_series = [
+        [tx.seconds, tx.price] for tx in Transaction.filter(group=group)
+    ]
+    results_series = [
+        [tx.seconds, tx.price, tx.buyer.id_in_group, tx.seller.id_in_group]
+        for tx in Transaction.filter(group=group)
+    ]
     return {
         p.id_in_group: dict(
-            player=my_id,            
+            player=my_id,
             num_items=p.num_items,
             current_offer=p.current_offer,
-            payoff = p.payoff,
-            bids_dict = bids_dict,            
+            payoff=p.payoff,
+            bids_dict=bids_dict,
             bids=bids,
             bids_player=bids_player,
-            asks_dict = asks_dict,            
+            asks_dict=asks_dict,
             asks=asks,
             asks_player=asks_player,
             highcharts_series=highcharts_series,
@@ -263,19 +292,18 @@ def live_method(player: Player, data):
             partners=p.partners,
             prices=p.prices,
             finish_frag=p.finish_frag,
-            results_series=results_series
+            results_series=results_series,
         )
         for p in players
     }
-        
-    
 
 
 # PAGES
-class WaitToStart(WaitPage):     
+class WaitToStart(WaitPage):
     @staticmethod
     def after_all_players_arrive(group: Group):
-        group.start_timestamp = int(time.time())  
+        group.start_timestamp = int(time.time())
+
 
 class Trading(Page):
     live_method = live_method
@@ -286,20 +314,21 @@ class Trading(Page):
         players = group.get_players()
         buyers = [p for p in players if p.is_buyer]
         sellers = [p for p in players if not p.is_buyer]
-        return dict(num_sellers=len(sellers),
-                    num_buyers=len(buyers))
+        return dict(num_sellers=len(sellers), num_buyers=len(buyers))
 
     @staticmethod
     def js_vars(player: Player):
-        group = player.group    
+        group = player.group
         players = group.get_players()
         buyers = [p for p in players if p.is_buyer]
         sellers = [p for p in players if not p.is_buyer]
-        return dict(num_sellers=len(sellers),
-                    num_buyers=len(buyers),
-                    id_in_group=player.id_in_group,
-                    is_buyer=player.is_buyer,
-                    max_value=C.VALUATION_MAX)
+        return dict(
+            num_sellers=len(sellers),
+            num_buyers=len(buyers),
+            id_in_group=player.id_in_group,
+            is_buyer=player.is_buyer,
+            max_value=C.VALUATION_MAX,
+        )
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -307,7 +336,7 @@ class Trading(Page):
         return (group.start_timestamp + 3 * 60) - time.time()
 
 
-def keisan(group:Group):
+def keisan(group: Group):
     players = group.get_players()
     tranzakution_buyers = [p for p in players if p.is_buyer and p.partners != ""]
     tranzaction_sellers = [p for p in players if not p.is_buyer and p.partners != ""]
@@ -316,11 +345,12 @@ def keisan(group:Group):
     # 全体取引量
     group.sum_transactions = len(tranzakution_buyers)
     # 社会的損害額(20×全体取引量÷参加者)
-    group.social_damage = C.multiple_social_damage * group.sum_transactions / C.PLAYERS_PER_GROUP
+    group.social_damage = (
+        C.multiple_social_damage * group.sum_transactions / C.PLAYERS_PER_GROUP
+    )
     # 個人の利得を再計算
     for p in players:
         p.social_damage_payoff = p.payoff - group.social_damage
-
 
 
 class ResultsWaitPage(WaitPage):
@@ -330,28 +360,27 @@ class ResultsWaitPage(WaitPage):
         keisan(group)
 
 
-
 class Results(Page):
     @staticmethod
     def vars_for_template(player: Player):
-        #roundごとの変数リスト
+        # roundごとの変数リスト
         p_list = []
         p_list2 = []
         for i in range(player.round_number):
-            p = player.in_round(i+1)
+            p = player.in_round(i + 1)
             players = p.group.get_players()
 
-            #役割
+            # 役割
             if p.is_buyer:
-                role = '買い手'
+                role = "買い手"
             else:
-                role = '売り手'
+                role = "売り手"
 
-            #買い手・売り手それぞれの注文時取引価格リスト
-            buyer_offer = []    #buyerのofferリスト
-            seller_offer = []   #sellerのofferリスト
+            # 買い手・売り手それぞれの注文時取引価格リスト
+            buyer_offer = []  # buyerのofferリスト
+            seller_offer = []  # sellerのofferリスト
             for q in players:
-                if q.prices != '':
+                if q.prices != "":
                     if q.is_buyer:
                         buyer_offer.append(int(q.offers_win))
                     else:
@@ -359,25 +388,27 @@ class Results(Page):
             buyer_offer.sort(reverse=True)
             seller_offer.sort()
 
-            #均衡価格
-            eq_cnt = -1 #均衡価格となる量の初期値
+            # 均衡価格
+            eq_cnt = -1  # 均衡価格となる量の初期値
             for j in range(len(buyer_offer)):
                 if buyer_offer[j] < seller_offer[j]:
-                    if j==0: eq_cnt=0
-                    else: eq_cnt=j-1
+                    if j == 0:
+                        eq_cnt = 0
+                    else:
+                        eq_cnt = j - 1
                     break
 
-            if len(buyer_offer)==0:
+            if len(buyer_offer) == 0:
                 eq_price = 0
-            elif eq_cnt==-1:
-                eq_price = (buyer_offer[-1]+seller_offer[-1])//2
+            elif eq_cnt == -1:
+                eq_price = (buyer_offer[-1] + seller_offer[-1]) // 2
             else:
-                eq_price = (buyer_offer[eq_cnt]+seller_offer[eq_cnt])//2
+                eq_price = (buyer_offer[eq_cnt] + seller_offer[eq_cnt]) // 2
 
-            #余剰の計算
-            #prod_surplus = sum(buyer_offer) - len(buyer_offer)*eq_price
-            #cons_surplus = len(seller_offer)*eq_price - sum(seller_offer)
-            #total_surplus = prod_surplus + cons_surplus - C.multiple_social_damage*p.group.sum_transactions
+            # 余剰の計算
+            # prod_surplus = sum(buyer_offer) - len(buyer_offer)*eq_price
+            # cons_surplus = len(seller_offer)*eq_price - sum(seller_offer)
+            # total_surplus = prod_surplus + cons_surplus - C.multiple_social_damage*p.group.sum_transactions
 
             cons_surplus = 0
             prod_surplus = 0
@@ -413,15 +444,15 @@ class Results(Page):
                 cons_surplus=cons_surplus,
                 total_surplus=total_surplus,
                 # 追加
-                sum_transactions = group.sum_transactions,
-                social_damage = group.social_damage,
-                social_damage_payoff = player.social_damage_payoff
+                sum_transactions=group.sum_transactions,
+                social_damage=group.social_damage,
+                social_damage_payoff=player.social_damage_payoff,
             )
 
             p_list.append(p_dict)
             p_list2.append(p_dict2)
 
-            #理想値の計算(均衡価格、余剰)
+            # 理想値の計算(均衡価格、余剰)
             ideal_prodSurplus = 0
             ideal_consSurplus = 0
             # for j in range(C.PLAYERS_PER_GROUP):
@@ -477,26 +508,28 @@ class Results(Page):
 
     @staticmethod
     def js_vars(player: Player):
-        if player.is_buyer :
-            return dict(Num = player.num_items)
+        if player.is_buyer:
+            return dict(Num=player.num_items)
         else:
-            return dict(Num = C.ITEMS_PER_SELLER - player.num_items)
+            return dict(Num=C.ITEMS_PER_SELLER - player.num_items)
 
     @staticmethod
-    def live_method(player: Player,data):
+    def live_method(player: Player, data):
         group = player.group
-        highcharts_series = [[tx.seconds, tx.price] for tx in Transaction.filter(group=group)]
+        highcharts_series = [
+            [tx.seconds, tx.price] for tx in Transaction.filter(group=group)
+        ]
         players = group.get_players()
 
-        #需要と供給グラフ用の変数
-        buyer_offer = []    #buyerのofferリスト
-        seller_offer = []   #sellerのofferリスト
+        # 需要と供給グラフ用の変数
+        buyer_offer = []  # buyerのofferリスト
+        seller_offer = []  # sellerのofferリスト
         highcharts_buyer = []
         highcharts_seller = []
         chart_time = []
         chart_buyer_seller = []
         for p in players:
-            if p.prices != '':
+            if p.prices != "":
                 if p.is_buyer:
                     buyer_offer.append(p.break_even_point)
                     highcharts_buyer.append([int(p.seconds), int(p.break_even_point)])
@@ -535,18 +568,20 @@ class Results(Page):
         # for i in range(len(buyer_offer)):
         #     highcharts_buyer[i] = [i+1,buyer_offer[i]]
         #     highcharts_seller[i] = [i+1,seller_offer[i]]
-        
-        #取引が無かったことを表すFlag．(取引なければTrue)
-        if len(buyer_offer) == 0: noBuyer = True
-        else: noBuyer = False
 
-        #最後のラウンドであることを示すFlag
+        # 取引が無かったことを表すFlag．(取引なければTrue)
+        if len(buyer_offer) == 0:
+            noBuyer = True
+        else:
+            noBuyer = False
+
+        # 最後のラウンドであることを示すFlag
         if p.round_number == C.NUM_ROUNDS:
             last_flag = True
         else:
             last_flag = False
 
-        #理想値の需要供給グラフ
+        # 理想値の需要供給グラフ
         tmp_buyer = []
         tmp_seller = []
 
@@ -579,35 +614,30 @@ class Results(Page):
                 highcharts_series=highcharts_series,
                 highcharts_buyer=highcharts_buyer,
                 highcharts_seller=highcharts_seller,
-                last_flag = last_flag,
-                noBuyer = noBuyer,
-                chart_idealBuyer = chart_idealBuyer,
-                chart_idealSeller = chart_idealSeller,
-                chart_time =chart_time,
-                chart_buyer_seller = chart_buyer_seller
+                last_flag=last_flag,
+                noBuyer=noBuyer,
+                chart_idealBuyer=chart_idealBuyer,
+                chart_idealSeller=chart_idealSeller,
+                chart_time=chart_time,
+                chart_buyer_seller=chart_buyer_seller,
             )
             for p in players
         }
 
-  #  @staticmethod
-  #  def get_timeout_seconds(player: Player):
-  #      return player.group.start_timestamp + 30 -time.time()
+
+#  @staticmethod
+#  def get_timeout_seconds(player: Player):
+#      return player.group.start_timestamp + 30 -time.time()
 
 
 class Room_waiting(Page):
     def is_displayed(self):
         return self.subsession.round_number == 1
 
+
 class Finish(Page):
-    def is_displayed(player:Player):
+    def is_displayed(player: Player):
         return player.round_number == C.NUM_ROUNDS
 
-page_sequence = [
-    Room_waiting,
-    WaitToStart,
-    Trading,
-    ResultsWaitPage,
-    Results,
-    Finish
-]
 
+page_sequence = [Room_waiting, WaitToStart, Trading, ResultsWaitPage, Results, Finish]

@@ -1,22 +1,21 @@
 from otree.api import *
 import random
 
-doc = """
-
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch2_1_coordination'
+    NAME_IN_URL = "ch2_1_coordination"
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
-    INSTRUCTIONS_TEMPLATE = 'ch2_1_coordination/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch2_1_coordination/instructions.html"
     PAYOFF_A = cu(5)
     PAYOFF_B = cu(10)
     PAYOFF_C = cu(3)
     PAYOFF_D = cu(2)
 
-    choice_list = ["A","B"]
+    choice_list = ["A", "B"]
+
 
 class Subsession(BaseSubsession):
     num_participants = models.IntegerField(initial=0)
@@ -30,15 +29,17 @@ class Subsession(BaseSubsession):
     pair_num_BB = models.IntegerField(initial=0)
     pair_err_message = models.StringField()
 
+
 class Group(BaseGroup):
     pass
+
 
 class Player(BasePlayer):
     flg_non_input = models.IntegerField(initial=0)
     flg_pair_non_input = models.IntegerField(initial=0)
 
     individual_choice = models.StringField(
-        choices=[['A', 'A'], ['B', 'B']],
+        choices=[["A", "A"], ["B", "B"]],
         doc="""This player's decision""",
         widget=widgets.RadioSelect,
     )
@@ -49,47 +50,43 @@ class Player(BasePlayer):
 
     # 相手はどちらを選ぶと思うか
     think_other_player_choice = models.StringField(
-    widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["Aを選ぶと予想する", '映画1を選ぶと予想する'],
-            ["Bを選ぶと予想する", '映画2を選ぶと予想する'],
+            ["Aを選ぶと予想する", "映画1を選ぶと予想する"],
+            ["Bを選ぶと予想する", "映画2を選ぶと予想する"],
         ],
     )
 
     # 意思決定の理由
-    individual_choice_comment  = models.LongStringField(
-        verbose_name='',
-        initial=""
-    )
+    individual_choice_comment = models.LongStringField(verbose_name="", initial="")
 
     # 相手の予想のの理由
-    think_other_player_choice_comment  = models.LongStringField(
-        verbose_name='',
-        initial=""
+    think_other_player_choice_comment = models.LongStringField(
+        verbose_name="", initial=""
     )
 
     # 相手が映画１を選んだ際に、あなたは何ポイント獲得しますか？
     q1 = models.StringField(
-    #widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        # widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["5", '5'],
-            ["10", '10'],
-            ["2", '2'],
-            ["3", '3'],
+            ["5", "5"],
+            ["10", "10"],
+            ["2", "2"],
+            ["3", "3"],
         ],
     )
 
     # 相手が映画2を選んだ際に、あなたは何ポイント獲得しますか？
     q2 = models.StringField(
-    #widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        # widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["5", '5'],
-            ["10", '10'],
-            ["2", '2'],
-            ["3", '3'],
+            ["5", "5"],
+            ["10", "10"],
+            ["2", "2"],
+            ["3", "3"],
         ],
     )
 
@@ -116,16 +113,20 @@ def keisans(subsession: Subsession):
     for p in subsession.get_players():
         keisan(p)
 
+
 def set_graph(subsession: Subsession):
     for p in subsession.get_players():
         graph_pair(p)
+
 
 def set_payoffs(group: Group):
     for p in group.get_players():
         set_payoff(p)
 
+
 def other_player(player: Player):
     return player.get_others_in_group()[0]
+
 
 def graph_pair(player: Player):
     sub = player.subsession
@@ -133,9 +134,9 @@ def graph_pair(player: Player):
     # グラフ用集計
     s = player.individual_choice
     sp = player.pair_choice
-    if (s == "A")and(sp == "A"):
+    if (s == "A") and (sp == "A"):
         sub.pair_num_AA += 1
-    elif (s == "A")and(sp == "B"):
+    elif (s == "A") and (sp == "B"):
         sub.pair_num_AB += 1
     elif (s == "B") and (sp == "A"):
         sub.pair_num_BA += 1
@@ -143,6 +144,7 @@ def graph_pair(player: Player):
         sub.pair_num_BB += 1
     else:
         sub.pair_err_message = "エラーあり"
+
 
 def set_payoff(player: Player):
     payoff_matrix_p1 = {
@@ -165,34 +167,45 @@ def set_payoff(player: Player):
 
     print(player.individual_choice, other.individual_choice)
     if player.id_in_group == 1:
-        player.payoff = payoff_matrix_p1[(player.individual_choice, other.individual_choice)]
+        player.payoff = payoff_matrix_p1[
+            (player.individual_choice, other.individual_choice)
+        ]
     else:
-        player.payoff = payoff_matrix_p2[(other.individual_choice, player.individual_choice)]
+        player.payoff = payoff_matrix_p2[
+            (other.individual_choice, player.individual_choice)
+        ]
     print(player.id_in_group, player.payoff)
 
 
-
-# PAGESー－－－－－－－
+# PAGES-----
 class Introduction(Page):
     timeout_seconds = 100
 
 
 class Decision(Page):
-    form_model = 'player'
-    form_fields = ['individual_choice','individual_choice_comment']
+    form_model = "player"
+    form_fields = ["individual_choice", "individual_choice_comment"]
 
 
 class Question(Page):
-    form_model = 'player'
-    form_fields = ['q1','q2','think_other_player_choice','think_other_player_choice_comment']
+    form_model = "player"
+    form_fields = [
+        "q1",
+        "q2",
+        "think_other_player_choice",
+        "think_other_player_choice_comment",
+    ]
+
 
 class keisanWaitPage(WaitPage):
     wait_for_all_groups = True
     after_all_players_arrive = keisans
 
+
 class GraphWaitPage(WaitPage):
     wait_for_all_groups = True
     after_all_players_arrive = set_graph
+
 
 class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
@@ -208,7 +221,7 @@ class Results(Page):
         else:
             disp_my_decision = "映画2"
 
-        if opponent.individual_choice== "A":
+        if opponent.individual_choice == "A":
             disp_opponent_decision = "映画1"
         else:
             disp_opponent_decision = "映画2"
@@ -217,10 +230,10 @@ class Results(Page):
         return dict(
             opponent=opponent,
             same_choice=player.individual_choice == opponent.individual_choice,
-            #my_decision=player.field_display('individual_choice'),
-            my_decision = disp_my_decision,
-            opponent_decision = disp_opponent_decision,
-            #opponent_decision=opponent.field_display('individual_choice'),
+            # my_decision=player.field_display('individual_choice'),
+            my_decision=disp_my_decision,
+            opponent_decision=disp_opponent_decision,
+            # opponent_decision=opponent.field_display('individual_choice'),
         )
 
     # グラフ描画用
@@ -230,11 +243,11 @@ class Results(Page):
         sub = player.subsession
         # 割合に計算
         if sub.num_A > 0:
-            prop_num_A = round((sub.num_A / sub.num_participants) * 100,2)
+            prop_num_A = round((sub.num_A / sub.num_participants) * 100, 2)
         else:
             prop_num_A = 0
         if sub.num_B > 0:
-            prop_num_B = round((sub.num_B / sub.num_participants) * 100,2)
+            prop_num_B = round((sub.num_B / sub.num_participants) * 100, 2)
         else:
             prop_num_B = 0
 
@@ -258,26 +271,28 @@ class Results(Page):
             prop_pair_num_BB = 0
 
         return dict(
-                    num_participants = sub.num_participants,
-                    num_A  = prop_num_A,
-                    num_B  = prop_num_B,
-                    num_pairs =sub.pair_num,
-                    num_AA=prop_pair_num_AA,
-                    num_AB=prop_pair_num_AB,
-                    num_BA=prop_pair_num_BA,
-                    num_BB=prop_pair_num_BB,
-                )
+            num_participants=sub.num_participants,
+            num_A=prop_num_A,
+            num_B=prop_num_B,
+            num_pairs=sub.pair_num,
+            num_AA=prop_pair_num_AA,
+            num_AB=prop_pair_num_AB,
+            num_BA=prop_pair_num_BA,
+            num_BB=prop_pair_num_BB,
+        )
+
 
 class PreResults(Page):
     pass
 
+
 page_sequence = [
-                 Introduction,
-                 Decision,
-                 Question,
-                 keisanWaitPage,
-                 ResultsWaitPage,
-                 GraphWaitPage,
-                 PreResults,
-                 Results
-                 ]
+    Introduction,
+    Decision,
+    Question,
+    keisanWaitPage,
+    ResultsWaitPage,
+    GraphWaitPage,
+    PreResults,
+    Results,
+]

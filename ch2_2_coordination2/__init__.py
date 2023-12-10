@@ -1,16 +1,14 @@
 from otree.api import *
 import random
 
-doc = """
-
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch2_2_coordination2'
+    NAME_IN_URL = "ch2_2_coordination2"
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
-    INSTRUCTIONS_TEMPLATE = 'ch2_2_coordination2/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch2_2_coordination2/instructions.html"
     PAYOFF_A = cu(85)
     PAYOFF_B = cu(30)
     PAYOFF_C = cu(65)
@@ -18,8 +16,8 @@ class C(BaseConstants):
     PAYOFF_E = cu(100)
     PAYOFF_F = cu(50)
 
+    choice_list = ["A", "B"]
 
-    choice_list = ["A","B"]
 
 class Subsession(BaseSubsession):
     num_participants_p1 = models.IntegerField(initial=0)
@@ -39,15 +37,17 @@ class Subsession(BaseSubsession):
     pair_num_BB = models.IntegerField(initial=0)
     pair_err_message = models.StringField()
 
+
 class Group(BaseGroup):
     pass
+
 
 class Player(BasePlayer):
     flg_non_input = models.IntegerField(initial=0)
     flg_pair_non_input = models.IntegerField(initial=0)
 
     individual_choice = models.StringField(
-        choices=[['A', 'A'], ['B', 'B']],
+        choices=[["A", "A"], ["B", "B"]],
         doc="""This player's decision""",
         widget=widgets.RadioSelect,
     )
@@ -57,42 +57,38 @@ class Player(BasePlayer):
     pair_choice = models.StringField()
 
     # 意思決定の理由
-    individual_choice_comment  = models.LongStringField(
-        verbose_name='',
-        initial=""
-    )
+    individual_choice_comment = models.LongStringField(verbose_name="", initial="")
 
     q1 = models.StringField(
-    #widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        # widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["UL", 'プレイヤー1がU,プレイヤー2がL'],
-            ["UR", 'プレイヤー1がU,プレイヤー2がR'],
-            ["DL", 'プレイヤー1がD,プレイヤー2がL'],
-            ["DR", 'プレイヤー1がD,プレイヤー2がR'],
+            ["UL", "プレイヤー1がU,プレイヤー2がL"],
+            ["UR", "プレイヤー1がU,プレイヤー2がR"],
+            ["DL", "プレイヤー1がD,プレイヤー2がL"],
+            ["DR", "プレイヤー1がD,プレイヤー2がR"],
         ],
     )
     q2 = models.StringField(
-    #widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        # widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["UL", 'プレイヤー1がU,プレイヤー2がL'],
-            ["UR", 'プレイヤー1がU,プレイヤー2がR'],
-            ["DL", 'プレイヤー1がD,プレイヤー2がL'],
-            ["DR", 'プレイヤー1がD,プレイヤー2がR'],
+            ["UL", "プレイヤー1がU,プレイヤー2がL"],
+            ["UR", "プレイヤー1がU,プレイヤー2がR"],
+            ["DL", "プレイヤー1がD,プレイヤー2がL"],
+            ["DR", "プレイヤー1がD,プレイヤー2がR"],
         ],
     )
     q3 = models.StringField(
-    #widget=widgets.RadioSelectHorizontal,
-        verbose_name='',
+        # widget=widgets.RadioSelectHorizontal,
+        verbose_name="",
         choices=[
-            ["UL", 'プレイヤー1がU,プレイヤー2がL'],
-            ["UR", 'プレイヤー1がU,プレイヤー2がR'],
-            ["DL", 'プレイヤー1がD,プレイヤー2がL'],
-            ["DR", 'プレイヤー1がD,プレイヤー2がR'],
+            ["UL", "プレイヤー1がU,プレイヤー2がL"],
+            ["UR", "プレイヤー1がU,プレイヤー2がR"],
+            ["DL", "プレイヤー1がD,プレイヤー2がL"],
+            ["DR", "プレイヤー1がD,プレイヤー2がR"],
         ],
     )
-
 
 
 # FUNCTIONS
@@ -132,16 +128,20 @@ def keisans(subsession: Subsession):
     for p in subsession.get_players():
         keisan(p)
 
+
 def set_graph(subsession: Subsession):
     for p in subsession.get_players():
         graph_pair(p)
+
 
 def set_payoffs(group: Group):
     for p in group.get_players():
         set_payoff(p)
 
+
 def other_player(player: Player):
     return player.get_others_in_group()[0]
+
 
 def graph_pair(player: Player):
     sub = player.subsession
@@ -149,12 +149,12 @@ def graph_pair(player: Player):
     # グラフ用集計
     s = player.individual_choice
     sp = player.pair_choice
-    print("graph_____プレイヤー1,プレイヤー2________________",s,sp)
+    print("graph_____プレイヤー1,プレイヤー2________________", s, sp)
     if player.id_in_group == 1:
-        if (s == "A")and(sp == "A"):
+        if (s == "A") and (sp == "A"):
             print("graph1_____________________AA", s, sp)
             sub.pair_num_AA += 1
-        elif (s == "A")and(sp == "B"):
+        elif (s == "A") and (sp == "B"):
             print("graph1_____________________AB", s, sp)
             sub.pair_num_AB += 1
         elif (s == "B") and (sp == "A"):
@@ -165,7 +165,7 @@ def graph_pair(player: Player):
             sub.pair_num_BB += 1
         else:
             sub.pair_err_message = "エラーあり"
-    #else:
+    # else:
     #    if (sp == "A")and(s == "A"):
     #        print("graph_2____________________AA", s, sp)
     #        sub.pair_num_AA += 1
@@ -180,6 +180,7 @@ def graph_pair(player: Player):
     #        sub.pair_num_BB += 1
     #    else:
     #        sub.pair_err_message = "エラーあり"
+
 
 def set_payoff(player: Player):
     payoff_matrix_p1 = {
@@ -202,34 +203,40 @@ def set_payoff(player: Player):
 
     print(player.individual_choice, other.individual_choice)
     if player.id_in_group == 1:
-        player.payoff = payoff_matrix_p1[(player.individual_choice, other.individual_choice)]
+        player.payoff = payoff_matrix_p1[
+            (player.individual_choice, other.individual_choice)
+        ]
     else:
-        player.payoff = payoff_matrix_p2[(other.individual_choice, player.individual_choice)]
+        player.payoff = payoff_matrix_p2[
+            (other.individual_choice, player.individual_choice)
+        ]
     print(player.id_in_group, player.payoff)
 
 
-
-# PAGESー－－－－－－－
+# PAGES-----
 class Introduction(Page):
     timeout_seconds = 100
 
 
 class Decision(Page):
-    form_model = 'player'
-    form_fields = ['individual_choice','individual_choice_comment']
+    form_model = "player"
+    form_fields = ["individual_choice", "individual_choice_comment"]
 
 
 class Question(Page):
-    form_model = 'player'
-    form_fields = ['q1','q2','q3']
+    form_model = "player"
+    form_fields = ["q1", "q2", "q3"]
+
 
 class keisanWaitPage(WaitPage):
     wait_for_all_groups = True
     after_all_players_arrive = keisans
 
+
 class GraphWaitPage(WaitPage):
     wait_for_all_groups = True
     after_all_players_arrive = set_graph
+
 
 class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
@@ -240,7 +247,12 @@ class Results(Page):
     def vars_for_template(player: Player):
         opponent = other_player(player)
 
-        print(player.id_in_group,"*************************************",player.individual_choice,opponent.individual_choice)
+        print(
+            player.id_in_group,
+            "*************************************",
+            player.individual_choice,
+            opponent.individual_choice,
+        )
         if player.id_in_group == 1:
             if player.individual_choice == "A":
                 disp_my_decision = "U"
@@ -264,10 +276,10 @@ class Results(Page):
         return dict(
             opponent=opponent,
             same_choice=player.individual_choice == opponent.individual_choice,
-            #my_decision=player.field_display('individual_choice'),
-            my_decision = disp_my_decision,
-            opponent_decision = disp_opponent_decision,
-            #opponent_decision=opponent.field_display('individual_choice'),
+            # my_decision=player.field_display('individual_choice'),
+            my_decision=disp_my_decision,
+            opponent_decision=disp_opponent_decision,
+            # opponent_decision=opponent.field_display('individual_choice'),
         )
 
     # グラフ描画用
@@ -286,7 +298,7 @@ class Results(Page):
         else:
             prop_num_B_p1 = 0
 
-        print(prop_num_A_p1,";;;;;;;;;;;;;;;;;;;;;")
+        print(prop_num_A_p1, ";;;;;;;;;;;;;;;;;;;;;")
         # 割合に計算
         if sub.num_A_p2 > 0:
             prop_num_A_p2 = round((sub.num_A_p2 / sub.num_participants_p2) * 100, 2)
@@ -317,29 +329,31 @@ class Results(Page):
             prop_pair_num_BB = 0
 
         return dict(
-                    num_participants_p1=sub.num_participants_p1,
-                    num_participants_p2=sub.num_participants_p2,
-                    num_A_p1=prop_num_A_p1,
-                    num_B_p1=prop_num_B_p1,
-                    num_A_p2=prop_num_A_p2,
-                    num_B_p2=prop_num_B_p2,
-                    num_pairs =sub.pair_num,
-                    num_AA=prop_pair_num_AA,
-                    num_AB=prop_pair_num_AB,
-                    num_BA=prop_pair_num_BA,
-                    num_BB=prop_pair_num_BB,
-                )
+            num_participants_p1=sub.num_participants_p1,
+            num_participants_p2=sub.num_participants_p2,
+            num_A_p1=prop_num_A_p1,
+            num_B_p1=prop_num_B_p1,
+            num_A_p2=prop_num_A_p2,
+            num_B_p2=prop_num_B_p2,
+            num_pairs=sub.pair_num,
+            num_AA=prop_pair_num_AA,
+            num_AB=prop_pair_num_AB,
+            num_BA=prop_pair_num_BA,
+            num_BB=prop_pair_num_BB,
+        )
+
 
 class PreResults(Page):
     pass
 
+
 page_sequence = [
-                 Introduction,
-                 Decision,
-                 Question,
-                 keisanWaitPage,
-                 ResultsWaitPage,
-                 GraphWaitPage,
-                 PreResults,
-                 Results
-                 ]
+    Introduction,
+    Decision,
+    Question,
+    keisanWaitPage,
+    ResultsWaitPage,
+    GraphWaitPage,
+    PreResults,
+    Results,
+]

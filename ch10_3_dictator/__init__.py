@@ -1,32 +1,29 @@
 from otree.api import *
 import random
 
-doc = """
-Simple trust game
-"""
+doc = """ """
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'ch10_3_dictator'
+    NAME_IN_URL = "ch10_3_dictator"
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
     ENDOWMENT = 1000
-    INSTRUCTIONS_TEMPLATE = 'ch10_3_dictator/instructions.html'
+    INSTRUCTIONS_TEMPLATE = "ch10_3_dictator/instructions.html"
     ADD_TIME = 180
 
-
     CHOICE_LIST_SENTE = [
-        [0, 'あなた0ポイント、相手1000ポイント'],
-        [100, 'あなた100ポイント、相手900ポイント'],
-        [200, 'あなた200ポイント、相手800ポイント'],
-        [300, 'あなた300ポイント、相手700ポイント'],
-        [400, 'あなた400ポイント、相手600ポイント'],
-        [500, 'あなた500ポイント、相手500ポイント'],
-        [600, 'あなた600ポイント、相手400ポイント'],
-        [700, 'あなた700ポイント、相手300ポイント'],
-        [800, 'あなた800ポイント、相手200ポイント'],
-        [900, 'あなた900ポイント、相手100ポイント'],
-        [1000, 'あなた1000ポイント、相手0ポイント']
+        [0, "あなた0ポイント、相手1000ポイント"],
+        [100, "あなた100ポイント、相手900ポイント"],
+        [200, "あなた200ポイント、相手800ポイント"],
+        [300, "あなた300ポイント、相手700ポイント"],
+        [400, "あなた400ポイント、相手600ポイント"],
+        [500, "あなた500ポイント、相手500ポイント"],
+        [600, "あなた600ポイント、相手400ポイント"],
+        [700, "あなた700ポイント、相手300ポイント"],
+        [800, "あなた800ポイント、相手200ポイント"],
+        [900, "あなた900ポイント、相手100ポイント"],
+        [1000, "あなた1000ポイント、相手0ポイント"],
     ]
 
 
@@ -58,20 +55,16 @@ class Group(BaseGroup):
     p2_amount = models.IntegerField()
 
     p1_decision = models.StringField(
-        choices=C.CHOICE_LIST_SENTE,
-        widget=widgets.RadioSelect,
-        label=""
+        choices=C.CHOICE_LIST_SENTE, widget=widgets.RadioSelect, label=""
     )
-    p1_decision_why = models.LongStringField(
-        label="なぜその選択をしましたか？"
-    )
-
+    p1_decision_why = models.LongStringField(label="なぜその選択をしましたか？")
 
     flg_non_input_p1 = models.IntegerField(initial=0)
 
 
 class Player(BasePlayer):
     pass
+
 
 # FUNCTIONS
 def set_P1(player: Player):
@@ -112,8 +105,8 @@ def set_P1(player: Player):
         tmp = random.randint(0, 10)
         group.p1_decision = str(C.CHOICE_LIST_SENTE[tmp][0])
     # 先手の配分計算
-    #group.p1_amount = C.ENDOWMENT - int(group.p1_decision)
-    #group.p1_amount = C.ENDOWMENT - int(group.p1_decision)
+    # group.p1_amount = C.ENDOWMENT - int(group.p1_decision)
+    # group.p1_amount = C.ENDOWMENT - int(group.p1_decision)
     group.p1_amount = int(group.p1_decision)
     group.p2_amount = C.ENDOWMENT - int(group.p1_decision)
 
@@ -127,8 +120,8 @@ def set_payoffs(group: Group):
     p1 = group.get_player_by_id(1)
     p2 = group.get_player_by_id(2)
 
-    #p1.payoff = C.ENDOWMENT - int(group.p1_decision)
-    #p2.payoff = int(group.p1_decision)
+    # p1.payoff = C.ENDOWMENT - int(group.p1_decision)
+    # p2.payoff = int(group.p1_decision)
     p1.payoff = int(group.p1_decision)
     p2.payoff = C.ENDOWMENT - int(group.p1_decision)
     graph(subsession=group.subsession)
@@ -201,34 +194,40 @@ def graph(subsession: Subsession):
     for player in subsession.get_players():
         group = player.group
         participant = player.participant
-        participant.vars['ch10_3_result'] = "++++++++++++++++++++++++++++++++++++++++++++++++++<br>" \
-                                            "独裁者ゲーム：あなたの結果：" \
-                                            "プレイヤー1（先手）は、プレイヤー1に" + str(group.p1_amount) + "ポイント、プレイヤー2に" + str(group.p2_amount) + "という提案をしました。<br>" \
-                                            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>" \
-                                            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+        participant.vars["ch10_3_result"] = (
+            "++++++++++++++++++++++++++++++++++++++++++++++++++<br>"
+            "独裁者ゲーム：あなたの結果："
+            "プレイヤー1（先手）は、プレイヤー1に"
+            + str(group.p1_amount)
+            + "ポイント、プレイヤー2に"
+            + str(group.p2_amount)
+            + "という提案をしました。<br>"
+            "プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。<br>"
+            "++++++++++++++++++++++++++++++++++++++++++++++++++"
+        )
 
-    ch10_3_result.append(participant.vars['ch10_3_result'])
+    ch10_3_result.append(participant.vars["ch10_3_result"])
 
-    #　最終結果用
-    if 'graph_data' not in session.vars:
+    # 　最終結果用
+    if "graph_data" not in session.vars:
         session.graph_data = {}
-    session.graph_data['ch10_3'] = {
-            'num_participants': sub.num_participants,
-            'graph_list': graph_list,
-            'ch10_3_result': ch10_3_result
+    session.graph_data["ch10_3"] = {
+        "num_participants": sub.num_participants,
+        "graph_list": graph_list,
+        "ch10_3_result": ch10_3_result,
     }
-    
 
-# PAGESー－－－－－－－
+
+# PAGES-----
 class Introduction(Page):
     timeout_seconds = 60
 
 
 class Send(Page):
-    #timeout_seconds = 60+C.ADD_TIME
+    # timeout_seconds = 60+C.ADD_TIME
     timeout_seconds = C.ADD_TIME
-    form_model = 'group'
-    form_fields = ['p1_decision', 'p1_decision_why']
+    form_model = "group"
+    form_fields = ["p1_decision", "p1_decision_why"]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -251,10 +250,4 @@ class Results(Page):
         return player.session.graph_data
 
 
-page_sequence = [
-    Introduction,
-    Send,
-    WaitForP1,
-    ResultsWaitPage,
-    Results
-]
+page_sequence = [Introduction, Send, WaitForP1, ResultsWaitPage, Results]
