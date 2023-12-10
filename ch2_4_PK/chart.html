@@ -6,7 +6,7 @@
 
 <script>
     function drawChart() {
-        disp_title = "（デバッグ中）" + js_vars.num_participants + "名が実験に参加しました。"
+        disp_title = js_vars.num_participants + "名が実験に参加しました。"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart', {
@@ -74,7 +74,7 @@
         }
     //}
     function drawChart_pair() {
-        disp_title = "（デバッグ中）" + js_vars.num_pairs + "名が実験に参加しました。"
+        disp_title = "（コンピュータを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart2', {

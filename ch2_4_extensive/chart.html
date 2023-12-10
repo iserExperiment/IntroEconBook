@@ -7,7 +7,7 @@
 
 <script>
     function drawChart_p1() {
-        disp_title = "（プレイヤー1）" + js_vars.num_participants + "名が実験に参加しました。"
+        disp_title = "（プレイヤー1）" + js_vars.num_participants_P1 + "名が実験に参加しました。"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart_p1', {
@@ -74,7 +74,7 @@
         }
     //}
     function drawChart_p2() {
-        disp_title = "（プレイヤー2）" + js_vars.num_participants + "名が実験に参加しました。"
+        disp_title = "（プレイヤー2）" + js_vars.num_participants_P2 + "名が実験に参加しました。"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart_p2', {
@@ -141,7 +141,7 @@
         }
     //}
     function drawChart_pair() {
-        disp_title = "（コンピュータプレイヤーを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
+        disp_title = "（コンピュータを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart2', {

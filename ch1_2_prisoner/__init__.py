@@ -203,13 +203,13 @@ class Results(Page):
 
         return dict(
                     num_participants = sub.num_participants,
-                    num_A  = prop_num_A,
-                    num_B  = prop_num_B,
-                    num_pairs =sub.pair_num,
-                    num_AA=prop_pair_num_AA,
-                    num_AB=prop_pair_num_AB,
-                    num_BA=prop_pair_num_BA,
-                    num_BB=prop_pair_num_BB,
+                    num_A = prop_num_A,
+                    num_B = prop_num_B,
+                    num_pairs = sub.pair_num,
+                    num_AA = prop_pair_num_AA,
+                    num_AB = prop_pair_num_AB,
+                    num_BA = prop_pair_num_BA,
+                    num_BB = prop_pair_num_BB,
                 )
 
 class PreResults(Page):

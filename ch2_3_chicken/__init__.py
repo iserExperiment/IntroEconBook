@@ -75,7 +75,7 @@ class Player(BasePlayer):
     )
 
     # 相手の予想のの理由
-    think_other_player_choice_comment  = models.LongStringField(
+    think_other_player_choice_comment = models.LongStringField(
         verbose_name='',
         initial=""
     )
@@ -91,7 +91,7 @@ class Player(BasePlayer):
     )
 
     # 意思決定の理由
-    individual_choice_comment  = models.LongStringField(
+    individual_choice_comment = models.LongStringField(
         verbose_name='',
         initial=""
     )
@@ -234,9 +234,9 @@ class Results(Page):
             prop_pair_num_BB = 0
 
         return dict(
-                    num_participants = sub.num_participants,
-                    num_A  = prop_num_A,
-                    num_B  = prop_num_B,
+                    num_participants=sub.num_participants,
+                    num_A=prop_num_A,
+                    num_B=prop_num_B,
                     num_pairs=sub.pair_num,
                     num_AA=prop_pair_num_AA,
                     num_AB=prop_pair_num_AB,

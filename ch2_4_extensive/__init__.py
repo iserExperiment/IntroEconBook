@@ -273,7 +273,8 @@ class Results(Page):
             prop_pair_num_BB = 0
 
         return dict(
-            num_participants=sub.num_participants_p1,
+            num_participants_P1=sub.num_participants_p1,
+            num_participants_P2=sub.num_participants_p2,
             num_A_p1=prop_num_A_p1,
             num_B_p1=prop_num_B_p1,
             num_A_p2=prop_num_A_p2,

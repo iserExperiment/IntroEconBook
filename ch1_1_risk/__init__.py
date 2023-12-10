@@ -9,7 +9,7 @@ class Constants(BaseConstants):
     name_in_url = 'ch1_1_risk'
     players_per_group = None
     num_rounds = 1
-    Q_num=5
+    Q_num = 5
     categories = ['Aが1つ', 'Aが2つ', 'Aが3つ', 'Aが4つ', 'Aが5つ'],
 
 
@@ -24,13 +24,13 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # 1：Decision_1
     risk_List = models.StringField(initial='')
-    individual_choice_r_comment= models.StringField(initial='',label='')
+    individual_choice_r_comment = models.StringField(initial='',label='')
     List_A = models.LongStringField(initial='')
     List_B = models.LongStringField(initial='')
     num_A = models.IntegerField()
     multiple_switch = models.BooleanField()
 
-    start= models.FloatField(initial=0.0)
+    start = models.FloatField(initial=0.0)
     read_time = models.LongStringField(initial='0')
     time = models.LongStringField(initial='0')
 
@@ -40,7 +40,7 @@ class Player(BasePlayer):
     individual_choice_comment = models.StringField(initial='',label='')
 
     # Decision_3
-    u_individual_choice =  models.StringField(
+    u_individual_choice = models.StringField(
         widget=widgets.RadioSelectHorizontal,
         verbose_name='',
         choices=[
@@ -52,7 +52,7 @@ class Player(BasePlayer):
     individual_choice_u_comment = models.StringField(initial='',label='')
 
     # Decision_4
-    s_individual_choice =  models.StringField(
+    s_individual_choice = models.StringField(
         widget=widgets.RadioSelectHorizontal,
         verbose_name='',
         choices=[
@@ -64,7 +64,7 @@ class Player(BasePlayer):
     individual_choice_s_comment = models.StringField(initial='',label='')
 
     # Decision_5
-    e_individual_choice =  models.StringField(
+    e_individual_choice = models.StringField(
         widget=widgets.RadioSelectHorizontal,
         verbose_name='',
         choices=[
@@ -193,17 +193,17 @@ class Results(Page):
 
         # Decision_2:ー－－－－－－－
         num_participants_c = 0
-        sum_decisinon = 0
+        sum_decision = 0
         average_decision = 0
         for p in players:
             c = p.individual_choice
             print("CCCCCCCCCCCCCCCCCCCC",c)
             if c != "":
                 num_participants_c += 1
-                sum_decisinon = sum_decisinon + int(c)
+                sum_decision = sum_decision + int(c)
 
-        if sum_decisinon > 0:
-            average_decision = round(sum_decisinon / num_participants_c, 2)
+        if sum_decision > 0:
+            average_decision = round(sum_decision / num_participants_c, 2)
         else:
             average_decision = 0
 
@@ -256,20 +256,20 @@ class Results(Page):
         e_prop_num_A, e_prop_num_B = keiosan_ratio(e_count_A, e_count_B, num_participants_e)
 
         return dict(
-            name_of_categories  = Constants.categories,
+            name_of_categories = Constants.categories,
             num_participants = num_participants,
-            num_A0  = prop_num_A0, #r_count_A0,
-            num_A1  = prop_num_A1, #r_count_A1,
-            num_A2  = prop_num_A2, #r_count_A2,
-            num_A3  = prop_num_A3, #r_count_A3,
-            num_A4  = prop_num_A4, #r_count_A4,
-            num_A5  = prop_num_A5, #r_count_A5,
+            num_A0 = prop_num_A0, #r_count_A0,
+            num_A1 = prop_num_A1, #r_count_A1,
+            num_A2 = prop_num_A2, #r_count_A2,
+            num_A3 = prop_num_A3, #r_count_A3,
+            num_A4 = prop_num_A4, #r_count_A4,
+            num_A5 = prop_num_A5, #r_count_A5,
             num_participants_c = num_participants_c,
             average_decision = average_decision,
             num_participants_u = num_participants_u,
             u_numA = u_prop_num_A,
             u_numB = u_prop_num_B,
-            num_participants_s=num_participants_s,
+            num_participants_s = num_participants_s,
             s_numA = s_prop_num_A,
             s_numB = s_prop_num_B,
             num_participants_e = num_participants_e,
@@ -298,7 +298,7 @@ class PreResults(Page):
 
 page_sequence = [
     Decision,
-    Decision_2,
+    #Decision_2,
     Decision_3,
     Decision_4,
     Decision_5,
