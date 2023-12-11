@@ -87,7 +87,7 @@ oTree v5.7.2 で動作確認をしております．
     docker compose down
     ```
 
-1. Postgreデータベースをリセットするには（`docker compose up`の状態で）以下のコマンドを実行する．
+1. Postgresデータベースをリセットするには（`docker compose up`の状態で）以下のコマンドを実行する．
 
     ```
     docker compose exec otreeserver otree resetdb
