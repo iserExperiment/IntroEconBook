@@ -1,5 +1,5 @@
 {{ block title }}
-あなたの役割は　{{ if player.is_buyer }}<font color="#1e90ff">買手</font>{{ else }}<font color="#ff4500">売手</font>{{ endif }}　です。<br>
+あなたの役割は {{ if player.is_buyer }}<font color="#1e90ff">買手</font>{{ else }}<font color="#ff4500">売手</font>{{ endif }} です。<br>
 この市場には買手が{{ num_buyers }}人、売手が{{ num_sellers }}人います。
 {{ endblock }}
 {{ block content }}
@@ -74,7 +74,7 @@
     function showNews(msg) {
         news_div.innerText = msg;
         // メッセージの削除
-        // setTimeout(function () {　　
+        // setTimeout(function () {  
         //     news_div.innerText = ''
         // }, 10000)
     }
@@ -94,7 +94,7 @@
 
     function player_count(p,q,current_offer) {
         if(q[p]=== undefined ){
-            return `　`; 
+            return ` `; 
         }else{
             return `${q[p]} `; 
         }
@@ -123,8 +123,8 @@
     }
 
     function make_history(x,player_id) {
-        let array_seconds = []; //　取引時間
-        let array_player = []; //　プレーヤー
+        let array_seconds = []; // 取引時間
+        let array_player = []; // プレーヤー
         let array_price = []; // 価格
         for (let i of x){                                        
             array_player.push(i[1])                                 
@@ -166,7 +166,7 @@
         var ask = Object.values(asks_dict) // 指値        
         let seller = count_duble(ask) // 人数                
         var ask = Array.from(new Set(ask)) // 重複削除
-        var ask = ask.sort(function(a,b){ //ソート　(降順)
+        var ask = ask.sort(function(a,b){ //ソート (降順)
             if(a > b) {
                 return -1;
             }
@@ -192,8 +192,8 @@
 
         var price = ask.concat(bid)   //価格の列        
         var long = 5
-        var ask = ask.reverse().slice(0, [long]) // 下位　5つ
-        var bid = bid.slice(0, [long]) //　上位　5つ
+        var ask = ask.reverse().slice(0, [long]) // 下位 5つ
+        var bid = bid.slice(0, [long]) // 上位 5つ
         
         asks_list.innerHTML = price.map(e => `<tr><td>${player_count(e,seller,current_offer)}</td></tr>`).join(''); // => アロー関数
         prices_list.innerHTML = price.map(e => `<tr><td>${price_count(e,current_offer,asks_price,bids_price)}</td></tr>`).join(''); // => アロー関数        
@@ -210,7 +210,7 @@
         
         if(player == my_id){            
             document.getElementById('alert').innerHTML = ``; 
-            document.getElementById('current_value').innerHTML = `現在の入札額:　${current_offer}`; 
+            document.getElementById('current_value').innerHTML = `現在の入札額: ${current_offer}`; 
             if(current_offer <=0 || max_value <= current_offer){
                 document.getElementById('current_value').innerHTML = ` `; 
             }                        

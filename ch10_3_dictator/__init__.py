@@ -208,7 +208,7 @@ def graph(subsession: Subsession):
 
     ch10_3_result.append(participant.vars["ch10_3_result"])
 
-    # 　最終結果用
+    #  最終結果用
     if "graph_data" not in session.vars:
         session.graph_data = {}
     session.graph_data["ch10_3"] = {

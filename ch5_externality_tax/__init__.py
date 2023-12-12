@@ -209,7 +209,7 @@ def live_method(player: Player, data):
                     time=mili_seconds,
                 )
 
-        if match is not None:  # find_match　が　空でなければ作動 #
+        if match is not None:  # find_match が 空でなければ作動 #
             [buyer, seller] = match
             Transaction.create(
                 group=group,

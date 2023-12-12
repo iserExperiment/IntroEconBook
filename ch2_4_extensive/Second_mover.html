@@ -3,14 +3,14 @@
 {{ endblock }}
 {{ block content }}
     {% if group.p1_decision == "A" %}
-        <p>　<font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_1}}]を選びました。</font></p>
-        <p>　あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_B }}、あなたは{{ C.PAYOFF_B }}もらうことができます。</p>
-        <p>　あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_D }}、あなたは{{ C.PAYOFF_A }}もらうことができます。</p>
+        <p> <font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_1}}]を選びました。</font></p>
+        <p> あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_B }}、あなたは{{ C.PAYOFF_B }}もらうことができます。</p>
+        <p> あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_D }}、あなたは{{ C.PAYOFF_A }}もらうことができます。</p>
     {% endif %}
     {% if group.p1_decision == "B" %}
-        <p>　<font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_2}}]を選びました。</font></p>
-        <p>　あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_A }}、あなたは{{ C.PAYOFF_D }}もらうことができます。</p>
-        <p>　あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_C }}、あなたは{{ C.PAYOFF_C }}もらうことができます。</p>
+        <p> <font color="red">プレイヤー1（先手）は、[{{C.CHOICE_LABEL_2}}]を選びました。</font></p>
+        <p> あなたが、[{{ C.CHOICE_LABEL_1 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_A }}、あなたは{{ C.PAYOFF_D }}もらうことができます。</p>
+        <p> あなたが、[{{ C.CHOICE_LABEL_2 }}]に出店すれば、プレイヤー１は{{ C.PAYOFF_C }}、あなたは{{ C.PAYOFF_C }}もらうことができます。</p>
     {% endif %}
    <table class='table table-bordered text-center'
            style='width: auto; margin: auto'>

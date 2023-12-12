@@ -89,7 +89,7 @@ class Player(BasePlayer):
     # 提出した順位でのランキング
     submitted_partner_index = models.IntegerField()
 
-    # プルダウンの選択肢　ここから
+    # プルダウンの選択肢 ここから
     student_first_choice = models.CharField(
         verbose_name="", choices=C.teacher, initial=None
     )

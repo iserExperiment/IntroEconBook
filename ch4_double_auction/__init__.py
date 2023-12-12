@@ -211,7 +211,7 @@ def live_method(player: Player, data):
                 )
 
         # 取引成立
-        if match is not None:  # find_match　が　空でなければ作動 #
+        if match is not None:  # find_match が 空でなければ作動 #
             [buyer, seller] = match
             Transaction.create(
                 group=group,
@@ -325,7 +325,7 @@ def live_method(player: Player, data):
 #             match = find_match(buyers=[player], sellers=sellers)
 #         else:
 #             match = find_match(buyers=buyers, sellers=[player])
-#         if match: # find_match　が　空でなければ作動 #
+#         if match: # find_match が 空でなければ作動 #
 #             [buyer, seller] = match
 #             price = buyer.current_offer
 #             Transaction.create(
