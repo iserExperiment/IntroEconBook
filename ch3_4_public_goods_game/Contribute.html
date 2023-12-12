@@ -1,0 +1,8 @@
+{{ extends "global/Page.html" }}
+{{ block title }}実験（{{C.NUM_ROUNDS}}回中{{player.round_number}}回目）{{ endblock }}
+{{ block content }}
+
+    あなたはいくら投資しますか？<input type="number" name="individual_choice" min="0" max="40">{% next_button %}
+    {{ include C.INSTRUCTIONS_TEMPLATE }}
+
+{{ endblock }}

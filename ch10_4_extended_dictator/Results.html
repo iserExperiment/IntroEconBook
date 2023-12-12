@@ -1,0 +1,34 @@
+{{ block title }}実験結果{{ endblock }}
+{{ block content }}
+
+    {{ if player.id_in_group == 1 }}
+        <p>
+            あなたはプレイヤー1（先手）でした。
+        </p>
+    {{ else }}
+        <p>
+            あなたはプレイヤー2（後手）でした。
+        </p>
+    {{ endif }}
+
+    <p>プレイヤー1（先手）は、{{ if group.p1_decision == "0" }}なにもしない{{ endif }}
+        {{ if group.p1_decision == "u100" }}100ポイント奪う{{ endif }}
+        {{ if group.p1_decision == "u200" }}200ポイント奪う{{ endif }}
+        {{ if group.p1_decision == "u300" }}300ポイント奪う{{ endif }}
+        {{ if group.p1_decision == "u400" }}400ポイント奪う{{ endif }}
+        {{ if group.p1_decision == "u500" }}500ポイント奪う{{ endif }}
+        {{ if group.p1_decision == "a100" }}100ポイント与える{{ endif }}
+        {{ if group.p1_decision == "a200" }}200ポイント与える{{ endif }}
+        {{ if group.p1_decision == "a300" }}300ポイント与える{{ endif }}
+        {{ if group.p1_decision == "a400" }}400ポイント与える{{ endif }}
+        {{ if group.p1_decision == "a500" }}500ポイント与える{{ endif }}
+        という提案をしました{{ if group.flg_non_input_p1 == 1 }}(コンピュータが選びました){{ endif }}。</p>
+    <p>プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。</p>
+    <p>結果、あなたの利得は{{ player.payoff }}です。</p>
+
+<p>全ての参加者の結果</p>
+{{ include 'ch10_4_extended_dictator/chart.html' }}
+<script>
+drawChart(js_vars);// グラフ描画
+</script>
+{{ endblock }}

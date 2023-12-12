@@ -1,0 +1,68 @@
+{{ block title }}
+実験
+{{ endblock }}
+{{ block content }}
+
+ {% if player.id_in_group == 1 %}
+<font color="red">
+   あなたはプレイヤー1になりました。</font> 映画1か映画2か決めてください。<br>
+   質問に回答したあと、下記のテーブル(<u>左があなたのポイント</u>、右が相手のポイントを表しています)より、ボタンを押して回答してください。</p>
+
+【質問】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment %}</p>
+    <div class="form-group required">
+        <table class="table table-bordered text-center" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="2">あなたの相手（プレイヤー2）</th>
+            </tr>
+            <tr>
+                <th>映画1</th>
+                <th>映画2</th>
+            </tr>
+            <tr>
+                <th rowspan="2"><span>あなた（プレイヤー1）</span></th>
+                <td><button name="individual_choice" value="A" class="btn btn-primary btn-large">映画1</button></td>
+                <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+                <td><u>{{ C.PAYOFF_D }}</u>, {{ C.PAYOFF_D }}</td>
+            </tr>
+            <tr>
+                <td><button name="individual_choice" value="B" class="btn btn-primary btn-large">映画2</button></td>
+                <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_C }}</td>
+                <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
+ {% if player.id_in_group == 2 %}
+<font color="red">
+   あなたはプレイヤー2になりました。</font>映画1か映画2か決めてください。<br>
+   質問に回答したあと、下記のテーブル(左が相手のポイント、<u>右があなたのポイント</u>を表しています)より、ボタンを押して回答してください。</p>
+
+【質問】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment %}</p>
+    <div class="form-group required">
+        <table class="table table-bordered text-center" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="2">あなた（プレイヤー2）</th>
+            </tr>
+            <tr>
+                <th><button name="individual_choice" value="A" class="btn btn-primary btn-large">映画1</button></th>
+                <th><button name="individual_choice" value="B" class="btn btn-primary btn-large">映画2</button></th>
+            </tr>
+            <tr>
+                <th rowspan="2"><span>あなたの相手（プレイヤー1）</span></th>
+                <td>映画1</td>
+                <td>{{ C.PAYOFF_A }}, <u>{{ C.PAYOFF_B }}</u></td>
+                <td>{{ C.PAYOFF_D }}, <u>{{ C.PAYOFF_D }}</u></td>
+            </tr>
+            <tr>
+                <td>映画2</td>
+                <td>{{ C.PAYOFF_C }}, <u>{{ C.PAYOFF_C }}</u></td>
+                <td>{{ C.PAYOFF_B }}, <u>{{ C.PAYOFF_A }}</u></td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
+{{ endblock }}

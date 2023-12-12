@@ -1,0 +1,68 @@
+{{ block title }}
+実験
+{{ endblock }}
+{{ block content }}
+
+ {% if player.id_in_group == 1 %}
+<font color="red">
+   あなたは{{C.PLAYER_NAME_1}}になりました。
+    {{C.CHOICE_LABEL_1}}か{{C.CHOICE_LABEL_2}}か決めてください。質問に回答したあと、</b></font>下記のテーブル(<u>左があなたのポイント</u>、右が相手のポイントを表しています)。いずれか押して回答してください。</font></p>
+
+【質問】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment %}</p>
+    <div class="form-group required">
+        <table class="table table-bordered text-center" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="2">{{C.PLAYER_NAME_2}}</th>
+            </tr>
+            <tr>
+                <th>{{C.CHOICE_LABEL_1}}</th>
+                <th>{{C.CHOICE_LABEL_2}}</th>
+            </tr>
+            <tr>
+                <th rowspan="2"><span>{{C.PLAYER_NAME_1}}</span></th>
+                <td><button name="individual_choice" value="A" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_1}}</button></td>
+                <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+                <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            </tr>
+            <tr>
+                <td><button name="individual_choice" value="B" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_2}}</button></td>
+                <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+                <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
+ {% if player.id_in_group == 2 %}
+<font color="red">
+   あなたは{{C.PLAYER_NAME_2}}になりました。
+    {{C.CHOICE_LABEL_1}}か{{C.CHOICE_LABEL_2}}か決めてください。質問に回答したあと、</b></font>下記のテーブル(左が相手のポイント、<u>右があなたのポイント</u>、を表しています)。いずれか押して回答してください。</font></p>
+
+【質問】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment %}</p>
+    <div class="form-group required">
+        <table class="table table-bordered text-center" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="2">{{C.PLAYER_NAME_2}}</th>
+            </tr>
+            <tr>
+                <th><button name="individual_choice" value="A" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_1}}</button></th>
+                <th><button name="individual_choice" value="B" class="btn btn-primary btn-large">{{C.CHOICE_LABEL_2}}</button></th>
+            </tr>
+            <tr>
+                <th rowspan="2"><span>{{C.PLAYER_NAME_1}}</span></th>
+                <td>{{C.CHOICE_LABEL_1}}</td>
+                <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+                <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            </tr>
+            <tr>
+                <td>{{C.CHOICE_LABEL_2}}</td>
+                <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+                <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_A }}</td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
+{{ endblock }}

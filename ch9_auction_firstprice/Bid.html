@@ -1,0 +1,12 @@
+{% extends "global/Page.html" %}
+
+{% block title %}入札（{{C.NUM_ROUNDS}}回中{{player.round_number}}回目）{% endblock %}
+{% block content %}
+
+    <div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; background-color: #FFFFE0;">
+        この回出品された商品に対するあなたの評価値は {{ player.item_value }}です。<br>
+        入札額を決定してください。<input type="number" name="individual_choice" min="0" max="999">
+    </div>{% next_button %}
+    {% include C.INSTRUCTIONS_TEMPLATE %}
+
+{% endblock %}

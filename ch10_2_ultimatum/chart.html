@@ -1,0 +1,51 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+
+
+<script>
+    function drawChart() {
+        disp_title = js_vars.num_participants + "名が実験に参加しました。"
+        Highcharts.chart('container', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: disp_title
+            },
+            xAxis: {
+               categories: ['(0,1000)', '(100,900)', '(200,800)', '(300,700)', '(400,600)', '(500,500)', '(600,400)', '(700,300)', '(800,200)', '(900,100)', '(1000,0)'],
+               title: {
+                    text: '（プレイヤー1の利得, プレイヤー2の利得）'
+               }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Goals'
+                }
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: '受入',
+                data: js_vars.graph_list_accept
+            }, {
+                name: '拒否',
+                //data: [5, 3]
+                data: js_vars.graph_list_reject
+            }]
+        });
+        }
+    //}
+</script>

@@ -1,0 +1,172 @@
+{% block title %}
+取引
+{% endblock %}
+
+{% block content %}
+
+<h3>あなたの情報</h3>
+
+{% if player.type == 'buy' %}  
+    あなたは買い手{{ player.player_number }}です。あなたは、
+    <ul>
+        <li>状態の良い中古品１つあたり、{{ C.VALUE_GOOD_BUYER }} </li>
+        <li>状態の悪い中古品１つあたり、{{ C.VALUE_BAD_BUYER }} </li>
+    </ul>
+の利得を得ることができます。
+{% else %}
+    あなたは売り手です。あなたは、
+        {% if player.used_status == True %}  
+            状態の良い中古品を１つ<span id="hoyuu">保有しています。</span><br>
+            <span id="baikyaku">あなたは、保有する中古品を売却することで、売却価格 - {{ C.VALUE_GOOD_SELLER }} ECUの利得を得ることができます。</span><br>
+        {% else %}
+            状態の悪い中古品を１つ<span id="hoyuu">保有しています。</span><br>
+            <span id="baikyaku">あなたは、保有する中古品を売却することで、売却価格 - {{ C.VALUE_BAD_SELLER }} ECUの利得を得ることができます。</span><br>
+        {% endif %}
+{% endif %}
+
+この市場には、状態の良い中古品の売り手が<span id="good_used_num">{{ group.update_good }}</span>人。
+状態の悪い中古品の売り手が<span id="bad_used_num">{{ group.update_bad }}</span>人います。
+
+{% if player.type == 'buy' %}
+提示する購入価格を入力してください    
+<div class="input-group">
+    <input id="buyer_form" class="form-control" type="number">
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-primary" onclick="form_buyer()">OK</button>
+    </span>
+</div>
+
+
+{% else %}
+<div id="bikyakuBtn">提示されている価格に基づいて、売却先を選び、「売却」ボタンを押してください。</div>
+
+{% endif %}
+
+ 
+<div class="white-background">
+    <div class="row">
+        <div class="col-8" style="margin: 0 auto; margin-bottom: 40px; min-height:30vh;">
+            <table id="trade" class="table fixed">
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let player_id=js_vars.player_number;
+    let soldFlg=false;
+    let min_sell_cost=js_vars.min_sell_cost;
+    let player_num=js_vars.players;
+    let buyVal_list = js_vars.buyVal_list
+    let player_type = js_vars.player_type;
+    let players = js_vars.buyer_num;
+    let buyer_id=js_vars.player_number;
+    let used_status=js_vars.used_status;
+    let payoff=js_vars.payoff;
+    let good_used_num=js_vars.good_used_num;
+    let bad_used_num=js_vars.bad_used_num;
+    let btnOffer = document.getElementById('btn-offer');// 送信ボタン
+    lock_flg = false; //画面ロック鍵
+
+    //最初のページ
+    let trade = document.getElementById("trade");
+    if (player_type === 'buy'){
+            trade.innerHTML = "<thead><tr><th>買い手</th><th>提示している購入価格</th><th>これまでに購入した中古品の数</th></tr></thead>";
+            for (var i = 0; i < player_num; i++){
+                trade.innerHTML += "<tr><td>" + (i+1) + "</td><td>0</td><td>0</td></tr>"
+            }
+    }
+    if (player_type === 'sell'){
+            trade.innerHTML = "<thead><tr><th>買い手</th><th>提示している購入価格</th><th>これまでに購入した中古品の数</th><th>売却するかどうか</th></tr></thead>";
+            for (var i = 0; i < player_num; i++){
+                trade.innerHTML += "<tr><td>" + (i+1) + "</td><td>0</td><td><div id=\"buyedNum" + (i+1) + "\">0</div></td><td><div class=\"input-group\"><span class=\"input-group-btn\"><button id=\"sellBtn"+(i+1)+"\" type=\"button\" class=\"btn btn-primary\" onclick=\"form_seller("+(i+1)+")\" disabled>売却</button></span></div></td></tr>";
+                document.getElementById("sellBtn"+(i+1)).disabled=true;
+            }
+    }
+
+    function form_buyer() {
+        var e = document.getElementById('buyer_form');
+        var form_value = e.value;
+        if (form_value.match(/[^0-9]/g)) {
+            alert(form_value.match(/[^0-9]/g) + "\n\n数値以外が含まれています");
+            return false;
+        }
+        if (form_value <= 0) {
+            alert("0以上の値を入力してください");
+            return false;
+        }
+        if (form_value > 10**4) {
+            alert("10000以下の値を入力してください")
+            return false;
+        }
+        liveSend({ 'type': 'buy', 'value': Number(form_value) });
+        e.value = '';
+    }
+
+    function liveRecv(data) {
+        console.log('lock_flg: ',lock_flg);
+        if (player_type === 'buy'){
+            let trade = document.getElementById("trade");
+            trade.innerHTML = '<thead><tr><th>買い手</th><th>提示している購入価格</th><th>これまでに購入した中古品の数</th></tr></thead>';
+            for (var i = 0; i < player_num; i++){
+                if (buyer_id===i+1){
+                    trade.innerHTML += '<tr><td>' + (i+1) + '（あなた）</td><td>' + data.buyVal_list[i] + '</td><td>' + data.bought_list[i] + '</td></tr>';
+                } else {
+                    trade.innerHTML += '<tr><td>' + (i+1) + '</td><td>' + data.buyVal_list[i] + '</td><td>' + data.bought_list[i] + '</td></tr>';
+                }
+            }
+            document.getElementById("good_used_num").textContent = data.update_good;
+            document.getElementById("bad_used_num").textContent = data.update_bad;
+        }
+        if (player_type === 'sell'){
+            if (data.sold_list[player_id-1]===true) {
+                sellbtn = 'sellBtn' + player_id
+                btnOffer = document.getElementById(sellbtn)
+                btnOffer.style.display = 'none';
+                lock_flg = true;
+            }
+            console.log('lock_flg: ',lock_flg);
+            let trade = document.getElementById("trade");
+            trade.innerHTML = "<thead><tr><th>買い手</th><th>提示している購入価格</th><th>これまでに購入した中古品の数</th><th>売却するかどうか</th></tr></thead>";
+            if (data.sold_list[player_id-1] === false) {
+                for (var i =0 ; i < player_num; i++){
+                    trade.innerHTML += "<tr><td>" + (i+1) + "</td><td>" + data.buyVal_list[i] + "</td><td><div id=\"buyedNum" + (i+1) + "\">" + data.bought_list[i] + "</div></td><td><div class=\"input-group\"><span class=\"input-group-btn\"><button id=\"sellBtn"+(i+1)+"\" type=\"button\" class=\"btn btn-primary\" onclick=\"form_seller("+(i+1)+")\" diabled>売却</button></span></div></td></tr>";
+                    if(data.buyVal_list[i]>min_sell_cost){
+                        document.getElementById("sellBtn"+(i+1)).disabled = false;
+                    }
+                    if(data.buyVal_list[i]<=min_sell_cost){
+                        document.getElementById("sellBtn"+(i+1)).disabled = true;
+                    }
+                }
+            }
+            if (data.sold_list[player_id-1] === true) {
+                document.getElementById("hoyuu").textContent="売却しました。";
+                document.getElementById("baikyaku").textContent="あなたが、今回得た利得："+data.seller_payoff[player_id-1];
+                document.getElementById("bikyakuBtn").textContent="";
+                for (var i =0 ; i < player_num; i++){
+                    trade.innerHTML += "<tr><td>" + (i+1) + "</td><td>" + data.buyVal_list[i] + "</td><td><div id=\"buyedNum" + (i+1) + "\">" + data.bought_list[i] + "</div></td><td><div class=\"input-group\"><span class=\"input-group-btn\"><button id=\"sellBtn"+(i+1)+"\" type=\"button\" class=\"btn btn-primary\" onclick=\"form_seller("+(i+1)+")\" diabled>売却</button></span></div></td></tr>";
+                    document.getElementById("sellBtn"+(i+1)).disabled=true;
+                }
+            }
+            document.getElementById("good_used_num").textContent=data.update_good;
+            document.getElementById("bad_used_num").textContent=data.update_bad;
+        }
+    }
+    
+    function form_seller(buyerNum) {
+        if (lock_flg === false){
+            liveSend({ 'type': 'sell', 'buyerNum': buyerNum });
+        }
+    }
+
+    //ユーザーがページをロード（リロード）したときに、サーバーに空のliveSendをおこなう
+    document.addEventListener("DOMContentLoaded", (event) => {
+        liveSend({});
+    });
+</script>
+
+{% endblock %}
+
+{% block styles %}
+<link href="{% static "adverse_selection/styles.css" %}" rel="stylesheet">
+{% endblock %}

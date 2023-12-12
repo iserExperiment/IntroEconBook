@@ -1,0 +1,21 @@
+{% extends "ch8_comparative_advantage1_instruction/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    実験の設定
+{% endblock %}
+
+{% block content %}
+
+<p>全ての人は、それぞれ{{ Constants.working_hours }}時間の労働時間をもっています。</p>
+<p>この労働時間を使って、チーズやパンを生産することができます。</p>
+<div>
+    あなた方は、AタイプかBタイプのどちらかのスキルを持っています。
+    <ul>
+        <li>おおよそ3人に1人がAタイプ、残り2人はBタイプです。</li>
+    </ul>
+</div>
+<p>スキルタイプによって、チーズやパンを生産するのに必要な時間が異なります。</p>
+
+    {% next_button %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "global/Page.html" %}
+
+{% block title %}結果（{{C.NUM_ROUNDS}}回中{{player.round_number}}回目）{% endblock %}
+{% block content %}
+
+    <p>
+        {% if player.is_winner %}
+            落札できました。あなたの利得は{{player.payoff}}です。
+        {% else %}
+            落札できませんでした。あなたの利得は0です。
+        {% endif %}
+    </p>
+
+    <table class="table">
+        <tr bgcolor="#E6FFE9">
+            <th>あなたの評価値</th><th>{{ player.item_value }}</th>
+        </tr>
+        <tr>
+            <th>あなたの入札額</th><th>{{ player.bid }}</th>
+        </tr>
+        <tr bgcolor="#E6FFE9">
+            <th>{{C.PLAYERS_PER_GROUP}}人のグループでの落札額</th><th>{{ group.highest_bid }}</th>
+        </tr>
+        <tr>
+            <th>あなたの利得（落札できていれば：評価値‐入札額 / 落札できなければ：0）</th><th>{{ player.payoff }}</th>
+        </tr>
+    </table>
+
+    {% next_button %}
+
+    {% include C.INSTRUCTIONS_TEMPLATE %}
+
+{% endblock %}

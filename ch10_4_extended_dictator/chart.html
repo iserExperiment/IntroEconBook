@@ -1,0 +1,133 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="ch10_1"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+<figure class="highcharts-figure">
+    <div id="ch10_2"></div>
+    <div id="ch10_2_result"></div>
+    <p class="highcharts-description"></p>
+</figure>
+<figure class="highcharts-figure">
+    <div id="ch10_3"></div>
+    <div id="ch10_3_result"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+<figure class="highcharts-figure">
+    <div id="ch10_4"></div>
+    <div id="ch10_4_result"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+
+<script>
+    function drawChart(graph_data) {
+        const base = {chart: {
+                type: 'bar'
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+        };
+        // var graph_data = js_vars.graph_data
+        console.log(graph_data)
+
+        if ('ch10_1' in graph_data){
+            ch10_1 = Object.assign({
+                title: {
+                    text: "1. 個人の意思決定<br>" + graph_data.ch10_1.num_participants + "名が実験に参加しました。"
+                },
+                xAxis: {
+                categories: graph_data.ch10_1.graph_name_list,
+                title: {
+                        text: '選択肢'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                },
+                series: [{
+                    data: graph_data.ch10_1.graph_list
+                }]
+            }, base);
+            Highcharts.chart('ch10_1', ch10_1);
+        }
+        if ('ch10_2' in graph_data){
+            ch10_2 = Object.assign({
+                title: {
+                    text: "2. 最後通牒ゲーム<br>" + graph_data.ch10_2.num_participants + "名が実験に参加しました。"
+                },
+                xAxis: {
+                categories: ['(0,1000)', '(100,900)', '(200,800)', '(300,700)', '(400,600)', '(500,500)', '(600,400)', '(700,300)', '(800,200)', '(900,100)', '(1000,0)'],
+                title: {
+                        text: '（プレイヤー1の利得, プレイヤー2の利得）'
+                }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Goals'
+                    }
+                },
+                series: [{
+                    name: '受入',
+                    data: graph_data.ch10_2.graph_list_accept
+                }, {
+                    name: '拒否',
+                    data: graph_data.ch10_2.graph_list_reject
+                }]
+            }, base);
+            Highcharts.chart('ch10_2', ch10_2);
+            document.getElementById('ch10_2_result').innerHTML = graph_data.ch10_2.ch10_2_result;
+        }
+        if ('ch10_3' in graph_data) {
+            ch10_3 = Object.assign({
+                title: {
+                    text: "3. 独裁者ゲーム<br>" + graph_data.ch10_3.num_participants + "名が実験に参加しました。"
+                },
+                xAxis: {
+                   categories: ['(0,1000)', '(100,900)', '(200,800)', '(300,700)', '(400,600)', '(500,500)', '(600,400)', '(700,300)', '(800,200)', '(900,100)', '(1000,0)'],
+                   title: {
+                        text: '（プレイヤー1の利得, プレイヤー2の利得）'
+                    }
+                },
+                series: [{
+                    name: '受入',
+                    data: graph_data.ch10_3.graph_list
+                }]
+            }, base);
+            Highcharts.chart('ch10_3', ch10_3);
+            document.getElementById('ch10_3_result').innerHTML = graph_data.ch10_3.ch10_3_result;
+        }
+        if ('ch10_4' in graph_data){
+            ch10_4 = Object.assign({
+                title: {
+                    text: "4. [拡張版]独裁者ゲーム<br>" + graph_data.ch10_4.num_participants + "名が実験に参加しました。"
+                },
+                xAxis: {
+                   categories: graph_data.ch10_4.graph_name_list,
+                   title: {
+                        text: '選択肢'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                },
+                        series: [{
+                    //name: '受入',
+                    data: graph_data.ch10_4.graph_list
+                }]
+            }, base);
+            Highcharts.chart('ch10_4', ch10_4);
+            document.getElementById('ch10_4_result').innerHTML = graph_data.ch10_4.ch10_4_result;
+        }
+    }
+</script>

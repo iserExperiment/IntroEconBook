@@ -1,0 +1,35 @@
+{{ block title }}
+    実験{{ num }}
+{{ endblock }}
+
+{{ block content }}
+    {{ if num == 1 }}
+    <p>最初に、あなた1人しか売り手がいない市場を考えましょう。</p>
+    {{ else }}
+    <p>再度、あなた1人しか売り手がいない市場を考えましょう。</p>
+    {{ endif }}
+
+    <p>あなたにとっての財の仕入れ値は、4 です。</p>
+    <p>市場に参加している買い手にとっての財の価値(評価値)は、次のようになっているとします。</p>
+        <table class="table">
+            <tr>
+                <th>財の価値</th>
+                <th>人数</th>
+            </tr>
+            {{ for item in list }}
+            <tr>
+                <td>
+                    {{ item.val }}
+                </td>
+                <td>
+                    {{ item.member }}
+                </td>
+            </tr>
+            {{ endfor }}
+        </table>
+
+        {{ formfields }}
+
+        {{ next_button }}
+
+{{ endblock }}

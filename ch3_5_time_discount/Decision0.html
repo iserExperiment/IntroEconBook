@@ -1,0 +1,127 @@
+{{ block title }}
+実験
+{{ endblock }}
+
+{{ block content }}
+<table height="100">
+  <tr>
+  <td width="3%" align="right"></td>
+  <td colspan="2" align="center" bgcolor="#ffd700">A</td>
+  <td colspan="2" align="center" bgcolor="#adff2f">B</td>
+</tr>
+<tr>
+  <td width="10%" align="right">質問1&nbsp;&nbsp;&nbsp;</td>
+  <td width="40%" align="center">今日もらう1000円</td>
+  <td width="5%"> &nbsp;&nbsp;A <input id="tmp" type="radio" name="q1" value=1  class="Choise ChoiseA"></td>
+  <td width="5%">&nbsp;&nbsp;<input type="radio" name="q1" value=1  class="Choise ChoiseB"> B </td>
+  <td width="40%" align="center">1年後にもらう1000円</td>
+</tr>
+</table>
+<br>
+
+<button id='end-btn' name="end-btn" disabled='disabled' value="次へ" class="btn btn-primary btn-large">次へ</button>
+  <style>
+      .otree-body {
+       max-width:1100px
+      }
+      .tab-wrap {
+       display:flex;
+       flex-wrap:wrap;
+      }
+      .tab-label {
+       color:White;
+       background:#d4dcda;
+       margin-right:5px;
+       padding:3px 12px;
+       order: -1;
+      }
+      .tab-content {
+       width: 100%;
+       display: none;
+      }
+      .tabs:checked+ .tab-label {
+       background: #89c3ed;
+      }
+      .tabs:checked+ .tab-label+ .tab-content {
+       display: block;
+      }
+      .tabs {
+       display: none;
+      }
+  </style>
+
+  <style type="text/css">
+      .table-css {
+       border-collapse; collapse;
+      }
+      .border_lowzero {
+       border: 1px solid black;
+      }
+      .border_topzero {
+       border: 1px solid black;
+       border-top-style:none;
+      }
+      .border_kakou {
+      border: 1px solid black;
+     }
+  </style>
+
+
+<script>
+  let Tmp = document.getElementById('tmp');
+  // 選択肢の数（必須）
+  choise_num=1
+  btn_num=1*2
+  var frag_first = 1
+  var BtnChoise = document.getElementsByClassName('Choise');
+  var BtnA = document.getElementsByClassName('ChoiseA');
+  var BtnB = document.getElementsByClassName('ChoiseB');
+  let endBtn = document.getElementById('end-btn');
+
+  let list_A = []
+  let list_B = []
+
+  function fillValue(data){
+      let clicked_value = data.value-1;
+
+      if(frag_first == 1){
+        frag_first = 0
+        if(BtnA[clicked_value].checked){
+
+          for (let n = 1; n <= Number(data.value); n += 1) {
+            list_A.push(n);
+          };
+
+          for (let n = Number(data.value)+1; n <= choise_num; n += 1){
+            list_B.push(n);
+            };
+
+          }else{
+            for (let n = 1; n <= Number(data.value)-1; n += 1) {
+            list_A.push(n);
+            }
+            for (let n = Number(data.value); n <= choise_num; n += 1) {
+              list_B.push(n);
+              }
+          };
+        liveSend({first:1,A:list_A,B:list_B});
+      }else{
+        if(BtnA[clicked_value].checked){
+          liveSend({first:0,position_num:data.value,select_type:"A"});
+        }else{
+          liveSend({first:0,position_num:data.value,select_type:"B"});
+        }
+
+        }
+    };
+
+  for (var i=0; i < btn_num; i++) {
+      BtnChoise[i].addEventListener('click', function() {
+        endBtn.disabled='';
+        fillValue(this);
+        });
+      };
+
+
+</script>
+{{ endblock }}

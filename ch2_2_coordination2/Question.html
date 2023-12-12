@@ -1,0 +1,36 @@
+{{ block title }}
+質問
+{{ endblock }}
+{{ block content }}
+
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>プレイヤー2</th>
+        </tr>
+        <tr>
+            <th>L</th>
+            <th>R</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>プレイヤー1</u></span></th>
+            <th>U</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_B }}</td>
+        </tr>
+        <tr>
+            <th>D</th>
+            <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_D }}</td>
+            <td><u>{{ C.PAYOFF_E }}</u>, {{ C.PAYOFF_F }}</td>
+        </tr>
+    </table>
+<br>
+
+<br>
+【質問】このゲームのナッシュ均衡が２つあります。選んでみましょう。{% formfield player.q1 %}{% formfield player.q2 %}<br>
+【質問】このゲームのパレート最適な状況は1つあります。選んでみましょう。{% formfield player.q3 %}<br>
+<br>
+{{ next_button }}
+{{ endblock }}

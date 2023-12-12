@@ -1,0 +1,14 @@
+{% extends "otree/FormPage.html" %}
+
+{% load staticfiles otree_tags %}
+
+
+{% block global_styles  %}
+    <link rel="stylesheet" type="text/css" href="{% static 'global/timmer.css' %}" />
+{% endblock %}
+
+{% block global_scripts  %}
+    <!--Custom scripts-->
+    <script type="text/javascript" src="{% static 'global/timmer.js' %}"></script>
+
+{% endblock %}

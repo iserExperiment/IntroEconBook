@@ -1,0 +1,8 @@
+{{ extends 'otree/WaitPage.html' }}
+{{ block title }}実験{{ player.round_number }}回目{{ endblock }}
+{{ block content }}
+    <p>
+        あなたは、プレイヤー{{ player.role }}です。<br>
+        プレイヤー{{ other_player.role }}が意思決定をしています。しばらくお待ちください。
+    </p>
+{{ endblock }}

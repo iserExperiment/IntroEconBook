@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    質問1～5-2
+{% endblock %}
+
+{% block content %}
+<div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; width:65%">
+「50%の確率で400になり、50%の確率で100になる」という投資に対して、<br>
+    あなたが投資をしない一番小さい元手はいくらですか？</p>
+</div>
+<br>
+<p> いくらですか？(数字で入力してください)<input type="text" pattern="^[0-9]+$" name="individual_choice" maxlength="4" autofocus required></p>
+<p> それはなぜですか？{{ formfield 'individual_choice_comment' }}</p>
+
+{% next_button %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{{ block title }}
+質問
+{{ endblock }}
+{{ block content }}
+
+
+    <table class='table table-bordered text-center'
+           style='width: auto; margin: auto'>
+        <tr>
+            <th colspan=2 rowspan=2></th>
+            <th colspan=2>あなたの相手</th>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+        </tr>
+        <tr>
+            <th rowspan=2><span style="transform: rotate(-90deg);"><u>あなた</u></span></th>
+            <th>{{C.CHOICE_LABEL_1}}</th>
+            <td><u>{{ C.PAYOFF_B }}</u>, {{ C.PAYOFF_B }}</td>
+            <td><u>{{ C.PAYOFF_D }}</u>, {{ C.PAYOFF_A }}</td>
+        </tr>
+        <tr>
+            <th>{{C.CHOICE_LABEL_2}}</th>
+            <td><u>{{ C.PAYOFF_A }}</u>, {{ C.PAYOFF_D }}</td>
+            <td><u>{{ C.PAYOFF_C }}</u>, {{ C.PAYOFF_C }}</td>
+        </tr>
+    </table>
+<br>
+
+{% if player.individual_choice == "A" %}あなたは{{C.CHOICE_LABEL_1}}をえらびました。{% endif %}
+{% if player.individual_choice == "B" %}あなたは{{C.CHOICE_LABEL_2}}をえらびました。{% endif %}
+{% if player.individual_choice == "" %}あなたが{{C.CHOICE_LABEL_1}}を選んでいたとしてください。{% endif %}
+<br>
+【質問】相手が{{C.CHOICE_LABEL_1}}を選んでいたら、あなたは何ポイント獲得しますか？{% formfield player.q1 %}<br>
+【質問】相手が{{C.CHOICE_LABEL_2}}を選んでいたら、あなたは何ポイント獲得しますか？{% formfield player.q2 %}<br>
+【質問】あなたの相手はどちらを選ぶと思いますか？{% formfield player.think_other_player_choice %}<br>
+【質問】相手がその選択をすると思った理由はなぜですか？{% formfield player.think_other_player_choice_comment %}<br>
+{{ next_button }}
+{{ endblock }}

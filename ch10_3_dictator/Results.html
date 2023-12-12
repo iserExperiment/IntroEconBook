@@ -1,0 +1,23 @@
+{{ block title }}実験結果{{ endblock }}
+{{ block content }}
+
+    {{ if player.id_in_group == 1 }}
+        <p>
+            あなたはプレイヤー1（先手）でした。
+        </p>
+    {{ else }}
+        <p>
+            あなたはプレイヤー2（後手）でした。
+        </p>
+    {{ endif }}
+
+    <p>プレイヤー1（先手）は、プレイヤー1に{{ group.p1_amount }} ポイント、プレイヤー2に{{group.p2_amount}}という提案をしました{{ if group.flg_non_input_p1 == 1 }}(コンピュータが選びました){{ endif }}。</p>
+    <p>プレイヤー2（後手）は、プレイヤー1の提案をそのまま受け入れます。</p>
+    <p>結果、あなたの利得は{{ player.payoff }}です。</p>
+
+<p>全ての参加者の結果</p>
+{{ include './../ch10_4_extended_dictator/chart.html' }}
+<script>
+drawChart(js_vars); // グラフ描画
+</script>
+{{ endblock }}

@@ -1,0 +1,152 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <div id="container_sub"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+
+<script>
+Highcharts.chart('container', {
+title: {
+    text: 'あなたのグループ：評価値と入札額（評価値通りに入札していたら、45度線上に現れる）'
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+    gridLineWidth: 1,
+    title: {
+      enabled: true,
+      text: '評価額',
+    },
+    max: 100,
+    min: 0,
+    startOnTick: true,
+    endOnTick: true,
+    showLastLabel: true
+  },
+  yAxis: {
+    title: {
+      text: '入札値',
+    },
+    max: 100,
+    min: 0,
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle'
+  },
+  series: [{
+    name: '45度線',
+    type: 'polygon',
+    data: [[0, 0], [0, 1], [100, 100], [100, 99]],
+    color: Highcharts.color(Highcharts.getOptions()
+      .colors[0]).setOpacity(0.5).get(),
+    enableMouseTracking: false,
+    accessibility: {
+      exposeAsGroupOnly: true,
+      description: 'Target ranges in an upwards trending diagonal from 161 to 182 on the x axis, and 42 to 100 on the y axis.'
+    }
+  }, {
+    name: '（評価値, 入札額）',
+    type: 'scatter',
+    color: Highcharts.getOptions().colors[1],
+    //data: [[7.0, 6.9], [9.5, 14.5], [18.2, 21.5], [25.2, 26.5], [23.3, 18.3], [13.9, 9.6]]
+    data: js_vars.graph_data_group
+
+  }],
+  tooltip: {
+    headerFormat: '<b></b><br>',
+    pointFormat: '{point.x}, {point.y}'
+  },
+  responsive: {
+    rules: [{
+      condition: {
+        maxWidth: 500
+      },
+      chartOptions: {
+        legend: {
+          align: 'center',
+          layout: 'horizontal',
+          verticalAlign: 'bottom'
+        }
+      }
+    }]
+  }
+});
+
+Highcharts.chart('container_sub', {
+title: {
+    text: '全グループ：評価値と入札額（評価値通りに入札していたら、45度線上に現れる）'
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+    gridLineWidth: 1,
+    title: {
+      enabled: true,
+      text: '評価額'
+    },
+    max: 100,
+    min: 0,
+    startOnTick: true,
+    endOnTick: true,
+    showLastLabel: true
+  },
+  yAxis: {
+    title: {
+      text: '入札値'
+    },
+    max: 100,
+    min: 0,
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle'
+  },
+  series: [{
+    name: '45度線',
+    type: 'polygon',
+    data: [[0, 0], [0, 1], [100, 100], [100, 99]],
+    color: Highcharts.color(Highcharts.getOptions()
+      .colors[0]).setOpacity(0.5).get(),
+    enableMouseTracking: false,
+    accessibility: {
+      exposeAsGroupOnly: true,
+      description: 'Target ranges in an upwards trending diagonal from 161 to 182 on the x axis, and 42 to 100 on the y axis.'
+    }
+  }, {
+    name: '（評価値, 入札額）',
+    type: 'scatter',
+    color: Highcharts.getOptions().colors[1],
+    //data: [[7.0, 6.9], [9.5, 14.5], [18.2, 21.5], [25.2, 26.5], [23.3, 18.3], [13.9, 9.6]]
+    data: js_vars.graph_data_sub
+
+  }],
+  tooltip: {
+    headerFormat: '<b></b><br>',
+    pointFormat: '{point.x}, {point.y}'
+  },
+  responsive: {
+    rules: [{
+      condition: {
+        maxWidth: 500
+      },
+      chartOptions: {
+        legend: {
+          align: 'center',
+          layout: 'horizontal',
+          verticalAlign: 'bottom'
+        }
+      }
+    }]
+  }
+});
+
+</script>

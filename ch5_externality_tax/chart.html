@@ -1,0 +1,273 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+
+<script>
+    function redrawChart(series) {  
+        if (series.length!=0){
+            Highcharts.chart('highchart', {
+                title: {
+                    text: '取引結果'
+                },
+                yAxis: {
+                    title: {
+                        text: '価格'
+                    }
+                },
+
+                xAxis: {
+                    title: {
+                        text: '時間 (秒)'
+                    },
+                    min: series[0][0]-1
+                },
+
+                plotOptions: {
+                    series: {
+                        label: {
+                            enabled: false
+                        },
+                    }
+                },
+
+                series: [{
+                    data: series,
+                    type: 'line',
+                    name: '取引価格'
+
+                }],
+
+                credits: {
+                    enabled: false
+                },
+                accessibility: {
+                    enabled: false
+                }
+
+            });
+        }        
+    }
+    function redrawChart2(series1,series2) {  
+        if (series1.length!=0){
+            Highcharts.chart('highchart2', {
+                //chart: {
+                //    type: 'line'
+                //},
+                title: {
+                    text: '市場均衡（実験値）'
+                },
+                yAxis: {
+                    title: {
+                        text: '価格'
+                    }
+                },
+
+                xAxis: {
+                    title: {
+                        text: '時間（秒）'
+                    },
+                },
+
+                plotOptions: {
+                    series1: {
+                        label: {
+                            enabled: false
+                        },
+                    },
+                },
+
+                series: [
+                    {
+                        data: series1,
+                        type: 'line',
+                        step: true,
+                        name: '需要'
+                    },
+                    {
+                        data: series2,
+                        type: 'line',
+                        step: true,
+                        name: '供給'
+                    },
+                ],
+                credits: {
+                    enabled: false
+                },
+                accessibility: {
+                    enabled: false
+                }
+
+
+            });
+        }        
+    }
+    function redrawChart3(series1,series2, series3) {
+        if (series1.length!=0){
+            Highcharts.chart('highchart3', {
+                title: {
+                    text: '市場均衡（理論値）'
+                },
+                yAxis: {
+                    title: {
+                        text: '価格'
+                    }
+                },
+
+                xAxis: {
+                    title: {
+                        text: '量'
+                    },
+                },
+
+                plotOptions: {
+                    series1: {
+                        label: {
+                            enabled: false
+                        },
+                    },
+                },
+                tooltip: {
+                    enabled: false, // 0始まりのため、ポップアップ非表示
+                },
+                series: [
+                    {
+                        data: series1,
+                        type: 'line',
+                        step: true,
+                        name: '需要'
+                    },
+                    {
+                        data: series2,
+                        type: 'line',
+                        step: true,
+                        name: '供給'
+                    },
+                    {
+                        data: series3,
+                        type: 'line',
+                        step: true,
+                        name: '供給(税あり)'
+                    },
+                ],
+                credits: {
+                    enabled: false
+                },
+                accessibility: {
+                    enabled: false
+                }
+
+
+            });
+        }        
+    }
+
+
+// Define custom series type for displaying low/med/high values using boxplot as a base
+Highcharts.seriesType('lowmedhigh', 'boxplot', {
+    keys: ['low', 'high'],
+    tooltip: {
+        pointFormat: ''
+    }
+}, {
+    // Change point shape to a line with three crossing lines for low/median/high
+    // Stroke width is hardcoded to 1 for simplicity
+    drawPoints: function () {
+        const series = this;
+        this.points.forEach(function (point) {
+            let graphic = point.graphic;
+            const verb = graphic ? 'animate' : 'attr',
+                shapeArgs = point.shapeArgs,
+                width = shapeArgs.width,
+                left = Math.floor(shapeArgs.x) + 0.5,
+                right = left + width,
+                crispX = left + Math.round(width / 2) + 0.5,
+                highPlot = Math.floor(point.highPlot) + 0.5,
+                //medianPlot = Math.floor(point.medianPlot) + 0.5,
+                // Sneakily draw low marker even if 0
+                lowPlot = Math.floor(point.lowPlot) +
+                    0.5 - (point.low === 0 ? 1 : 0);
+
+            if (point.isNull) {
+                return;
+            }
+
+            if (!graphic) {
+                point.graphic = graphic = series.chart.renderer
+                    .path('point')
+                    .add(series.group);
+            }
+
+            graphic.attr({
+                stroke: point.color || series.color,
+                'stroke-width': 1
+            });
+
+            graphic[verb]({
+                d: [
+                    'M', left, highPlot,
+                    'H', right,
+                    //'M', left, medianPlot,
+                    'H', right,
+                    'M', left, lowPlot,
+                    'H', right,
+                    'M', crispX, highPlot,
+                    'V', lowPlot
+                ]
+            });
+        });
+    }
+});
+
+function redrawChart4(series1,series2) {
+const chart = Highcharts.chart('container', {
+    chart: {
+        type: 'lowmedhigh'
+    },
+    title: {
+        text: '取引推移（実験値）',
+        align: 'center'
+    },
+    accessibility: {
+        point: {
+            descriptionFormat: 'low {low}, high {high}{/unless}'
+        },
+        series: {
+            descriptionFormat: '{series.name}, series {seriesNumber} of {chart.series.length} with {series.points.length} data points.'
+        },
+        typeDescription: ''
+    },
+    xAxis: [{
+             title: {
+                 text: '時間 (秒)'
+             },
+        crosshair: true,
+        categories: series1
+    }],
+    yAxis: {
+        title: {
+            text: '評価値'
+        },
+        min: 0
+    },
+    tooltip: {
+        shared: true,
+        stickOnContact: true
+    },
+    plotOptions: {
+        series: {
+            stickyTracking: true,
+            whiskerWidth: 5
+        }
+    },
+    series: [{
+        name: '取引ペア',
+        data: series2,
+    }]
+});
+
+}
+
+
+</script>

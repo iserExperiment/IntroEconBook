@@ -1,0 +1,18 @@
+{{ block title }}
+実験
+{{ endblock }}
+{{ block content }}
+<p>顧客が「仕事を発注する」を選びました。</p>
+<p>企業が「仕事をする」を選ぶと、顧客に２ポイント、企業に２ポイントです。</p>
+<p>企業が「仕事をしない」を選ぶと、顧客に-1ポイント、企業に4ポイントです。</p>
+{% if C.NUM_ROUNDS == subsession.round_number %}<b>ただし、「もし仕事をしない」を選択した場合はこの顧客から「二度と仕事がもらえない」とします。</b>{{ endif }}<br>
+<br>
+<br>
+【質問1】あなたが企業の担当者だとすると、[{{C.CHOICE_LABEL_1}}][{{C.CHOICE_LABEL_2}}]どちらを選びますか？<br>{% formfield player.individual_choice_1 %}</p>
+【質問2】あなたがその選択をする理由はなぜですか？<br>{% formfield player.individual_choice_comment_1 %}</p>
+
+{% next_button %}
+
+{{ include C.INSTRUCTIONS_TEMPLATE }}
+
+{{ endblock }}

@@ -1,0 +1,233 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+      実験　応募画面
+{% endblock %}
+
+{% block content %}
+
+
+<div style="background-color : #FFFF99">
+    <p>いま、あなたのタイプは 【学生
+        {% if player.role == 'student1' %} 1 {% endif %}
+        {% if player.role == 'student2' %} 2 {% endif %}
+        {% if player.role == 'student3' %} 3 {% endif %}
+        {% if player.role == 'student4' %} 4 {% endif %}
+        {% if player.role == 'student5' %} 5 {% endif %}
+        {% if player.role == 'student6' %} 6 {% endif %}
+        】に決定しました。</p>
+</div>
+
+<p>下の希望順位表をみて、応募順位を決定してください。</p>
+<p>マッチングは{{ C.MATCHING }}メカニズムによって計算されます。</p>
+<p>マッチングの計算はあなたの提出する応募順位でなされ、利得は希望順位でなされることに注意してください。</p>
+
+<table class="table-css">
+      <tr>
+        <td width="420" valign="top" class="border_lowzero">
+        <p><b>各学生の希望順位</b></p>
+            <table class="" border=1  align="center" width="400">
+                <tr align="center"><th bgcolor="#FFFFFF" width="80" ></th>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">1</th>{% else %}<th bgcolor="#FFFFFF">1</th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">2</th>{% else %}<th bgcolor="#FFFFFF">2</th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">3</th>{% else %}<th bgcolor="#FFFFFF">3</th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">4</th>{% else %}<th bgcolor="#FFFFFF">4</th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">5</th>{% else %}<th bgcolor="#FFFFFF">5</th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">6</th>{% else %}<th bgcolor="#FFFFFF">6</th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF" width="0">第一希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.0}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.0}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.0}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.0}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.0}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.0}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.0}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第二希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.1}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.1}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.1}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.1}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.1}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.1}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第三希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.2}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.2}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.2}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.2}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.2}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.2}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第四希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.3}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.3}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.3}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.3}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.3}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.3}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第五希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.4}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.4}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.4}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.4}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.4}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.4}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第六希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student1.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student1.5}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student2.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student2.5}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student3.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student3.5}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student4.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student4.5}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student5.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student5.5}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.student_true_choices.student6.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.student_true_choices.student6.5}} </th>{% endif %}
+                </tr>
+            </table>
+     </td><td width="420" valign="top" class="border_lowzero">
+        <p><b>各企業の希望順位</b></p>
+            <table class="" border=1  align="center" width="400">
+                <tr align="center"><th bgcolor="#FFFFFF" width="80"></th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.0}}</th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.1}}</th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.2}}</th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.3}}</th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.4}}</th>
+                    <th bgcolor="#FFFFFF">{{C.teacher.5}}</th>
+                </tr>
+
+                <tr align="center"><td bgcolor="#FFFFFF">第一希望</td>
+                     {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.A.0}} </th>{% endif %}
+                     {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.B.0}} </th>{% endif %}
+                     {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.C.0}} </th>{% endif %}
+                     {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.D.0}} </th>{% endif %}
+                     {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.E.0}} </th>{% endif %}
+                     {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.0}} </th>{% else %}<th bgcolor="#FFFFFF"> {{C.teacher_true_choices.F.0}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第二希望</td>
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.A.1}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.B.1}} </th>{% endif %}
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.C.1}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.D.1}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.E.1}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.1}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.F.1}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第三希望</td>
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.A.2}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.B.2}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.C.2}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.D.2}} </th>{% endif %}
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.E.2}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.2}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.F.2}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第四希望</td>
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.A.3}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.B.3}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.C.3}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.D.3}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.E.3}} </th>{% endif %}
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.3}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.F.3}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第五希望</td>
+                    {% if player.role == 'student1' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.A.4}} </th>{% endif %}
+                    {% if player.role == 'student2' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.B.4}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.C.4}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.D.4}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.E.4}} </th>{% endif %}
+                    {% if player.role == 'student6' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.4}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.F.4}} </th>{% endif %}
+                </tr>
+                <tr align="center"><td bgcolor="#FFFFFF">第六希望</td>
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.A.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.A.5}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.B.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.B.5}} </th>{% endif %}
+                    {% if player.role == 'student4' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.C.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.C.5}} </th>{% endif %}
+                    {% if player.role == 'student5' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.D.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.D.5}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.E.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.E.5}} </th>{% endif %}
+                    {% if player.role == 'student3' %}<th bgcolor="#CCFFCC">{{C.teacher_true_choices.F.5}} </th>{% else %}<th bgcolor="#FFFFFF">{{C.teacher_true_choices.F.5}} </th>{% endif %}
+                </tr>
+            </table>
+    </td><td width="300" valign="top"></td>
+    <td rowspan="2" width="400" class="border_kakou" bgcolor="aliceblue" align="center">
+        <p><b>あなたの応募順位</b></p>
+		<p>第1希望 </p>
+        {% formfield player.student_first_choice %}
+
+		<p>第2希望</p>
+		{% formfield player.student_second_choice %}
+
+		<p>第3希望</p>
+		{% formfield player.student_third_choice %}
+
+		<p>第4希望</p>
+		{% formfield player.student_fourth_choice %}
+
+		<p>第5希望</p>
+		{% formfield player.student_fifth_choice %}
+
+		<p>第6希望</p>
+		{% formfield player.student_sixth_choice %}
+
+    </td>
+  </tr>
+</table>
+        <p>この状況をみて、どのように思って、応募順位を提出するか記入し,提出ボタンをおしてください。
+            {% formfield player.individual_choice_comment %}
+        </p>
+<br>
+<br>
+{{ next_button }}
+<style>
+    .otree-body {
+        max-width:1100px
+    }
+     .tabwrap {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .tabln {
+        color: White;
+        background: #dcdcdc;
+        margin-right: 5px;
+        padding: 3px 12px;
+        order: -1;
+    }
+    .tab-content {
+        width: 100%;
+        display: none;
+    }
+
+    .tabs:checked+.tabln {
+        background: #87cefa;
+    }
+    .tabs:checked+.tabln+.tab-content {
+         display: block;
+    }
+
+    .tabs {
+        display: none;
+    }
+</style>
+
+<style type="text/css">
+    .table-css {
+        border-collapse: collapse;
+    }
+    .border_lowzero {
+        border: 1px solid black;
+    }
+    .border_topzero {
+        border: 1px solid black;
+        border-top-style:none;
+    }
+    .border_kakou{
+         border: 1px solid black;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

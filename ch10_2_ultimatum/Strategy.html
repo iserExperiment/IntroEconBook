@@ -1,0 +1,20 @@
+{{ block title }}
+    質問
+{{ endblock }}
+{{ block content }}
+
+【質問１：あなたがプレイヤー１（先手）となったとします。】
+プレイヤー２（後手）に提案する配分を決定してください。
+{% formfield player.tmp_first_player %}
+{% formfield player.tmp_first_player_why %}
+<br><br>
+
+
+【質問２：あなたが後手となったとします。】
+あなたに配分される金額がいくら以上であればその提案を受け入れますか？
+{% formfield player.tmp_second_player %}
+{% formfield player.tmp_second_player_why %}
+
+    {{ next_button }}
+
+{{ endblock }}

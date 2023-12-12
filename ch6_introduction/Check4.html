@@ -1,0 +1,14 @@
+{{ block title }}
+    確認クイズ4
+{{ endblock }}
+
+{{ block content }}
+    <p>あなたにとっての財の仕入れ値が10だったとします。販売価格15で、10単位の財を売却した場合、あなたの利得はいくらですか？<br>
+
+    {{ formfield 'check_q4_int1' }}
+
+    <p>あなたにとっての財の仕入れ値が10だったとします。販売価格9で、10単位の財を売却した場合、あなたの利得はいくらですか？<br>
+    {{ formfield 'check_q4_int2' }}
+    
+    {{ next_button }}
+{{ endblock }}

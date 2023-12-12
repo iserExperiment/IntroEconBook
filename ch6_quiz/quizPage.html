@@ -1,0 +1,12 @@
+{{ block title }}
+    クイズ:時間内に入力して「次へボタンを押してください」
+{{ endblock }}
+{{ block content }}
+
+    {{ formfields }}
+    {{ next_button }}
+
+
+    {{ include C.INSTRUCTIONS1_TEMPLATE }}
+    {{ include C.INSTRUCTIONS2_TEMPLATE }}
+{{ endblock }}

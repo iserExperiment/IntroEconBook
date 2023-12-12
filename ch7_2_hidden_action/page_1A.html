@@ -1,0 +1,16 @@
+{{ block title }}実験{{ player.round_number }}回目{{ endblock }}
+{{ block content }}
+    <p>
+        <ul>
+            <li>あなたはプレイヤー{{ player.role }}です。</li>
+            <li>UとDのどちらを選びますか？</li>
+            {{ formfields }}
+        </ul>
+        どちらかを選んだあと、OKボタンをクリックしてください。
+    </p>
+    <p>
+        <button class="otree-btn-next btn btn-primary">OK</button>
+    </p>
+
+    {{ include C.INSTRUCTIONS_TEMPLATE }}
+{{ endblock }}

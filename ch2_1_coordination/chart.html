@@ -1,0 +1,143 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+
+<div id="highchart"></div>
+<div id="highchart2"></div>
+
+<script>
+    function drawChart() {
+        disp_title = js_vars.num_participants + "名が実験に参加しました。"
+        //alert(disp_title)
+        //if (series.length!=0){
+            Highcharts.chart('highchart', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['映画1を選んだ人','映画2を選んだ人'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    //data: [js_vars.num_A, js_vars.num_B]
+                    data: [
+                      {y: js_vars.num_A, color: 'orange'},
+                      {y: js_vars.num_B, color: 'green'},
+                    ]
+                }]
+            });
+        }
+    //}
+    function drawChart_pair() {
+        disp_title = "（コンピュータを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
+        //alert(disp_title)
+        //if (series.length!=0){
+            Highcharts.chart('highchart2', {
+                chart: {
+                type: 'bar'
+                },
+                title: {
+                    text: disp_title
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['映画1映画1','映画1映画2','映画2映画1','映画2映画2'],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '%',
+                    data: [
+                      {y: js_vars.num_AA, color: '#87cefa'},
+                      {y: js_vars.num_AB, color: '#87cefa'},
+                      {y: js_vars.num_BA, color: '#87cefa'},
+                      {y: js_vars.num_BB, color: '#87cefa'},
+                    ]
+                }]
+            });
+        }
+    //}
+</script>

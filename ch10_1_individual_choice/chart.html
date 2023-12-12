@@ -1,0 +1,47 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description"></p>
+    <div class="mx-auto" style="width: fit-content;">
+        {{ for item in graph_choice_list }}
+            {{ item }}<br>
+        {{ endfor }}
+    </div>
+</figure>
+
+
+<script>
+    function drawChart() {
+        disp_title = js_vars.num_participants + "名が実験に参加しました。"
+        Highcharts.chart('container', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: disp_title
+            },
+            xAxis: {
+               categories: js_vars.graph_name_list,
+               title: {
+                    text: '選択肢'
+               }
+            },
+            yAxis: {
+                min: 0,
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                data: js_vars.graph_list,
+            }]
+        });
+        }
+    //}
+</script>

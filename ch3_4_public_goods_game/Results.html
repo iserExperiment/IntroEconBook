@@ -1,0 +1,15 @@
+{{ block title }}結果（{{C.NUM_ROUNDS}}回中{{player.round_number}}回目）{{ endblock }}
+{{ block content }}
+
+<p>
+<p>{{C.PLAYERS_PER_GROUP}}人一組のグループで、各参加者には、初期保有としてそれぞれ{{C.ENDOWMENT}}が与えられていました。</p>
+<p>あなたは{{ player.individual_choice }}を投資しました。</p>
+<p>あなたのグループは全員で {{ group.total_contribution }}を投資しました。</p>
+<p>よって、あなたがこの回で得られるポイントは{{ group.individual_share }}（={{ group.total_contribution }} &times; {{C.MULTIPLIER}} &divide; {{C.PLAYERS_PER_GROUP}}）です。</p>
+<p>あなたはこの回で{{ player.payoff }}（={{C.ENDOWMENT}} &minus; {{ player.individual_choice | cu }} &plus; {{ group.individual_share }}）を得ます。</p>
+
+    {{ next_button }}
+
+{{ include C.INSTRUCTIONS_TEMPLATE }}
+
+{{ endblock }}

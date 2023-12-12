@@ -1,0 +1,26 @@
+{{ block title }}
+    結果
+{{ endblock }}
+
+{{ block content }}
+    <p>あなたは、今回、次のような買い手が参加している市場に、1人の売り手として参加しました。</p>
+    <table class="table">
+        <tr>
+            <th>財の価値</th>
+            <th>人数</th>
+        </tr>
+        {{ for item in list }}
+        <tr>
+            <td>
+                {{ item.val }}
+            </td>
+            <td>
+                {{ item.member }}
+            </td>
+        </tr>
+        {{ endfor }}
+    </table>
+    <p>あなたが選んだ販売価格：{{ selectedVal }}</p>
+    <p>その結果今回得られた利得：{{ payoff }}</p>
+    {{ next_button }}
+{{ endblock }}

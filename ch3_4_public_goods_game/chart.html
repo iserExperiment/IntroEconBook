@@ -1,0 +1,49 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: '投資額の推移'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: js_vars.list_counts
+    },
+    yAxis: {
+        title: {
+            text: '投資額'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        name: 'グループ全体の投資額（コンピュータを含む）',
+        //data: [16.0, 18.2, 23.1, 27.9, 32.2, 36.4, 39.8, 38.4, 35.5, 29.2,22.0, 17.8]
+        data: js_vars.list_data
+    },
+    //{
+    //    name: 'Tallinn',
+    //    data: [-2.9, -3.6, -0.6, 4.8, 10.2, 14.5, 17.6, 16.5, 12.0, 6.5,2.0, -0.9]
+    //}
+    ]
+});
+
+</script>

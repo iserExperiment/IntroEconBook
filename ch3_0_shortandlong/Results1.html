@@ -1,0 +1,21 @@
+{{ block title }}
+結果：あなたと相手の意思決定の結果です。
+{{ endblock }}
+{{ block content }}
+    {% if C.NUM_ROUNDS != subsession.round_number %}<p><font color="red">画面を閉じずにお待ちください。</font></p>{% endif %}
+    <p>
+             あなた{{ if player.flg_non_input_1 == 1 }}(コンピュータが選びました){{ endif }}は{{ my_decision }}を選びました。
+             {{ if my_decision == C.CHOICE_LABEL_1 }}2ポイントを得ます。{{ endif }}
+　　         {{ if my_decision == C.CHOICE_LABEL_2 }}4ポイントを得ます。{{ endif }}
+    </p>
+
+
+<p>全ての参加者の結果</p>
+{{ include 'ch3_0_shortandlong/chart.html' }}
+<script>
+drawChart();// グラフ描画
+</script>
+
+
+
+{{ endblock }}
