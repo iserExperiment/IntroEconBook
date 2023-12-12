@@ -2,7 +2,16 @@
 
 花木伸行・島田夏美『実験から始める経済学の第一歩』（2023，有斐閣）で用いる oTree (Chen et al., 2016, J Behav Exp Finance) のプログラムです．
 
-oTree v5.7.2 で動作確認をしております．
+有斐閣 ウェブサポートページ: [https://www.yuhikaku.co.jp/books/detail/9784641151178](https://www.yuhikaku.co.jp/books/detail/9784641151178)
+
+プログラムは oTree v5.7.2 で動作確認をしております．
+
+
+## Issues
+
+プログラムのバグを発見されたり，改良案を思いつかれたりしたときは，Issues に投稿してください．
+回答にはお時間をいただきますが，ご了承ください．
+
 
 ## 動かし方
 
@@ -43,6 +52,11 @@ oTree v5.7.2 で動作確認をしております．
     pip install -r requirements.txt
     ```
 
+    または
+    ```
+    pip install otree==5.7.2
+    ```
+
 1. oTreeサーバを起動には以下のコマンドを実行する．
 
     ```
@@ -70,11 +84,13 @@ oTree v5.7.2 で動作確認をしております．
     docker compose build
     ```
 
-1. 起動するには以下のコマンドを実行する．
+1. 起動する（`prodserver`）には以下のコマンドを実行する．
 
     ```
     docker compose up -d
     ```
+
+    Notes: `compose.yaml` において，デフォルトのコマンドとして `otree prodserver` を設定してある．
 
 1. ブラウザで localhost:8000 にアクセスすると，管理者画面にアクセスできる．
 
@@ -87,13 +103,19 @@ oTree v5.7.2 で動作確認をしております．
     docker compose down
     ```
 
-1. Postgresデータベースをリセットするには（`docker compose up`の状態で）以下のコマンドを実行する．
+1. Postgresデータベースをリセットするには（`docker compose up -d` を実行した状態で）以下のコマンドを実行する．
 
     ```
     docker compose exec otreeserver otree resetdb
     ```
 
-1. コードの編集中にサーバーを起動する（`otree devserver`）には以下のコマンドを実行する．
+1. （`docker compose up -d` の状態が続いているとき）コードを編集したあと反映させるには以下のコマンドを実行する．
+
+    ```
+    docker compose restart
+    ```
+
+1. コードの編集中にサーバーを起動する（`devserver`）には以下のコマンドを実行する．
 
     ```
     # 初回のみ
@@ -102,3 +124,5 @@ oTree v5.7.2 で動作確認をしております．
     # このコマンドで devserver を起動
     docker run --rm -it -v $PWD:/app -p 8000:8000 devotree
     ```
+
+    Notes: `Dockerfile` において，デフォルトのコマンドとして `otree devserver 0.0.0.0:8000` を設定してある．
