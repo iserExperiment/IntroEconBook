@@ -4,7 +4,7 @@
 
 有斐閣 ウェブサポートページ: [https://www.yuhikaku.co.jp/books/detail/9784641151178](https://www.yuhikaku.co.jp/books/detail/9784641151178)
 
-プログラムは oTree v5.7.2 で動作確認をしております．
+プログラムは oTree v5.10.4 で動作確認をしております．
 
 
 ## Issues
@@ -54,7 +54,7 @@
 
     または
     ```
-    pip install otree==5.7.2
+    pip install otree
     ```
 
 1. oTreeサーバを起動には以下のコマンドを実行する．
