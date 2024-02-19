@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         name="ch1_1_risk",
         display_name="第1章：個人の意思決定(リスクあり)",
         app_sequence=["b_input_id", "ch1_1_risk"],
-        num_demo_participants=1,
+        num_demo_participants=2,
     ),
     dict(
         name="ch1_2_prisoner",
