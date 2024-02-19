@@ -311,20 +311,26 @@ class Results(Page):
 
         print("ここから追加")
         # 割合に計算s
+
+        pair_num = sub.pair_num / 2#ここまで計算されたsub.pair_numはpairの数ではなくて、参加人数になっちゃた。その原因はまだわからなくて、一応sub.pair_numを２で割ってpair数にした
+        
         if sub.pair_num_AA > 0:
-            prop_pair_num_AA = round((sub.pair_num_AA / sub.pair_num) * 100, 2)
+            prop_pair_num_AA = round((sub.pair_num_AA / pair_num) * 100, 2)
         else:
             prop_pair_num_AA = 0
+
         if sub.pair_num_AB > 0:
-            prop_pair_num_AB = round((sub.pair_num_AB / sub.pair_num) * 100, 2)
+            prop_pair_num_AB = round((sub.pair_num_AB / pair_num) * 100, 2)
         else:
             prop_pair_num_AB = 0
+
         if sub.pair_num_BA > 0:
-            prop_pair_num_BA = round((sub.pair_num_BA / sub.pair_num) * 100, 2)
+            prop_pair_num_BA = round((sub.pair_num_BA / pair_num) * 100, 2)
         else:
             prop_pair_num_BA = 0
+
         if sub.pair_num_BB > 0:
-            prop_pair_num_BB = round((sub.pair_num_BB / sub.pair_num) * 100, 2)
+            prop_pair_num_BB = round((sub.pair_num_BB / pair_num) * 100, 2)
         else:
             prop_pair_num_BB = 0
 
