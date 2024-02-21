@@ -1,7 +1,17 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 
-<div id="highchart"></div>
+
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
+
+<div class="boxed-section">
+    <div id="highchart"></div></div>
 
 <script>
     function drawChart() {
@@ -20,7 +30,7 @@
                 },
                 xAxis: {
                     //categories: ['Aが1つ', 'Aが2つ', 'Aが3つ', 'Aが4つ', 'Aが5つ'],
-                    categories: ['Aを選んだ人','Bを選んだ人'],
+                    categories: ['「仕事する」を選んだ人','「仕事しない」を選んだ人'],
                     title: {
                         text: null
                     }
