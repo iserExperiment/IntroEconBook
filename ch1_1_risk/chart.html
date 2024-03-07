@@ -1,44 +1,76 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 
-<table class="table">
-        <td>実験１：あなたの意思決定</td>
-        <tr>
-            <th>質問1～5</th>
-            <th>
-                {{ player.risk_List }}
-            </th>
-        </tr>
-</table>
-<div id="highchart"></div>
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
 
-<table class="table">
+<div class="boxed-section">
+    <table class="table">
+            <tr>
+                <th>質問1～5</th>
+            </tr>
+            <tr>
+                <td>あなたの意思決定: <b>{{ player.risk_List }}</b></td>
+            </tr>
+    </table>
+    <div id="highchart"></div>
+</div>
+
+
+<!-- <table class="table">
     <td>実験２：あなたの意思決定：{{ player.individual_choice }}<div id="innerid1"></div><div id="innerid2"></div></td>
 </table>
-<br><br>
-<table class="table">
-        <td>実験３：あなたの意思決定：{{ player.u_individual_choice }}</td>
-</table>
-<div id="highchart3"></div>
+<br><br> -->
 
-<table class="table">
-        <td>実験４：あなたの意思決定：{{ player.s_individual_choice }}</td>
-</table>
-<div id="highchart4"></div>
+<div id="innerid1" style="display: none;"></div>
+<div id="innerid2" style="display: none;"></div>
 
+<div class="boxed-section">
+    <table class="table">
+            <tr>
+                <th>質問6</th>
+            </tr>
+            <tr>
+                <td>あなたの意思決定：<b>{{ player.u_individual_choice }}</b></td>
+            </tr>
+    </table>
+    <div id="highchart3"></div>
+</div>
 
-<table class="table">
-        <td>実験５：あなたの意思決定：{{ player.e_individual_choice }}</td>
-</table>
-<div id="highchart5"></div>
+<div class="boxed-section">
+    <table class="table">
+            <tr>
+                <th>質問7</th>
+            </tr>
+            <tr>
+            <td>あなたの意思決定：<b>{{ player.s_individual_choice }}</b></td>
+            </tr>
+    </table>
+    <div id="highchart4"></div>
+</div>
+
+<div class="boxed-section">
+    <table class="table">
+            <tr>
+                <th>質問8</th>
+            </tr>
+            <td>あなたの意思決定：<b>{{ player.e_individual_choice }}</b></td>
+    </table>
+    <div id="highchart5"></div>
+</div>
 
 <script>
     function inputValue(){
             innerid1.innerHTML= "平均" + js_vars.average_decision
-            innerid2.innerHTML= js_vars.num_participants_c + "名が実験に参加しました。"
+            innerid2.innerHTML= js_vars.num_participants_c + "名が実験に参加しました"
     }
     function drawChart() {
-        disp_title = js_vars.num_participants + "名が実験に参加しました。"
+        disp_title = js_vars.num_participants + "名が実験に参加しました"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart', {
@@ -60,6 +92,7 @@
                 },
                 yAxis: {
                     min: 0,
+                    max:100,
                     title: {
                         text: '',
                         align: 'high'
@@ -102,7 +135,7 @@
      }
 
     function drawChart_3() {
-        disp_title_3 = js_vars.num_participants_u + "名が実験に参加しました。"
+        disp_title_3 = js_vars.num_participants_u + "名が実験に参加しました"
         //alert(js_vars.u_numA)
         //if (series.length!=0){
             Highcharts.chart('highchart3', {
@@ -169,7 +202,7 @@
 
 
     function drawChart_4() {
-        disp_title_4 = js_vars.num_participants_s + "名が実験に参加しました。"
+        disp_title_4 = js_vars.num_participants_s + "名が実験に参加しました"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart4', {
@@ -237,7 +270,7 @@
 
 
     function drawChart_5() {
-        disp_title_5 = js_vars.num_participants_e + "名が実験に参加しました。"
+        disp_title_5 = js_vars.num_participants_e + "名が実験に参加しました"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart5', {

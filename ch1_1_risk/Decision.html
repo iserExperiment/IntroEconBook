@@ -1,10 +1,14 @@
-{{ block title }}
-{{ endblock }}
+{% block title %}
+    質問1～5
+{% endblock %}
+
 
 {{ block content }}
+
+
 <table class="table">
   <tr>
-  <td rowspan="2">質問1～5</td>
+  <td rowspan="2"></td>
   <td colspan="2" align="center" bgcolor="#ffd700">A</td>
   <td colspan="2" align="center" bgcolor="#adff2f">B</td>
 </tr>
@@ -47,8 +51,8 @@
   <td>&nbsp;&nbsp;<input type="radio" name="q5" value=5  class="Choise ChoiseB"> B </td>
   <td>350をそのまま持つ</td>
 </tr>
-
 </table>
+
 <br>
 <p> どのように考えて上記の意思決定をしましたか？{{ formfield 'individual_choice_r_comment' }}</p>
 

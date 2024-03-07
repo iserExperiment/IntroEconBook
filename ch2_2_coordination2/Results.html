@@ -2,20 +2,22 @@
 結果：あなたと相手の意思決定の結果です。
 {{ endblock }}
 {{ block content }}
- {% if player.id_in_group == 1 %}あなたはプレイヤー1でした。{% endif %}
- {% if player.id_in_group == 2 %}あなたはプレイヤー2でした。{% endif %}
+
+
+ {% if player.id_in_group == 1 %}あなたは<b>プレイヤー1</b>でした。{% endif %}
+ {% if player.id_in_group == 2 %}あなたは<b>プレイヤー2</b>でした。{% endif %}
     <p>
-             あなた{{ if player.flg_non_input == 1 }}(コンピュータが選びました){{ endif }}は{{ my_decision }} 、あなたの相手{{ if player.flg_pair_non_input == 1 }}(コンピュータが選びました){{ endif }}は {{ opponent_decision }}を選びました。
+             あなた{{ if player.flg_non_input == 1 }}(コンピュータが選びました){{ endif }}は<b>{{ my_decision }}</b> 、あなたの相手{{ if player.flg_pair_non_input == 1 }}(コンピュータが選びました){{ endif }}は <b>{{ opponent_decision }}</b>を選びました。
     </p>
 
     <p>
-        その結果、あなたのポイントは {{ player.payoff }}です。
+        その結果、あなたのポイントは <b>{{ player.payoff }}</b>です。
     </p>
 
 
     {{ include C.INSTRUCTIONS_TEMPLATE }}
 
-<p>全ての参加者の結果</p>
+<center><p><b>全ての参加者の結果</b></p></center>
 {{ include 'ch2_2_coordination2/chart.html' }}
 <script>
 drawChart_p1();// グラフ描画

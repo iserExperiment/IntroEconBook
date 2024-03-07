@@ -4,17 +4,20 @@
 {{ block content }}
 
     <p>
-             あなた{{ if player.flg_non_input == 1 }}(コンピュータが選びました){{ endif }}は{{ my_decision }} 、あなたの相手{{ if player.flg_pair_non_input == 1 }}(コンピュータが選びました){{ endif }}は {{ opponent_decision }}を選びました。
+             あなた{{ if player.flg_non_input == 1 }}(コンピュータが選びました){{ endif }}は<b>{{ my_decision }}</b> 、あなたの相手{{ if player.flg_pair_non_input == 1 }}(コンピュータが選びました){{ endif }}は <b>{{ opponent_decision }}</b>を選びました。
     </p>
 
     <p>
-        その結果、あなたのポイントは {{ player.payoff }}です。
+        その結果、あなたのポイントは <b>{{ player.payoff }}</b>です。
     </p>
 
 
     {{ include C.INSTRUCTIONS_TEMPLATE }}
 
-<p>他の参加者の方の結果</p>
+
+<!-- <p>他の参加者の方の結果</p> -->
+<center><b>全体としての結果</b></center>
+
 {{ include 'ch1_2_prisoner/chart.html' }}
 <script>
 drawChart();// グラフ描画

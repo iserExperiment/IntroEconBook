@@ -207,7 +207,7 @@ def set_payoff(player: Player):
 
 
 class Introduction(Page):
-    timeout_seconds = 30
+    timeout_seconds = 60
 
 
 class Decision(Page):
@@ -237,7 +237,7 @@ class ResultsWaitPage(WaitPage):
 
 class Results(Page):
     # timeout_seconds =45
-    timeout_seconds = 30
+    timeout_seconds = 60
 
     @staticmethod
     def vars_for_template(player: Player):

@@ -4,9 +4,9 @@
 {{ block content }}
     {% if C.NUM_ROUNDS != subsession.round_number %}<p><font color="red">画面を閉じずにお待ちください。</font></p>{% endif %}
     <p>
-             あなた{{ if player.flg_non_input_1 == 1 }}(コンピュータが選びました){{ endif }}は{{ my_decision }}を選びました。
-             {{ if my_decision == C.CHOICE_LABEL_1 }}2ポイントを得ます。{{ endif }}
-           {{ if my_decision == C.CHOICE_LABEL_2 }}4ポイントを得ます。{{ endif }}
+             あなた{{ if player.flg_non_input_1 == 1 }}(コンピュータが選びました){{ endif }}は<b>「{{ my_decision }}」</b>を選びました。
+             {{ if my_decision == C.CHOICE_LABEL_1 }}<b>2</b>ポイントを得ます。{{ endif }}
+           {{ if my_decision == C.CHOICE_LABEL_2 }}<b>4</b>ポイントを得ます。{{ endif }}
     </p>
 
 

@@ -12,8 +12,14 @@
         その結果、あなたのポイントは {{ player.payoff }}です。
     </p>
 
-{% if C.NUM_ROUNDS != subsession.round_number %}サイコロは{{subsession.this_rounds_dice}}でしたので、次に続きます。{{ next_button }}{% endif %}
-{% if C.NUM_ROUNDS == subsession.round_number %}サイコロは{{subsession.this_rounds_dice}}でしたので、この回で終了です。{% endif %}
+{% if C.NUM_ROUNDS != subsession.round_number %}
+    コンピューターが無作為に選ぶ数字は{{subsession.this_rounds_dice}}でしたので、次に進みます。
+    {{ next_button }}
+{% endif %}
+
+{% if C.NUM_ROUNDS == subsession.round_number%}　
+    コンピューターが無作為に選ぶ数字は{{subsession.this_rounds_dice}}でしたので、この回で終了です。
+{% endif %}
 
 <p>全ての参加者の結果</p>
 {{ include 'ch3_3_repeated_infinite/chart.html' }}

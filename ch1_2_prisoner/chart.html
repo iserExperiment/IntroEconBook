@@ -1,12 +1,26 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 
-<div id="highchart"></div>
-<div id="highchart2"></div>
+
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
+
+<div class="boxed-section">
+    <div id="highchart"></div>
+</div>
+
+<div class="boxed-section">
+    <div id="highchart2"></div>
+</div>
 
 <script>
     function drawChart() {
-        disp_title = js_vars.num_participants + "名が実験に参加しました。"
+        disp_title = js_vars.num_participants + "名が実験に参加しました"
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart', {
@@ -74,7 +88,9 @@
         }
     //}
    function drawChart_pair() {
-        disp_title = "（コンピュータを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
+        // disp_title = "（コンピュータを含む）" + js_vars.num_pairs + "名が実験に参加しました。"
+        disp_title = "選択組合の割合"
+
         //alert(disp_title)
         //if (series.length!=0){
             Highcharts.chart('highchart2', {
@@ -105,7 +121,7 @@
                     }
                 },
                 tooltip: {
-                    valueSuffix: '%'
+                    valueSuffix: ''
                 },
                 plotOptions: {
                     bar: {
