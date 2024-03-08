@@ -3,6 +3,16 @@
 {{ endblock }}
 
 {{ block content }}
+
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
+
+<div class="boxed-section">
 <h3>各ラウンドの結果</h3>
 <table class="table">
     <tr>
@@ -32,9 +42,14 @@
             </td>
         </tr>
 </table>
+</div>
 
+<div class="boxed-section">
 <div id="highchart"></div>
-<br><br>
+</div>
+
+
+<div class="boxed-section">
 <h3>市場の結果</h3>
 <br><br>
 <table class="table">
@@ -54,10 +69,14 @@
     </tr>
     {{ endfor }}
 </table>
+</div>
 
-<div id="container"></div>
+<div class="boxed-section">
+<div id="container"></div></div>
 
 <br><br>
+
+<div class="boxed-section">
 {{ if player.round_number == C.NUM_ROUNDS }}
 <h3>理論値</h3>
 <table class="table">
@@ -75,12 +94,14 @@
     </tr>
 </table>
 
-
-
-
 <div id="highchart3"></div>
 {{ endif }}
+</div>
+
+
+<!-- <div class="boxed-section"> -->
 {{ include 'ch4_double_auction/chart.html' }}
+<!-- </div> -->
 
 <script>
 let my_id = js_vars.id_in_group;
