@@ -3,6 +3,15 @@
 {{ endblock }}
 
 {{ block content }}
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
+
+<div class="boxed-section">
 <h3>今回の実験結果</h3>
 <table class="table">
     <tr>
@@ -37,9 +46,13 @@
                 </td>
             </tr>
 </table>
+</div>
 
-<div id="highchart"></div>
+<div class="boxed-section">
+<div id="highchart"></div></div>
+
 <br><br>
+<div class="boxed-section">
 <h3>市場の結果</h3>
 <br><br>
 <table class="table">
@@ -71,8 +84,10 @@
 
     {{ endfor }}
 </table>
+</div>
 
-<div id="container"></div>
+<div class="boxed-section">
+<div id="container"></div></div>
 
 <br><br>
 {{ if player.round_number == C.NUM_ROUNDS }}

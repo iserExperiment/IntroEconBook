@@ -3,6 +3,17 @@
 {{ endblock }}
 
 {{ block content }}
+
+
+<style>
+.boxed-section{ /*creat a box*/
+    border: 2px solid #000; 
+    padding: 10px; 
+    margin: 10px 0; 
+}   
+</style>
+
+<div class="boxed-section">
 <h3>今回の実験結果</h3>
 <table class="table">
     <tr>
@@ -36,9 +47,12 @@
             </td>
         </tr>
 </table>
+</div>
 
-<div id="highchart"></div>
+<div class="boxed-section">
+<div id="highchart"></div></div>
 <br><br>
+<div class="boxed-section">
 <h3>市場の結果</h3>
 <br><br>
 <table class="table">
@@ -58,10 +72,12 @@
     </tr>
     {{ endfor }}
 </table>
-
-<div id="container"></div>
+</div>
+<div class="boxed-section">
+<div id="container"></div></div>
 
 <br><br>
+<div class="boxed-section">
 {{ if player.round_number == C.NUM_ROUNDS }}
 <h3>理論値</h3>
 <table class="table">
@@ -90,8 +106,12 @@
         <td>{{ ideal_dict.ideal_totalSurplus_tax }}</td>
     </tr>
 </table>
-<div id="highchart3"></div>
+</div>
+
+<div class="boxed-section">
+<div id="highchart3"></div></div>
 {{ endif }}
+
 {{ include 'ch5_externality_tax/chart.html' }}
     
 <script>

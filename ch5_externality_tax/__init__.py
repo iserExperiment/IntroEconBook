@@ -7,7 +7,7 @@ doc = "Double auction market"
 
 class C(BaseConstants):
     NAME_IN_URL = "ch5_externality_tax"
-    PLAYERS_PER_GROUP = 200
+    PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     ITEMS_PER_SELLER = 1
     VALUATION_MIN = 20
@@ -348,8 +348,14 @@ def keisan(group: Group):
     # 全体取引量
     group.sum_transactions = len(tranzakution_buyers)
     # 社会的損害額(20×全体取引量÷参加者)
+
+    ####################################################################
+    num_participants = group.session.num_participants 
+    #事前に参加者人数が不明なので（C.PLAYERS_PER_GROUP = None）、ここでPLAYERS_PER_GROUPにより参加者人数を導出することができぬ
+    #sessionによって参加者人数を導出
+
     group.social_damage = (
-        C.multiple_social_damage * group.sum_transactions / C.PLAYERS_PER_GROUP
+        C.multiple_social_damage * group.sum_transactions / num_participants
     )
     # 個人の利得を再計算
     for p in players:
@@ -584,7 +590,13 @@ class Results(Page):
         tmp_buyer = []
         tmp_seller = []
         tmp_seller_tax = []
-        for j in range(C.PLAYERS_PER_GROUP // 2):
+
+        ####################################################################
+        num_participants = player.session.num_participants 
+        #事前に参加者人数が不明なので（C.PLAYERS_PER_GROUP = None）、ここでPLAYERS_PER_GROUPにより参加者人数を導出することができぬ
+        #sessionにより参加者人数を導出
+
+        for j in range(num_participants // 2):
             tmp_buyer.append(C.buyer_value[j % len(C.buyer_value)])
             tmp_seller.append(C.seller_value[j % len(C.seller_value)])
             tmp_seller_tax.append(C.seller_value[j % len(C.seller_value)])
