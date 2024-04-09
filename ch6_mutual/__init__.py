@@ -29,7 +29,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # 入力があったかどうかのフラグ
     flg_non_input = models.IntegerField()
-    sellingPrice = models.IntegerField(label="販売価格を決めてください")
+    sellingPrice = models.IntegerField(label="")
     pass
 
 

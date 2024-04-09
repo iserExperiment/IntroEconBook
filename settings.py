@@ -84,19 +84,19 @@ SESSION_CONFIGS = [
         name="ch4_double_auction",
         display_name="第4章：通常の市場",
         app_sequence=["b_input_id", "ch4_double_auction"],
-        num_demo_participants=200,
+        num_demo_participants=4,
     ),
     dict(
         name="ch5_externality",
         display_name="第5章：公害のある市場",
         app_sequence=["b_input_id", "ch5_externality"],
-        num_demo_participants=200,
+        num_demo_participants=4,
     ),
     dict(
         name="ch5_externality_tax",
         display_name="第5章：税のある市場",
         app_sequence=["b_input_id", "ch5_externality_tax"],
-        num_demo_participants=200,
+        num_demo_participants=4,
     ),
     dict(
         name="ch6_individual",
